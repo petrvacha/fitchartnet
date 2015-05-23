@@ -1,0 +1,126 @@
+<?php
+
+namespace App\Model;
+
+/**
+ * Basic operations
+ */
+class BaseModel extends \Nette\Object
+{
+    
+    /** @var string Table name */
+    protected $tableName;
+
+    /** @var Nette\Database\Context */
+    protected $context;
+
+    /**
+     * @param \Nette\Database\Context $context
+     */
+    public function __construct(\Nette\Database\Context $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTableName()
+    {
+        if (empty($this->tableName)) {
+            $this->tableName = lcfirst(substr(get_called_class(), strrpos(get_called_class(), '\\')+1));
+        }
+        return $this->tableName;
+    }
+
+    /**
+     * @return Nette\Database\Table\Selection
+     */
+    protected function getTable()
+    {
+        return $this->context->table($this->getTableName());
+    }
+
+    /**
+     * @return Nette\Database\Table\Selection
+     */
+    public function findAll()
+    {
+        return $this->getTable();
+    }
+
+    /**
+     * @param array $by
+     * @return Nette\Database\Table\Selection
+     */
+    public function findBy(array $by)
+    {
+        return $this->getTable()->where($by);
+    }
+
+    /**
+     * Returns row by primary key
+     * 
+     * @param $id
+     * @param Row
+     */
+    public function findRow($id)
+    {
+        return $this->getTable()->get((int) $id);
+    }
+
+    /**
+     * @param $data
+     * @return 
+     */
+    public function insert($data)
+    {
+        return $this->getTable()->insert($data);
+    }
+
+    /**
+     * @param $id
+     * @return int number of affected rows
+     */
+    public function delete($id)
+    {
+        return $this->findBy(array($this->getTable()->getPrimary() => (int) $id))->delete();
+    }
+
+    /**
+     * @param array
+     * @return
+     */
+    public function insertUpdate($data)
+    {
+        if (empty($data['id'])) {
+            $record = $this->insert($data);
+        } else {
+            $record = $this->findRow((int) $data['id']);
+            if ($record) {
+                $record->update($data);
+            } else {
+                return FALSE;
+            }
+        }
+
+        return $record;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumns()
+    {
+        $columns = $this->context->connection->getSupplementalDriver()->getColumns($this->getTableName());
+
+        $columnsResult = array();
+
+        foreach ($columns as $column) {
+            $columnsResult[] = $column['name'];
+        }
+
+        return $columnsResult;
+    }
+    
+}

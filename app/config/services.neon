@@ -6,3 +6,5 @@ services:
 
 
     - App\Components\SignFormFactory
+    - App\Model\BaseModel
+    - App\Model\User

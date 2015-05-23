@@ -5,6 +5,7 @@ namespace App\Presenters;
 use Nette;
 use App\Model;
 use App\Components\SignFormFactory;
+use App\Model\User;
 
 
 /**
@@ -15,9 +16,12 @@ class HomepagePresenter extends BasePresenter
     /** @var SignFormFactory @inject */
     public $factory;
 
+    /** @var User @inject */
+    public $model;
+
     public function renderDefault()
     {
-        $this->template->anyVariable = 'any value';
+
     }
 
 

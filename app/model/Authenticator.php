@@ -12,9 +12,9 @@ use Nette\Security\Passwords;
  */
 class Authenticator extends Nette\Object implements Nette\Security\IAuthenticator
 {
-    const TABLE_NAME = 'users';
+    const TABLE_NAME = 'user';
     const COLUMN_ID = 'id';
-    const COLUMN_NAME = 'nickname';
+    const COLUMN_NAME = 'username';
     const COLUMN_PASSWORD_HASH = 'password';
     const COLUMN_ROLE = 'role';
 
@@ -36,9 +36,9 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
      */
     public function authenticate(array $credentials)
     {
-        list($nickname, $password) = $credentials;
+        list($username, $password) = $credentials;
 
-        $row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_NAME, $nickname)->fetch();
+        $row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_NAME, $username)->fetch();
 
         if (!$row) {
                 throw new Nette\Security\AuthenticationException('The  is incorrect.', self::IDENTITY_NOT_FOUND);
