@@ -1,0 +1,5 @@
+parameters:
+    config:
+        emailMessageFrom: 'no-reply@pushupers.org'
+        emailContact: 'mail@pushupers.org'
+        enableLanguage: ['en']

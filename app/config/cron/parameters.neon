@@ -1,0 +1,7 @@
+parameters:
+    config:
+        disabledSendEmail: FALSE    # TRUE = Neodesílají se emaily (použito pro vývoj)
+        enabledSaveEmail: FALSE      # TRUE = Začne ukládat odeslané emaily (použito pro vývoj)
+        measureGoogleAnalytics: FALSE   # Povolit měření pro Google Analytics
+        replace_interests: FALSE
+

@@ -1,0 +1,8 @@
+services:
+
+    - App\RouterFactory
+    router: @App\RouterFactory::createRouter(%consoleMode%)
+    authenticator: App\Model\Authenticator
+
+
+    - App\Components\SignFormFactory

@@ -1,0 +1,7 @@
+/nbproject/
+/log/
+/temp/
+/htdocs/css/style.min.css
+/htdocs/js/main.min.js
+/node_modules/
+/app/config/config.local.neon
