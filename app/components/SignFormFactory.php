@@ -2,9 +2,9 @@
 
 namespace App\Components;
 
-use Nette,
-	Nette\Application\UI\Form,
-	Nette\Security\User;
+use Nette;
+use Nette\Application\UI\Form;
+use Nette\Security\User;
 
 
 class SignFormFactory extends Nette\Object
@@ -12,7 +12,9 @@ class SignFormFactory extends Nette\Object
     /** @var User */
     private $user;
 
-
+    /**
+     * @param \Nette\Security\User $user
+     */
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -26,10 +28,10 @@ class SignFormFactory extends Nette\Object
     {
         $form = new Form;
         $form->addText('username', 'Username:')
-                ->setRequired('Please enter your username.');
+            ->setRequired('Please enter your username.');
 
         $form->addPassword('password', 'Password:')
-                ->setRequired('Please enter your password.');
+            ->setRequired('Please enter your password.');
 
         $form->addCheckbox('remember', 'Keep me signed in');
 

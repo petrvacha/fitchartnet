@@ -16,9 +16,11 @@ module.exports = function(grunt) {
         uglify: {
             web: {
                 src: [
-                    './htdocs/js/main.js',
+                    './htdocs/js/jquery-2.1.4.js',
+                    './htdocs/js/common.js',
+                    './htdocs/js/netteForms.js',
                 ],
-                dest: './htdocs/js/main.min.js'
+                dest: './htdocs/js/script.min.js'
             }
         },
 

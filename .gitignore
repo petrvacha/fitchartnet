@@ -2,6 +2,6 @@
 /log/
 /temp/
 /htdocs/css/style.min.css
-/htdocs/js/main.min.js
+/htdocs/js/script.min.js
 /node_modules/
 /app/config/config.local.neon
