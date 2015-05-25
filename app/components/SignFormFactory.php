@@ -33,8 +33,6 @@ class SignFormFactory extends Nette\Object
         $form->addPassword('password', 'Password:')
             ->setRequired('Please enter your password.');
 
-        $form->addCheckbox('remember', 'Keep me signed in');
-
         $form->addSubmit('send', 'Sign in');
 
         $form->onSuccess[] = array($this, 'formSucceeded');

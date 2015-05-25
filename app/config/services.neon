@@ -5,6 +5,8 @@ services:
     authenticator: App\Model\Authenticator
 
 
-    - App\Components\SignFormFactory
     - App\Model\BaseModel
     - App\Model\User
+
+    - App\Components\SignFormFactory
+    - App\Components\RegistrationFormFactory(@App\Model\User)

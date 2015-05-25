@@ -5,8 +5,9 @@ namespace App\Presenters;
 use Nette;
 use App\Model;
 use App\Components\SignFormFactory;
+use App\Components\RegistrationFormFactory;
 use App\Model\User;
-
+use \Nette\Utils\DateTime;
 
 /**
  * Homepage presenter.
@@ -14,14 +15,19 @@ use App\Model\User;
 class HomepagePresenter extends BasePresenter
 {
     /** @var SignFormFactory @inject */
-    public $factory;
+    public $signFormFactory;
 
-    /** @var User @inject */
-    public $model;
+    /** @var RegistrationFormFactory @inject */
+    public $registrationFormFactory;
 
     public function renderDefault()
     {
+        
+    }
 
+    public function renderRegistred()
+    {
+        
     }
 
 
@@ -31,8 +37,24 @@ class HomepagePresenter extends BasePresenter
      */
     protected function createComponentSignInForm()
     {
-        $form = $this->factory->create();
+        $form = $this->signFormFactory->create();
         $form->onSuccess[] = function ($form) {
+            $this->flashMessage('Welcome!', 'info');
+            $form->getPresenter()->redirect('Main:');
+        };
+        return $form;
+    }
+
+
+    /**
+     * Registration form factory.
+     * @return Nette\Application\UI\Form
+     */
+    protected function createComponentRegistrationForm()
+    {
+        $form = $this->registrationFormFactory->create();
+        $form->onSuccess[] = function ($form) {
+            $this->flashMessage('Check your mail box and confirm the registration.', 'info');
             $form->getPresenter()->redirect('Homepage:');
         };
         return $form;
@@ -42,7 +64,7 @@ class HomepagePresenter extends BasePresenter
     public function actionOut()
     {
         $this->getUser()->logout();
-        $this->flashMessage('You have been signed out.');
+        $this->flashMessage('You have been signed out.', 'info');
         $this->redirect('in');
     }
 

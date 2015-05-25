@@ -2,6 +2,8 @@
 
 namespace App\Model;
 
+use Nette\Utils\DateTime;
+
 /**
  * Basic operations
  */
@@ -13,6 +15,10 @@ class BaseModel extends \Nette\Object
 
     /** @var Nette\Database\Context */
     protected $context;
+
+    /** @var string */
+    protected $datetime = NULL;
+    
 
     /**
      * @param \Nette\Database\Context $context
@@ -59,10 +65,19 @@ class BaseModel extends \Nette\Object
     }
 
     /**
+     * @param array $by
+     * @return Nette\Database\Row
+     */
+    public function findOneBy(array $by)
+    {
+        return $this->getTable()->where($by)->fetch();
+    }
+
+    /**
      * Returns row by primary key
      * 
      * @param $id
-     * @param Row
+     * @param Nette\Database\Row
      */
     public function findRow($id)
     {
@@ -89,7 +104,7 @@ class BaseModel extends \Nette\Object
 
     /**
      * @param array
-     * @return
+     * @return bool|int
      */
     public function insertUpdate($data)
     {
@@ -121,6 +136,23 @@ class BaseModel extends \Nette\Object
         }
 
         return $columnsResult;
+    }
+
+    /**
+     * @param string $format
+     * @return DateTime
+     */
+    public function getDateTime($format = NULL)
+    {
+        if (empty($format)) {
+            return $this->datetime ?: new DateTime();
+        } else if ($this->datetime) {
+            $this->datetime = new DateTime($this->datetime);
+            return $this->datetime->format($format);
+        } else {
+            $this->datetime = new DateTime();
+            return $this->datetime->format($format);
+        }
     }
     
 }
