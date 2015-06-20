@@ -5,6 +5,7 @@ namespace App\Model;
 use Nette;
 use Nette\Security\Passwords;
 use Nette\Utils\DateTime;
+use Pushupers\Application\Utilities;
 
 class User extends BaseModel
 {
@@ -25,6 +26,7 @@ class User extends BaseModel
            'username' => $values->username,
            'password' => Passwords::hash($values->password),
            'email' => $values->email,
+           'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
            'state' => self::USER_STATE_NEW,
            'createdAt' => $this->getDateTime(),
            'updateAt' => $this->getDateTime()

@@ -3,15 +3,17 @@
 namespace App\Components;
 
 use Nette;
+use Pushupers\Application\Mailer;
 
 
 class MailerFactory extends Nette\Object
 {
     /** @var ILogger */
-    private $logger;
+    protected $logger;
 
     /** @var array */
-    private $parameters;
+    protected $parameters;
+
 
     /**
      * @param ILogger $logger
@@ -27,21 +29,10 @@ class MailerFactory extends Nette\Object
     /**
      * @return Mailer
      */
-    public function create()
+    public function init()
     {
         $mailer = new Mailer();
-
-        if ($this->logger instanceof ILogger) {
-            $mailer->setLogger($this->logger);
-        }
-        
-        if (isset($this->parameters['fromEmail']) && !empty($this->parameters['fromEmail'])) {
-            $mailer->setFrom($this->fromEmail);
-        }
-
-        if (isset($this->parameters['bccLog']) && !empty($this->parameters['bccLog'])) {
-            $mailer->setBcc($this->bccLog);
-        }
+        $mailer->setLogger($this->logger);
     }
 
 }

@@ -8,11 +8,14 @@ use Nette\Application\UI\Form;
 
 class RegistrationFormFactory extends Nette\Object
 {
-    /** @var App\Model\User */
+    /** @var MailerManagerFactory @inject */
+    public $mailerManagerFactory;
+
+    /** @var \App\Model\User */
     protected $userModel;
 
     /**
-     * @param App\Model\User $userModel
+     * @param \App\Model\User $userModel
      */
     public function __construct(\App\Model\User $userModel)
     {
@@ -54,7 +57,10 @@ class RegistrationFormFactory extends Nette\Object
     public function registrationFormSent($form, $values)
     {
         try {
-            $this->userModel->add($values);
+            $userData = $this->userModel->add($values);
+            $mailerManager = $this->mailerManagerFactory->init();
+            $mailerManager->action(MailerManager::REGISTRATION_NEW_USER, $userData);
+
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
             $form->addError($e->getMessage());
         }
