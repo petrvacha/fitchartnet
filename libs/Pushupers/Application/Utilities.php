@@ -57,4 +57,24 @@ class Utilities extends \Nette\Object
             return FALSE;
         }
     }
+
+
+    /**
+     * @param string $hash
+     * @param string $input
+     * @param string $salt
+     * @return bool
+     */
+    public static function check_sha1_hash($hash, $input, $salt = '') {
+        return ($hash === sha1($input . $salt));
+    }
+
+    /**
+     * @param string $input
+     * @param string $salt
+     * @return bool
+     */
+    public static function create_sha1_hash($input, $salt = '') {
+        return sha1($input . $salt);
+    }
 }
