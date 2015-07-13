@@ -70,7 +70,7 @@ class MailerManager extends Nette\Object
         $template->data = $data;
         $this->message->setSubject($subject);
         $this->message->setBody($template);
-        $this->mailer->send();
+        $this->mailer->send($this->message);
     }
 
     /**
@@ -80,7 +80,7 @@ class MailerManager extends Nette\Object
      */
     protected function templateFactory($action, $lang)
     {
-        return $this->templateFactory->createTemplate()->setFile(APP_DIR . '/templates/Email/' . $lang . '/' . $action . 'latte');
+        return $this->templateFactory->createTemplate()->setFile(APP_DIR . '/presenters/templates/Email/' . $lang . '/' . $action . '.latte');
     }
 
 }
