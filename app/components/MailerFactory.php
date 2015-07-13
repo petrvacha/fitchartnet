@@ -16,9 +16,9 @@ class MailerFactory extends Nette\Object
 
 
     /**
-     * @param ILogger $logger
+     * @param \App\Model\LoggerModel $logger
      */
-    public function __construct(ILogger $logger,
+    public function __construct(\App\Model\LoggerModel $logger,
                                 \Nette\DI\Container $container)
     {
         $this->logger = $logger;
@@ -33,6 +33,7 @@ class MailerFactory extends Nette\Object
     {
         $mailer = new Mailer();
         $mailer->setLogger($this->logger);
+        return $mailer;
     }
 
 }

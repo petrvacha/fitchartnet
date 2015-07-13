@@ -2,7 +2,6 @@
 
 namespace Pushupers\Application;
 
-use App\Model\ILogger;
 use \Nette\Mail\Message;
 
 /**
@@ -13,9 +12,9 @@ use \Nette\Mail\Message;
 interface IMailer
 {
     /**
-     * @param ILogger $logger
+     * @param \Pushupers\Application\ILogger $logger
      */
-    public function setLogger(ILogger $logger);
+    public function setLogger(\Pushupers\Application\ILogger $logger);
 
     /**
      * @param \Nette\Mail\Message $mail

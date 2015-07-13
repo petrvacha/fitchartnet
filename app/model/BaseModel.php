@@ -94,6 +94,15 @@ class BaseModel extends \Nette\Object
     }
 
     /**
+     * @param $data
+     * @return
+     */
+    public function update($data)
+    {
+        return $this->getTable()->update($data);
+    }
+
+    /**
      * @param $id
      * @return int number of affected rows
      */

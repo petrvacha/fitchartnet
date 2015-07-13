@@ -4,7 +4,6 @@ namespace Pushupers\Application;
 
 use Nette\Mail\SendmailMailer;
 use Nette\Mail\Message;
-use App\Model\ILogger;
 
 /**
  * Mailer
@@ -13,12 +12,14 @@ use App\Model\ILogger;
  */
 class Mailer extends SendmailMailer implements IMailer
 {
+    /** @var \Pushupers\Application\ILogger */
     protected $logger = NULL;
 
+
     /**
-     * @param ILogger $logger
+     * @param \Pushupers\Application\ILogger $logger
      */
-    public function setLogger(ILogger $logger)
+    public function setLogger(\Pushupers\Application\ILogger $logger)
     {
         $this->logger = $logger;
     }

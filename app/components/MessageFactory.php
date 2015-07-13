@@ -43,7 +43,7 @@ class MessageFactory extends Nette\Object
             $message->setBcc($this->parameters['bccLog']);
         }
 
-        return new $message;
+        return $message;
     }
 
 }

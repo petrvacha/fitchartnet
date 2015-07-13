@@ -7,6 +7,10 @@ services:
 
     - App\Model\BaseModel
     - App\Model\User
+    - App\Model\LoggerModel
 
     - App\Components\SignFormFactory
     - App\Components\RegistrationFormFactory(@App\Model\User)
+    - App\Components\MailerManagerFactory
+    - App\Components\MailerFactory(@App\Model\LoggerModel)
+    - App\Components\MessageFactory

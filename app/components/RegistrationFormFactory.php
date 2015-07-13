@@ -4,11 +4,12 @@ namespace App\Components;
 
 use Nette;
 use Nette\Application\UI\Form;
+use Pushupers\Application\Control;
 
 
-class RegistrationFormFactory extends Nette\Object
+class RegistrationFormFactory extends Control
 {
-    /** @var MailerManagerFactory @inject */
+    /** @var MailerManagerFactory */
     public $mailerManagerFactory;
 
     /** @var \App\Model\User */
@@ -16,10 +17,12 @@ class RegistrationFormFactory extends Nette\Object
 
     /**
      * @param \App\Model\User $userModel
+     * @param MailerManagerFactory $mailerManagerFactory
      */
-    public function __construct(\App\Model\User $userModel)
+    public function __construct(\App\Model\User $userModel, MailerManagerFactory $mailerManagerFactory)
     {
         $this->userModel = $userModel;
+        $this->mailerManagerFactory = $mailerManagerFactory;
     }
 
 
@@ -41,7 +44,7 @@ class RegistrationFormFactory extends Nette\Object
 
         $form->addPassword('password', 'Password')
             ->setRequired('Please enter your password.')
-            ->addRule(Form::MIN_LENGTH, 'Username must be at least %s characters.', 6);
+            ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6);
 
 
         $form->addSubmit('send', 'Sign Up');
@@ -52,7 +55,7 @@ class RegistrationFormFactory extends Nette\Object
 
     /**
      * @param Form $form
-     * @param type $values
+     * @param $values
      */
     public function registrationFormSent($form, $values)
     {

@@ -20,6 +20,7 @@ class HomepagePresenter extends BasePresenter
     /** @var RegistrationFormFactory @inject */
     public $registrationFormFactory;
 
+
     public function renderDefault()
     {
         

@@ -8,10 +8,10 @@ use Pushupers\Application\Mailer;
 
 class MailerManagerFactory extends Nette\Object
 {
-    /** @var MailerFactory @inject */
+    /** @var MailerFactory */
     protected $mailerFactory;
 
-    /** @var MessageFactory @inject */
+    /** @var MessageFactory */
     protected $messageFactory;
 
     /** @var  Mailer */
@@ -20,11 +20,23 @@ class MailerManagerFactory extends Nette\Object
     /** @var  Message */
     protected $message;
 
+    /** @var  Nette\Http\Request */
+    protected $request;
 
-    public function __construct()
+    /** @var Nette\Application\UI\ITemplateFactory */
+    protected $templateFactory;
+
+
+    /**
+     * @param MailerFactory $mailerFactory
+     * @param MessageFactory $messageFactory
+     */
+    public function __construct(MailerFactory $mailerFactory, MessageFactory $messageFactory, Nette\Http\Request $request, Nette\Application\UI\ITemplateFactory $templateFactory)
     {
-        $this->mailer = $this->mailerFactory->init();
-        $this->message = $this->messageFactory->init();
+        $this->mailer = $mailerFactory->init();
+        $this->message = $messageFactory->init();
+        $this->request = $request;
+        $this->templateFactory = $templateFactory;
     }
 
     /**
@@ -32,7 +44,7 @@ class MailerManagerFactory extends Nette\Object
      */
     public function init()
     {
-        return new MailerManager($this->mailer, $this->message);
+        return new MailerManager($this->mailer, $this->message, $this->request, $this->templateFactory);
     }
 
 }
