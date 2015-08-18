@@ -4,16 +4,17 @@ namespace App\Components;
 
 use Nette;
 use Nette\Application\UI\Form;
-use Pushupers\Application\Control;
 
 
-class RegistrationFormFactory extends Control
+class RegistrationFormFactory extends Nette\Object
 {
     /** @var MailerManagerFactory */
     public $mailerManagerFactory;
 
+
     /** @var \App\Model\User */
     protected $userModel;
+
 
     /**
      * @param \App\Model\User $userModel
@@ -71,7 +72,7 @@ class RegistrationFormFactory extends Control
 
 
     /**
-     * @param Nette\Forms\IControl $userNameCandidate
+     * @param \Nette\Forms\IControl $userNameCandidate
      * @return bool
      */
     public function isUsernameAvailable($userNameCandidate)
@@ -81,7 +82,7 @@ class RegistrationFormFactory extends Control
 
 
     /**
-     * @param Nette\Forms\IControl $emailCandidate
+     * @param \Nette\Forms\IControl $emailCandidate
      * @return bool
      */
     public function isEmailAvailable($emailCandidate)
