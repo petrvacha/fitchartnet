@@ -26,17 +26,25 @@ class MailerManagerFactory extends Nette\Object
     /** @var Nette\Application\UI\ITemplateFactory */
     protected $templateFactory;
 
+    /** @var array */
+    protected $config;
+
 
     /**
-     * @param MailerFactory $mailerFactory
-     * @param MessageFactory $messageFactory
+     * @param \App\Components\MailerFactory $mailerFactory
+     * @param \App\Components\MessageFactory $messageFactory
+     * @param Nette\Http\Request $request
+     * @param Nette\Application\UI\ITemplateFactory $templateFactory
+     * @param array $config
      */
-    public function __construct(MailerFactory $mailerFactory, MessageFactory $messageFactory, Nette\Http\Request $request, Nette\Application\UI\ITemplateFactory $templateFactory)
+    public function __construct(MailerFactory $mailerFactory, MessageFactory $messageFactory, Nette\Http\Request $request, Nette\Application\UI\ITemplateFactory $templateFactory, array $config)
     {
         $this->mailer = $mailerFactory->init();
         $this->message = $messageFactory->init();
         $this->request = $request;
         $this->templateFactory = $templateFactory;
+        $this->config = $config;
+
     }
 
     /**
@@ -44,7 +52,7 @@ class MailerManagerFactory extends Nette\Object
      */
     public function init()
     {
-        return new MailerManager($this->mailer, $this->message, $this->request, $this->templateFactory);
+        return new MailerManager($this->mailer, $this->message, $this->request, $this->templateFactory, $this->config);
     }
 
 }
