@@ -11,5 +11,12 @@ use Nette,
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
+    /** @const MESSAGE_TYPE_INFO string */
+    const MESSAGE_TYPE_INFO = 'info';
 
+    /** @const MESSAGE_TYPE_SUCCESS string */
+    const MESSAGE_TYPE_SUCCESS = 'success';
+
+    /** @const MESSAGE_TYPE_ERROR string */
+    const MESSAGE_TYPE_ERROR = 'error';
 }

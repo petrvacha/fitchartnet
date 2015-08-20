@@ -61,4 +61,15 @@ class User extends BaseModel
             return FALSE;
         }
     }
+
+    /**
+     * @param string $token
+     * @return bool
+     */
+    public function activeUserByToken($token)
+    {
+        return $this
+                ->findOneBy(['token' => $token])
+                ->update(['token' => NULL, 'active' => TRUE, 'updateAt' => $this->getDateTime()]);
+    }
 }
