@@ -4,9 +4,9 @@ namespace App\Presenters;
 
 
 /**
- * Main presenter.
+ * Main presenter
  */
-class MainPresenter extends BasePresenter
+class MainPresenter extends LoginBasePresenter
 {
     public function renderDefault()
     {
