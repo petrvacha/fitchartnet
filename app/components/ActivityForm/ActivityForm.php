@@ -83,6 +83,9 @@ class ActivityForm extends \Pushupers\Application\Control
         $values['activity_id'] = 1;
         
         if (empty($values['id'])) {
+            if (empty($values['created_at'])) {
+                $values['created_at'] = new \DateTime;
+            }
             $values['updated_at'] = $values['created_at'];
             $this->activityLogModel->insert($values);
         } else {

@@ -8,7 +8,9 @@ module.exports = function(grunt) {
                 files: {
                     './htdocs/css/style.min.css': [
                         './htdocs/css/style.css',
-                        './htdocs/css/jquery.datetimepicker.css'
+                        './htdocs/css/libs/bootstrap-theme.css',
+                        './htdocs/css/libs/bootstrap.css',
+                        './htdocs/css/libs/jquery.datetimepicker.css',
                     ]
                 }
             },
@@ -17,10 +19,10 @@ module.exports = function(grunt) {
         uglify: {
             web: {
                 src: [
-                    './htdocs/js/jquery-2.1.4.js',
+                    './htdocs/js/libs/jquery-2.1.4.js',
+                    './htdocs/js/libs/netteForms.js',
+                    './htdocs/js/libs/jquery.datetimepicker.js',
                     './htdocs/js/common.js',
-                    './htdocs/js/netteForms.js',
-                    './htdocs/js/jquery.datetimepicker.js',
                 ],
                 dest: './htdocs/js/script.min.js'
             }
