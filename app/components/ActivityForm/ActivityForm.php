@@ -43,7 +43,6 @@ class ActivityForm extends \Pushupers\Application\Control
         $form = new Form;
         $form->addText('created_at', 'Time')
             ->setAttribute('placeholder', 'now')
-            ->setRequired('Please enter your time of your activity.')
             ->getControlPrototype()->class = 'datetimepicker';
 
         $form->addText('value', 'Count')
