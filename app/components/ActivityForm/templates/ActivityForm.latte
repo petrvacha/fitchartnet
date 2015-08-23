@@ -18,3 +18,12 @@
 	</div>
     </div>
 {/form}
+<script type="text/javascript">
+$(function(){
+    $('.datetimepicker').datetimepicker({
+    dayOfWeekStart : 1,
+    lang: 'en',
+    startDate: '{!$time}'
+    });
+});
+</script>

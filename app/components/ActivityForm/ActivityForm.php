@@ -42,15 +42,25 @@ class ActivityForm extends \Pushupers\Application\Control
     {
         $form = new Form;
         $form->addText('created_at', 'Time')
-            ->setRequired('Please enter your username.');
+            ->setAttribute('placeholder', 'now')
+            ->setRequired('Please enter your time of your activity.')
+            ->getControlPrototype()->class = 'datetimepicker';
 
         $form->addText('value', 'Count')
+            ->setAttribute('placeholder', '0')
             ->setRequired('You forget fill important number.')
             ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.');
 
         //$form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
 
-
+        if (isset($this->data['id'])) {
+            $form->setDefaults($this->data);
+        } else {
+            if (empty($this->data['create_at'])) {
+                $this->data['create_at'] = date('Y/m/d H:00:00');
+            }
+            $form->setDefaults($this->data);
+        }
         $form->addSubmit('submit', 'Add');
 
         $form->onSuccess[] = array($this, 'formSent');
@@ -60,6 +70,7 @@ class ActivityForm extends \Pushupers\Application\Control
     public function render()
     {
         $this->template->setFile($this->getTemplatePath());
+        $this->template->time = date('Y/m/d H:00');
         $this->template->render();
     }
 

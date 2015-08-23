@@ -5,7 +5,8 @@
 
 	<title>{ifset title}{include title|striptags} | {/ifset}Nette Sandbox</title>
 
-	<link rel="stylesheet" href="{$basePath}/css/style.css">
+	<link rel="stylesheet" href="{$basePath}/css/style.min.css">
+        <script src="{$basePath}/js/script.min.js"></script>
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
 	<meta name="viewport" content="width=device-width">
 	{block head}{/block}
@@ -17,7 +18,7 @@
 	{include content}
 
 	{block scripts}
-            <script src="{$basePath}/js/script.min.js"></script>
+            
 	{/block}
 </body>
 </html>
