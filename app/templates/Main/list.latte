@@ -1,16 +1,15 @@
 {block content}
 <div id="banner">
-    <h1 n:block=title>Pushupers</h1>
+    <h1 n:block=title>Pushupers - list</h1>
 </div>
 
 <div id="content">
-    <div n:foreach="$flashes as $flash">
-        <span class="{$flash->type}">{$flash->message}</span>
-    </div>
-
-    <a n:href='Main:list, id=>1' >Record list</a>
+    <a n:href='Main:default'>Add new record</a>
     <br />
-    {control activityForm}
+    <table>
+        <tr><th>Date</th><th>Count</th></tr>
+        <tr n:foreach="$activities as $id => $activity"><td>{$activity->updated_at|date:'d.m.Y H:m'}</td><td>{$activity->value}</td></tr>
+    </table>
 </div>
 {/block}
 
