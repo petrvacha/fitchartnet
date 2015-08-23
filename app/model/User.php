@@ -35,8 +35,8 @@ class User extends BaseModel
             'email' => $values->email,
             'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
             'state' => self::USER_STATE_NEW,
-            'createdAt' => $this->getDateTime(),
-            'updateAt' => $this->getDateTime()
+            'created_at' => $this->getDateTime(),
+            'update_at' => $this->getDateTime()
         ];
         $this->context->table($this->getTableName())->insert($insert);
 
@@ -70,6 +70,6 @@ class User extends BaseModel
     {
         return $this
                 ->findOneBy(['token' => $token])
-                ->update(['token' => NULL, 'active' => TRUE, 'updateAt' => $this->getDateTime()]);
+                ->update(['token' => NULL, 'active' => TRUE, 'update_at' => $this->getDateTime()]);
     }
 }
