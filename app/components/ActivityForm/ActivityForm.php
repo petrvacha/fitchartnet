@@ -60,7 +60,8 @@ class ActivityForm extends \Pushupers\Application\Control
             }
             $form->setDefaults($this->data);
         }
-        $form->addSubmit('submit', 'Add');
+        $form->addSubmit('submit', 'Add')
+            ->getControlPrototype()->class = 'btn btn-success';
 
         $form->onSuccess[] = array($this, 'formSent');
         return $form;

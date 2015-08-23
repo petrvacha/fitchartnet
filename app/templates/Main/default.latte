@@ -8,8 +8,9 @@
         <span class="{$flash->type}">{$flash->message}</span>
     </div>
 
-    <a n:href='Main:list, id=>1' >Record list</a> <a n:href='Main:logout' >Logout</a>
-    <br />
+    <a class="btn btn-primary" n:href='Main:list, id=>1' >Record list</a> 
+    <a class="btn btn-primary" n:href='Main:logout' >Logout</a>
+    <br /><br />
     {control activityForm}
 </div>
 {/block}
