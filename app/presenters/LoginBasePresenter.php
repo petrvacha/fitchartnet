@@ -17,4 +17,10 @@ abstract class LoginBasePresenter extends BasePresenter
             $this->redirect('Homepage:default');
         }
     }
+
+    public function actionLogout()
+    {
+        $this->user->logout();
+        $this->redirect('Homepage:default');
+    }
 }

@@ -29,6 +29,12 @@ class MainPresenter extends LoginBasePresenter
         
     }
 
+    public function actionLogout()
+    {
+        $this->user->logout();
+        $this->redirect('Homepage:default');
+    }
+    
     /**
      * @param int $id activity_id
      */
