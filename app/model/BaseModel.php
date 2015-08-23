@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Nette\Utils\DateTime;
+use \Pushupers\Application\Utilities;
 
 /**
  * Basic operations
@@ -26,6 +27,7 @@ class BaseModel extends \Nette\Object
     public function __construct(\Nette\Database\Context $context)
     {
         $this->context = $context;
+        $this->getTableName();
     }
 
     /**
@@ -34,7 +36,7 @@ class BaseModel extends \Nette\Object
     protected function getTableName()
     {
         if (empty($this->tableName)) {
-            $this->tableName = lcfirst(substr(get_called_class(), strrpos(get_called_class(), '\\')+1));
+            $this->tableName = Utilities::convertClassNameToTableName(get_called_class());
         }
         return $this->tableName;
     }

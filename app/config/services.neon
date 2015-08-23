@@ -8,9 +8,13 @@ services:
     - App\Model\BaseModel
     - App\Model\User
     - App\Model\LoggerModel
+    - App\Model\Activity
+    - App\Model\ActivityLog
 
     - App\Components\SignFormFactory
     - App\Components\RegistrationFormFactory(@App\Model\User)
     - App\Components\MailerManagerFactory(@App\Components\MailerFactory, @App\Components\MessageFactory , @Nette\Http\Request , @Nette\Application\UI\ITemplateFactory , %config%)
     - App\Components\MailerFactory(@App\Model\LoggerModel)
     - App\Components\MessageFactory
+
+    - \IActivityFormFactory

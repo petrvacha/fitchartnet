@@ -16,7 +16,7 @@ class LoggerModel extends BaseModel implements ILogger
     /** @const EMAIL_TEMPLATE_RESET_PASSWORD string */
     const EMAIL_TEMPLATE_RESET_PASSWORD = 'reset_password';
 
-
+    
     /** @const EMAIL_TABLE string */
     const EMAIL_TABLE = 'email';
 

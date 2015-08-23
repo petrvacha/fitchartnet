@@ -26,6 +26,8 @@ class Control extends \Nette\Application\UI\Control
     /** @var mixed */
     protected $data = [];
 
+    
+    public $onSuccess = [];
 
     /**
      * @return string
@@ -33,7 +35,7 @@ class Control extends \Nette\Application\UI\Control
     protected function getTemplatePath()
     {
         $class = $this->getReflection();
-        return dirname($class->getFileName()) . '/' . $class->getShortName() . '.latte';
+        return dirname($class->getFileName()) . '/templates/' . $class->getShortName() . '.latte';
     }
 
     /**

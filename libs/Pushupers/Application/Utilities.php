@@ -65,7 +65,8 @@ class Utilities extends \Nette\Object
      * @param string $salt
      * @return bool
      */
-    public static function check_sha1_hash($hash, $input, $salt = '') {
+    public static function check_sha1_hash($hash, $input, $salt = '')
+    {
         return ($hash === sha1($input . $salt));
     }
 
@@ -74,7 +75,26 @@ class Utilities extends \Nette\Object
      * @param string $salt
      * @return bool
      */
-    public static function create_sha1_hash($input, $salt = '') {
+    public static function create_sha1_hash($input, $salt = '')
+    {
         return sha1($input . $salt);
+    }
+
+    /**
+     * @param string $fullClassName
+     * @return string
+     */
+    public static function convertClassNameToTableName($fullClassName)
+    {
+        return self::decamelize(lcfirst(substr($fullClassName, strrpos($fullClassName, '\\')+1)));
+    }
+
+    /**
+     * @param string $className
+     * @return string
+     */
+    public static function decamelize($className)
+    {
+        return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $className)), '_');
     }
 }

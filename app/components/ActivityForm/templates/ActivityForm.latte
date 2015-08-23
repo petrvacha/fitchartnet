@@ -1,0 +1,20 @@
+{form activityForm}
+
+    <ul class="error" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+
+    <div id="my-travelove-setting-form">
+	<div class="left">
+	    <div class="item">
+		{label created_at /}{input created_at}
+	    </div>
+	    <div class="item">
+		{label value /}{input value}
+	    </div>
+	    <div class="item full">
+		{input submit}
+	    </div>
+	</div>
+    </div>
+{/form}
