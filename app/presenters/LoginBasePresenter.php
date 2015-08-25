@@ -18,6 +18,12 @@ abstract class LoginBasePresenter extends BasePresenter
         }
     }
 
+    public function beforeRender() {
+        parent::beforeRender();
+
+        $this->template->userData = $this->getUser()->identity->data;
+    }
+
     public function actionLogout()
     {
         $this->user->logout();

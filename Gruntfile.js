@@ -22,6 +22,7 @@ module.exports = function(grunt) {
                     './htdocs/js/libs/jquery-2.1.4.js',
                     './htdocs/js/libs/netteForms.js',
                     './htdocs/js/libs/jquery.datetimepicker.js',
+                    './htdocs/js/libs/bootstrap.min.js',
                     './htdocs/js/common.js',
                 ],
                 dest: './htdocs/js/script.min.js'
