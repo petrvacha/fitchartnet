@@ -10,6 +10,7 @@ services:
     - App\Model\LoggerModel
     - App\Model\Activity
     - App\Model\ActivityLog
+    - App\Model\LaunchAlert
 
     - App\Components\SignFormFactory
     - App\Components\RegistrationFormFactory(@App\Model\User)
@@ -18,3 +19,4 @@ services:
     - App\Components\MessageFactory
 
     - \IActivityFormFactory
+    - \ILaunchAlertFormFactory

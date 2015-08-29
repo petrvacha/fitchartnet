@@ -11,7 +11,7 @@ class MainPresenter extends LoginBasePresenter
     /** @var \App\Model\ActivityLog */
     protected $activityLog;
 
-    
+
     /** @var \IActivityFormFactory @inject */
     public $activityFormFactory;
 

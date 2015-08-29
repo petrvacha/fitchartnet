@@ -20,10 +20,20 @@ class HomepagePresenter extends BasePresenter
     /** @var RegistrationFormFactory @inject */
     public $registrationFormFactory;
 
+    /** @var \ILaunchAlertFormFactory @inject */
+    public $launchAlertFormFactory;
+
+
+
 
     public function renderDefault()
     {
         
+    }
+
+    public function renderLaunch()
+    {
+
     }
 
     public function renderRegistred()
@@ -46,7 +56,6 @@ class HomepagePresenter extends BasePresenter
         return $form;
     }
 
-
     /**
      * Registration form factory.
      * @return Nette\Application\UI\Form
@@ -61,6 +70,19 @@ class HomepagePresenter extends BasePresenter
         return $form;
     }
 
+    /**
+     * Launch form factory.
+     * @return Nette\Application\UI\Form
+     */
+    protected function createComponentLaunchAlertForm()
+    {
+        $form = $this->launchAlertFormFactory->create();
+
+        $form->onSuccess[] = function () {
+            $this->redirect('Main:default');
+        };
+        return $form;
+    }
 
     public function actionOut()
     {
