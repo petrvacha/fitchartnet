@@ -24,10 +24,10 @@ if (\Nette\Environment::isConsole() && isset($_SERVER['argv'][0]) && Nette\Utils
         $enviroment = 'cron';
 
     } else {
-        if (Nette\Utils\Strings::endsWith($_SERVER['SERVER_NAME'], 'devel.mytravelove.com')) {
+        if (Nette\Utils\Strings::endsWith($_SERVER['SERVER_NAME'], 'pushupers-0374.rostiapp.cz')) {
             $enviroment = 'development';
 
-        } elseif (Nette\Utils\Strings::endsWith($_SERVER['SERVER_NAME'], 'mytravelove.com')) {
+        } elseif (Nette\Utils\Strings::endsWith($_SERVER['SERVER_NAME'], 'pushupers.com')) {
             $enviroment = 'production';
 
         } elseif ($configurator->isDebugMode()) {
