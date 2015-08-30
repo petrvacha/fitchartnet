@@ -1,17 +1,4 @@
 {form launchAlertForm}
-
-    <ul class="error" n:if="$form->hasErrors()">
-        <li n:foreach="$form->errors as $error">{$error}</li>
-    </ul>
-
-    <div>
-	<div class="left">
-	    <div class="item">
-		{label email /}{input email}
-	    </div>
-	    <div class="item full">
-		{input submit}
-	    </div>
-	</div>
-    </div>
+    {input email}
+    {input submit}
 {/form}

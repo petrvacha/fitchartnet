@@ -4,14 +4,14 @@
         <title>{include title|striptags}</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <!--[if lte IE 8]><script src="{$basePath}/js/ie/html5shiv.js"></script><![endif]-->
-        <link rel="stylesheet" href="{$basePath}/css/main.css" />
-        <!--[if lte IE 8]><link rel="stylesheet" href="{$basePath}/css/ie8.css" /><![endif]-->
-        <!--[if lte IE 9]><link rel="stylesheet" href="{$basePath}/css/ie9.css" /><![endif]-->
-        <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-        <script src="assets/js/main.js"></script>
+        <!--[if lte IE 8]><script src="{$basePath}/launcher/js/ie/html5shiv.js"></script><![endif]-->
+        <link rel="stylesheet" href="{$basePath}/launcher/css/main.css" />
+        <!--[if lte IE 8]><link rel="stylesheet" href="{$basePath}/launcher/css/ie8.css" /><![endif]-->
+        <!--[if lte IE 9]><link rel="stylesheet" href="{$basePath}/launcher/css/ie9.css" /><![endif]-->
+        <!--[if lte IE 8]><script src="{$basePath}/launcher/js/ie/respond.min.js"></script><![endif]-->
+        <script src="{$basePath}/launcher/js/main.js"></script>
     </head>
-    <body>
+    <body class="">
         <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
         {include content}
     </body>

@@ -24,8 +24,10 @@ class RouterFactory
 
         } else {
             $router = new RouteList();
+            $router[] = new Route('', 'Homepage:launch');
+            $router[] = new Route('/gamma', 'Homepage:default');
             $router[] = new Route('/registration/confirm/<hash>', 'Registration:check');
-            $router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:default');
+            $router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:launch');
             return $router;
         }
 

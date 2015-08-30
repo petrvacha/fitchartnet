@@ -33,7 +33,7 @@ class HomepagePresenter extends BasePresenter
 
     public function renderLaunch()
     {
-
+        $this->setLayout('launch');
     }
 
     public function renderRegistred()
