@@ -1,168 +1,219 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
+$(document).ready(function() {
+    "use strict";
 
-	"use strict";
+    // Methods/polyfills.
 
-	// Methods/polyfills.
+    // classList | (c) @remy | github.com/remy/polyfills | rem.mit-license.org
+    ! function() {
+        function t(t) {
+            this.el = t;
+            for (var n = t.className.replace(/^\s+|\s+$/g, "").split(/\s+/), i = 0; i < n.length; i++) e.call(this, n[i])
+        }
 
-		// classList | (c) @remy | github.com/remy/polyfills | rem.mit-license.org
-			!function(){function t(t){this.el=t;for(var n=t.className.replace(/^\s+|\s+$/g,"").split(/\s+/),i=0;i<n.length;i++)e.call(this,n[i])}function n(t,n,i){Object.defineProperty?Object.defineProperty(t,n,{get:i}):t.__defineGetter__(n,i)}if(!("undefined"==typeof window.Element||"classList"in document.documentElement)){var i=Array.prototype,e=i.push,s=i.splice,o=i.join;t.prototype={add:function(t){this.contains(t)||(e.call(this,t),this.el.className=this.toString())},contains:function(t){return-1!=this.el.className.indexOf(t)},item:function(t){return this[t]||null},remove:function(t){if(this.contains(t)){for(var n=0;n<this.length&&this[n]!=t;n++);s.call(this,n,1),this.el.className=this.toString()}},toString:function(){return o.call(this," ")},toggle:function(t){return this.contains(t)?this.remove(t):this.add(t),this.contains(t)}},window.DOMTokenList=t,n(Element.prototype,"classList",function(){return new t(this)})}}();
+        function n(t, n, i) {
+            Object.defineProperty ? Object.defineProperty(t, n, {
+                get: i
+            }) : t.__defineGetter__(n, i)
+        }
+        if (!("undefined" == typeof window.Element || "classList" in document.documentElement)) {
+            var i = Array.prototype,
+                e = i.push,
+                s = i.splice,
+                o = i.join;
+            t.prototype = {
+                add: function(t) {
+                    this.contains(t) || (e.call(this, t), this.el.className = this.toString())
+                },
+                contains: function(t) {
+                    return -1 != this.el.className.indexOf(t)
+                },
+                item: function(t) {
+                    return this[t] || null
+                },
+                remove: function(t) {
+                    if (this.contains(t)) {
+                        for (var n = 0; n < this.length && this[n] != t; n++);
+                        s.call(this, n, 1), this.el.className = this.toString()
+                    }
+                },
+                toString: function() {
+                    return o.call(this, " ")
+                },
+                toggle: function(t) {
+                    return this.contains(t) ? this.remove(t) : this.add(t), this.contains(t)
+                }
+            }, window.DOMTokenList = t, n(Element.prototype, "classList", function() {
+                return new t(this)
+            })
+        }
+    }();
 
-		// canUse
-			window.canUse=function(p){if(!window._canUse)window._canUse=document.createElement("div");var e=window._canUse.style,up=p.charAt(0).toUpperCase()+p.slice(1);return p in e||"Moz"+up in e||"Webkit"+up in e||"O"+up in e||"ms"+up in e};
+    // canUse
+    window.canUse = function(p) {
+        if (!window._canUse) window._canUse = document.createElement("div");
+        var e = window._canUse.style,
+            up = p.charAt(0).toUpperCase() + p.slice(1);
+        return p in e || "Moz" + up in e || "Webkit" + up in e || "O" + up in e || "ms" + up in e
+    };
 
-		// window.addEventListener
-			(function(){if("addEventListener"in window)return;window.addEventListener=function(type,f){window.attachEvent("on"+type,f)}})();
+    // window.addEventListener
+    (function() {
+        if ("addEventListener" in window) return;
+        window.addEventListener = function(type, f) {
+            window.attachEvent("on" + type, f)
+        }
+    })();
 
-	// Vars.
-		var	$body = document.querySelector('body');
+    // Vars.
+    var $body = document.querySelector('body');
 
-	// Disable animations/transitions until everything's loaded.
-		$body.classList.add('is-loading');
+    // Disable animations/transitions until everything's loaded.
+    $body.classList.add('is-loading');
 
-		window.addEventListener('load', function() {
-			window.setTimeout(function() {
-				$body.classList.remove('is-loading');
-			}, 100);
-		});
+    window.addEventListener('load', function() {
+        window.setTimeout(function() {
+            $body.classList.remove('is-loading');
+        }, 100);
+    });
 
-	// Slideshow Background.
-		(function() {
+    // Slideshow Background.
+    (function() {
 
-			// Settings.
-				var settings = {
+        // Settings.
+        var settings = {
 
-					// Images (in the format of 'url': 'alignment').
-						images: {
-							'../launcher/images/bg01.jpg': 'center',
-							'../launcher/images/bg02.jpg': 'center',
-							'../launcher/images/bg03.jpg': 'center'
-						},
+            // Images (in the format of 'url': 'alignment').
+            images: {
+                '../launcher/images/bg01.jpg': 'center',
+                '../launcher/images/bg02.jpg': 'center',
+                '../launcher/images/bg03.jpg': 'center'
+            },
 
-					// Delay.
-						delay: 8000
+            // Delay.
+            delay: 6000
 
-				};
+        };
 
-			// Vars.
-				var	pos = 0, lastPos = 0,
-					$wrapper, $bgs = [], $bg,
-					k, v;
+        // Vars.
+        var pos = 0,
+            lastPos = 0,
+            $wrapper, $bgs = [],
+            $bg,
+            k, v;
 
-			// Create BG wrapper, BGs.
-				$wrapper = document.createElement('div');
-					$wrapper.id = 'bg';
-					$body.appendChild($wrapper);
+        // Create BG wrapper, BGs.
+        $wrapper = document.createElement('div');
+        $wrapper.id = 'bg';
+        $body.appendChild($wrapper);
 
-				for (k in settings.images) {
+        for (k in settings.images) {
 
-					// Create BG.
-						$bg = document.createElement('div');
-							$bg.style.backgroundImage = 'url("' + k + '")';
-							$bg.style.backgroundPosition = settings.images[k];
-							$wrapper.appendChild($bg);
+            // Create BG.
+            $bg = document.createElement('div');
+            $bg.style.backgroundImage = 'url("' + k + '")';
+            $bg.style.backgroundPosition = settings.images[k];
+            $wrapper.appendChild($bg);
 
-					// Add it to array.
-						$bgs.push($bg);
+            // Add it to array.
+            $bgs.push($bg);
 
-				}
+        }
 
-			// Main loop.
-				$bgs[pos].classList.add('visible');
-				$bgs[pos].classList.add('top');
+        // Main loop.
+        $bgs[pos].classList.add('visible');
+        $bgs[pos].classList.add('top');
 
-				// Bail if we only have a single BG or the client doesn't support transitions.
-					if ($bgs.length == 1
-					||	!canUse('transition'))
-						return;
+        // Bail if we only have a single BG or the client doesn't support transitions.
+        if ($bgs.length === 1 || !canUse('transition'))
+            return;
 
-				window.setInterval(function() {
+        window.setInterval(function() {
 
-					lastPos = pos;
-					pos++;
+            lastPos = pos;
+            pos++;
 
-					// Wrap to beginning if necessary.
-						if (pos >= $bgs.length)
-							pos = 0;
+            // Wrap to beginning if necessary.
+            if (pos >= $bgs.length)
+                pos = 0;
 
-					// Swap top images.
-						$bgs[lastPos].classList.remove('top');
-						$bgs[pos].classList.add('visible');
-						$bgs[pos].classList.add('top');
+            // Swap top images.
+            $bgs[lastPos].classList.remove('top');
+            $bgs[pos].classList.add('visible');
+            $bgs[pos].classList.add('top');
 
-					// Hide last image after a short delay.
-						window.setTimeout(function() {
-							$bgs[lastPos].classList.remove('visible');
-						}, settings.delay / 2);
+            // Hide last image after a short delay.
+            window.setTimeout(function() {
+                $bgs[lastPos].classList.remove('visible');
+            }, settings.delay / 2);
 
-				}, settings.delay);
+        }, settings.delay);
 
-		})();
+    })();
 
-	// Signup Form.
-		(function() {
+    // Signup Form.
+    (function() {
 
-			// Vars.
-				var $form = document.querySelectorAll('#signup-form')[0],
-					$submit = document.querySelectorAll('#signup-form input[type="submit"]')[0],
-					$message;
+        // Vars.
+        var $form = document.querySelectorAll('#frm-launchAlertForm-launchAlertForm')[0],
+            $submit = document.querySelectorAll('#frm-launchAlertForm-launchAlertForm input[type="submit"]')[0],
+            $message;
 
-			// Bail if addEventListener isn't supported.
-				if (!('addEventListener' in $form))
-					return;
+        // Bail if addEventListener isn't supported.
+        if (!('addEventListener' in $form))
+            return;
 
-			// Message.
-				$message = document.createElement('span');
-					$message.classList.add('message');
-					$form.appendChild($message);
+        // Message.
+        $message = document.createElement('span');
+        $message.classList.add('message');
+        $form.appendChild($message);
 
-				$message._show = function(type, text) {
+        $message._show = function(type, text) {
 
-					$message.innerHTML = text;
-					$message.classList.add(type);
-					$message.classList.add('visible');
+            $message.innerHTML = text;
+            $message.classList.remove('failure');
+            $message.classList.remove('success');
+            $message.classList.add(type);
+            $message.classList.add('visible');
 
-					window.setTimeout(function() {
-						$message._hide();
-					}, 3000);
+            window.setTimeout(function() {
+                $message._hide();
+            }, 3000);
 
-				};
+        };
 
-				$message._hide = function() {
-					$message.classList.remove('visible');
-				};
+        $message._hide = function() {
+            $message.classList.remove('visible');
+        };
 
-			// Events.
-			// Note: If you're *not* using AJAX, get rid of this event listener.
-				$form.addEventListener('submit', function(event) {
+        // Events.
+        // Note: If you're *not* using AJAX, get rid of this event listener.
+        $form.addEventListener('submit', function(event) {
 
-					event.stopPropagation();
-					event.preventDefault();
+            // Hide message.
+            $message._hide();
 
-					// Hide message.
-						$message._hide();
+            if (!Nette.validateForm($('#frm-launchAlertForm-launchAlertForm').get(0))) {
 
-					// Disable submit.
-						$submit.disabled = true;
+                window.setTimeout(function() {
+                     $message._show('failure', "It doesn't look like a valid email.");
 
-					// Process form.
-					// Note: Doesn't actually do anything yet (other than report back with a "thank you"),
-					// but there's enough here to piece together a working AJAX submission call that does.
-						window.setTimeout(function() {
+                }, 450);
+                
+            } else {
+                $("#frm-launchAlertForm-launchAlertForm").ajaxSubmit();
 
-							// Reset form.
-								$form.reset();
+                window.setTimeout(function() {
 
-							// Enable submit.
-								$submit.disabled = false;
+                    // Enable submit.
+                    $submit.disabled = true;
 
-							// Show message.
-								$message._show('success', 'Thank you!');
-								//$message._show('failure', 'Something went wrong. Please try again.');
+                    // Show message.
+                    $message._show('success', 'Thank you!');
 
-						}, 750);
-
-				});
-
-		})();
-
+                }, 750);
+            }
+            event.stopPropagation();
+            event.preventDefault();
+        });
+    })();
 });

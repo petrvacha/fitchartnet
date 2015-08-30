@@ -230,7 +230,7 @@ Nette.isDisabled = function(elem) {
  */
 Nette.addError = function(elem, message) {
 	if (message) {
-		alert(message);
+		//alert(message);
 	}
 	if (elem.focus) {
 		elem.focus();

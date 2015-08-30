@@ -27,9 +27,9 @@ class LaunchAlertForm extends \Pushupers\Application\Control
     public function createComponentLaunchAlertForm()
     {
         $form = new Form;
-        $form->getElementPrototype()->id = 'signup-form';
+        
         $form->addText('email', 'Email')
-            ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email.')
+            ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email eee.')
             ->setAttribute('placeholder', 'Email Address');
 
         $form->addSubmit('submit', 'Sign Up')
