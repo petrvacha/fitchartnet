@@ -7,7 +7,7 @@ use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
 
 
-class ActivityForm extends \Pushupers\Application\Control
+class ActivityForm extends \Fitchart\Application\Control
 {
     /** @var \App\Model\User */
     protected $userModel;

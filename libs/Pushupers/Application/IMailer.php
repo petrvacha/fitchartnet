@@ -1,6 +1,6 @@
 <?php
 
-namespace Pushupers\Application;
+namespace Fitchart\Application;
 
 use \Nette\Mail\Message;
 
@@ -12,9 +12,9 @@ use \Nette\Mail\Message;
 interface IMailer
 {
     /**
-     * @param \Pushupers\Application\ILogger $logger
+     * @param \Fitchart\Application\ILogger $logger
      */
-    public function setLogger(\Pushupers\Application\ILogger $logger);
+    public function setLogger(\Fitchart\Application\ILogger $logger);
 
     /**
      * @param \Nette\Mail\Message $mail

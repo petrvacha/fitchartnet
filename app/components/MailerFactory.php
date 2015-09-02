@@ -3,7 +3,7 @@
 namespace App\Components;
 
 use Nette;
-use Pushupers\Application\Mailer;
+use Fitchart\Application\Mailer;
 
 
 class MailerFactory extends Nette\Object

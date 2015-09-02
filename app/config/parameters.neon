@@ -1,5 +1,5 @@
 parameters:
     config:
-        emailMessageFrom: 'no-reply@pushupers.org'
-        emailContact: 'mail@pushupers.org'
+        emailMessageFrom: 'no-reply@fitchart.net'
+        emailContact: 'mail@fitchart.net'
         enableLanguage: ['en']

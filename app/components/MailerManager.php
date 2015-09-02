@@ -5,10 +5,10 @@ namespace App\Components;
 
 use Latte\Template;
 use Nette;
-use Pushupers\Application\Control;
-use Pushupers\Application\IMailer;
+use Fitchart\Application\Control;
+use Fitchart\Application\IMailer;
 use Nette\Mail\Message;
-use Pushupers\Application\LogicException;
+use Fitchart\Application\LogicException;
 
 
 class MailerManager extends Nette\Object
@@ -61,7 +61,7 @@ class MailerManager extends Nette\Object
 
         switch($actionName) {
             case self::REGISTRATION_NEW_USER:
-                $subject = 'Pushupers - Registration';
+                $subject = 'Fitchart - Registration';
                 $confirmationLink = $domainWithScheme . '/registration/confirm/' . $data['token'];
                 $data = array_merge($data, ['domain' => $domain, 'confirmationLink' => $confirmationLink]);
                 break;

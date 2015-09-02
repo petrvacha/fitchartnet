@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use \Nette\Mail\Message;
-use Pushupers\Application\ILogger;
+use Fitchart\Application\ILogger;
 
 class LoggerModel extends BaseModel implements ILogger
 {

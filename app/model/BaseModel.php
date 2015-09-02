@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use Nette\Utils\DateTime;
-use \Pushupers\Application\Utilities;
+use \Fitchart\Application\Utilities;
 
 /**
  * Basic operations

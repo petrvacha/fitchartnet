@@ -5,7 +5,7 @@ namespace App\Components;
 use Nette;
 use Nette\Mail\Message;
 use Nette\DI\Container;
-use Pushupers\Application\Mailer;
+use Fitchart\Application\Mailer;
 
 
 class MessageFactory extends Nette\Object

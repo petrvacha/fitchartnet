@@ -1,6 +1,6 @@
 <?php
 
-namespace Pushupers\Application;
+namespace Fitchart\Application;
 
 interface ILogger
 {

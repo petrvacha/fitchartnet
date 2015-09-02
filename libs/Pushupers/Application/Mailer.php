@@ -1,6 +1,6 @@
 <?php
 
-namespace Pushupers\Application;
+namespace Fitchart\Application;
 
 use Nette\Mail\SendmailMailer;
 use Nette\Mail\Message;
@@ -12,14 +12,14 @@ use Nette\Mail\Message;
  */
 class Mailer extends SendmailMailer implements IMailer
 {
-    /** @var \Pushupers\Application\ILogger */
+    /** @var \Fitchart\Application\ILogger */
     protected $logger = NULL;
 
 
     /**
-     * @param \Pushupers\Application\ILogger $logger
+     * @param \Fitchart\Application\ILogger $logger
      */
-    public function setLogger(\Pushupers\Application\ILogger $logger)
+    public function setLogger(\Fitchart\Application\ILogger $logger)
     {
         $this->logger = $logger;
     }

@@ -6,7 +6,7 @@ use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
 
 
-class LaunchAlertForm extends \Pushupers\Application\Control
+class LaunchAlertForm extends \Fitchart\Application\Control
 {
     /** @var \App\Model\LunchAlert */
     protected $launchAlertModel;

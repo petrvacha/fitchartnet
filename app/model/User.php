@@ -5,7 +5,7 @@ namespace App\Model;
 use Nette;
 use Nette\Security\Passwords;
 use Nette\Utils\DateTime;
-use Pushupers\Application\Utilities;
+use Fitchart\Application\Utilities;
 
 class User extends BaseModel
 {
