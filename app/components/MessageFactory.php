@@ -36,7 +36,7 @@ class MessageFactory extends Nette\Object
         $message  = new Message();
 
         if (isset($this->parameters['emailMessageFrom']) && !empty($this->parameters['emailMessageFrom'])) {
-            $message->setFrom($this->parameters['emailMessageFrom']);
+            $message->setFrom($this->parameters['emailMessageFrom'], 'Fitchart.net');
         }
 
         if (isset($this->parameters['bccLog']) && !empty($this->parameters['bccLog'])) {
