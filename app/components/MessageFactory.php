@@ -35,8 +35,8 @@ class MessageFactory extends Nette\Object
     {
         $message  = new Message();
 
-        if (isset($this->parameters['fromEmail']) && !empty($this->parameters['fromEmail'])) {
-            $message->setFrom($this->parameters['fromEmail']);
+        if (isset($this->parameters['emailMessageFrom']) && !empty($this->parameters['emailMessageFrom'])) {
+            $message->setFrom($this->parameters['emailMessageFrom']);
         }
 
         if (isset($this->parameters['bccLog']) && !empty($this->parameters['bccLog'])) {

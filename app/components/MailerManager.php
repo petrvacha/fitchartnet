@@ -75,6 +75,7 @@ class MailerManager extends Nette\Object
         $template->data = $data;
         
         if (!empty($this->config['enabledSendEmail'])) {
+            $this->message->addTo($data['email']);
             $this->message->setSubject($subject);
             $this->message->setBody($template);
             $this->mailer->send($this->message);
