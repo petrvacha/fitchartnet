@@ -1,5 +1,6 @@
 parameters:
     config:
         emailMessageFrom: 'no-reply@fitchart.net'
+        emailNameFrom: 'Fitchart.net'
         emailContact: 'info@fitchart.net'
         enableLanguage: ['en']
