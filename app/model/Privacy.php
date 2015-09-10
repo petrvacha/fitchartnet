@@ -4,18 +4,18 @@ namespace App\Model;
 
 class Privacy extends BaseModel
 {
-    /** @const PRIVACY_SUPERADMIN int */
-    const PRIVACY_SUPERADMIN = 1;
+    /** @const STRICT_PRIVATE int */
+    const STRICT_PRIVATE = 1;
 
-    /** @const PRIVACY_ADMIN int */
-    const PRIVACY_ADMIN = 2;
+    /** @const ONLY_FRIENDS int */
+    const ONLY_FRIENDS = 2;
 
-    /** @const PRIVACY_MODERATOR int */
-    const PRIVACY_MODERATOR = 3;
+    /** @const FRIENDS_AND_GROUPS int */
+    const FRIENDS_AND_GROUPS = 3;
 
-    /** @const PRIVACY_USER int */
-    const PRIVACY_USER = 4;
+    /** @const PUBLIC_IN_SYSTEM int */
+    const PUBLIC_IN_SYSTEM = 4;
 
-    /** @const PRIVACY_SPECTATOR int */
-    const PRIVACY_SPECTATOR = 5;
+    /** @const PUBLIC_FOR_ALL int */
+    const PUBLIC_FOR_ALL = 5;
 }

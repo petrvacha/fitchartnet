@@ -12,6 +12,7 @@ services:
     - App\Model\ActivityLog
     - App\Model\LaunchAlert
     - App\Model\Privacy
+    - App\Model\Role
     - App\Model\Email
 
     - App\Components\SignFormFactory

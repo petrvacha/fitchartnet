@@ -25,14 +25,20 @@ class User extends BaseModel
     /** @var \App\Model\Privacy */
     protected $privacyModel;
 
+    /** @var \App\Model\Role */
+    protected $roleModel;
+
 
     /**
      * @param \App\Model\Privacy $privacyModel
      */
-    public function __construct(\Nette\Database\Context $context, \App\Model\Privacy $privacyModel)
+    public function __construct(\Nette\Database\Context $context, 
+                                \App\Model\Privacy $privacyModel,
+                                \App\Model\Role $roleModel)
     {
         parent::__construct($context);
         $this->privacyModel = $privacyModel;
+        $this->roleModel = $roleModel;
     }
 
     /**
@@ -42,13 +48,15 @@ class User extends BaseModel
      */
     public function add($values)
     {
+        $roleModel = $this->roleModel;
         $privacyModel = $this->privacyModel;
         $insert = [
             'username' => $values->username,
             'password' => Passwords::hash($values->password),
             'email' => $values->email,
             'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
-            'privacy' => $privacyModel::PRIVACY_USER,
+            'privacy' => $privacyModel::FRIENDS_AND_GROUPS,
+            'role' => $roleModel::USER,
             'state' => self::USER_STATE_NEW,
             'created_at' => $this->getDateTime(),
             'update_at' => $this->getDateTime()
