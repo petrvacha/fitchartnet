@@ -1,0 +1,14 @@
+{block content}
+{include '../partial/navigation.latte'}
+
+<div class="container">
+    <h1>Profile</h1>
+    <a n:href="User:edit">edit profile</a> <br />
+    Name: {$user->firstname} {$user->surname} <br />
+    Email: {$user->email} <br />
+    Username: {$user->username} <br />
+    Privacy: <span title="{$user->privacy_description}">{$user->privacy_name}</span><br />
+    Info: {$user->bio}
+</div>
+
+{/block}

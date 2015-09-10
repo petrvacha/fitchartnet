@@ -11,6 +11,8 @@ services:
     - App\Model\Activity
     - App\Model\ActivityLog
     - App\Model\LaunchAlert
+    - App\Model\Privacy
+    - App\Model\Email
 
     - App\Components\SignFormFactory
     - App\Components\RegistrationFormFactory(@App\Model\User)

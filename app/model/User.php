@@ -21,6 +21,19 @@ class User extends BaseModel
     /** @const ACTIVE_BY_ID string */
     const ACTIVE_BY_ID = 'id';
 
+    
+    /** @var \App\Model\Privacy */
+    protected $privacyModel;
+
+
+    /**
+     * @param \App\Model\Privacy $privacyModel
+     */
+    public function __construct(\Nette\Database\Context $context, \App\Model\Privacy $privacyModel)
+    {
+        parent::__construct($context);
+        $this->privacyModel = $privacyModel;
+    }
 
     /**
      * Adds new user.
@@ -29,11 +42,13 @@ class User extends BaseModel
      */
     public function add($values)
     {
+        $privacyModel = $this->privacyModel;
         $insert = [
             'username' => $values->username,
             'password' => Passwords::hash($values->password),
             'email' => $values->email,
             'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
+            'privacy' => $privacyModel::PRIVACY_USER,
             'state' => self::USER_STATE_NEW,
             'created_at' => $this->getDateTime(),
             'update_at' => $this->getDateTime()
@@ -71,5 +86,18 @@ class User extends BaseModel
         return $this
                 ->findOneBy(['token' => $token])
                 ->update(['token' => NULL, 'active' => TRUE, 'update_at' => $this->getDateTime()]);
+    }
+
+    /**
+     * @param int $userId
+     * @return ActiveRow
+     */
+    public function getUserInfo($userId)
+    {
+        return $this
+                ->getTable()
+                ->where('user.id = ?', $userId)
+                ->select('user.*, privacy.description AS privacy_description, privacy.name AS privacy_name')
+                ->fetch();
     }
 }
