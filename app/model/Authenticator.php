@@ -31,6 +31,7 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
 
     /**
      * Performs an authentication.
+     * @param array $credentials
      * @return Nette\Security\Identity
      * @throws Nette\Security\AuthenticationException
      */
@@ -38,10 +39,13 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
     {
         list($username, $password) = $credentials;
 
-        $row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_NAME, $username)->fetch();
+        $row = $this->database->table(self::TABLE_NAME)
+                ->where(self::COLUMN_NAME, $username)
+                ->select('user.*, role.name AS role')
+                ->fetch();
 
         if (!$row) {
-                throw new Nette\Security\AuthenticationException('The  is incorrect.', self::IDENTITY_NOT_FOUND);
+                throw new Nette\Security\AuthenticationException('The is incorrect.', self::IDENTITY_NOT_FOUND);
 
         } elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
                 throw new Nette\Security\AuthenticationException('Your nickname or password are incorrect.', self::INVALID_CREDENTIAL);
