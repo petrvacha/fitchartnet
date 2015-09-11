@@ -1,0 +1,40 @@
+{form userProfileForm}
+
+    <ul class="error" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+
+    <div>
+	<div class="left">
+	    <div style="float: left; padding-right: 50px;">
+		{label firstname /}{input firstname}
+	    </div>
+	    <div style="float: left; padding-right: 50px;">
+		{label surname /}{input surname}
+	    </div>
+	    <div style="float: left; padding-right: 50px;">
+		{label email /}{input email}
+	    </div>
+	    <div style="float: left; padding-right: 50px;">
+		{label username /}{input username}
+	    </div>
+	    <div style="float: left; padding-right: 50px;">
+		{label privacy_id /}{input privacy_id}
+	    </div>
+	    <div style="float: left; padding-right: 50px;">
+		{label old_password /}{input old_password}
+	    </div>
+	    <div style="float: left; padding-right: 50px;">
+		{label password /}{input password}
+	    </div>
+	    <div style="float: left; padding-right: 50px;">
+		{label password_confirm /}{input password_confirm}
+	    </div>
+	    <div style="padding-top: 24px;">
+		{input submit}
+	    </div>
+	</div>
+    </div>
+{/form}
+<script type="text/javascript">
+</script>
