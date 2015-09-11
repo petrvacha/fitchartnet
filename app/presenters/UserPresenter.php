@@ -31,7 +31,7 @@ class UserPresenter extends LoginBasePresenter
 
     public function renderEdit()
     {
-
+        
     }
 
     /**
@@ -39,7 +39,7 @@ class UserPresenter extends LoginBasePresenter
      */
     protected function createComponentUserProfileForm()
     {
-        $form = $this->userProfileFormFactory->create();
+        $form = $this->userProfileFormFactory->create($this->user->id);
 
         $form->onSuccess[] = function () {
             $this->redirect('User:profile');

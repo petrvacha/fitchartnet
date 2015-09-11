@@ -15,22 +15,23 @@ class UserProfileForm extends \Fitchart\Application\Control
     /** @var \App\Model\Privacy */
     protected $privacyModel;
 
-    /** @var Nette\Security\User */
-    protected $user;
+    /** @var \Nette\Database\Table\ActiveRow */
+    protected $userData;
+
 
 
     /**
-     * @param \Nette\Security\User $user
+     * @param int $userId
      * @param \App\Model\User $userModel
      * @param \App\Model\Privacy $privacyModel
      */
-    public function __construct(\Nette\Security\User $user,
+    public function __construct($userId,
                                 \App\Model\User $userModel,
                                 \App\Model\Privacy $privacyModel)
     {
         parent::__construct();
-        $this->user = $user;
         $this->userModel = $userModel;
+        $this->userData = $this->userModel->getUserInfo($userId);
         $this->privacyModel = $privacyModel;
     }
 
@@ -81,6 +82,7 @@ class UserProfileForm extends \Fitchart\Application\Control
         $form->addSubmit('submit', 'Save')
             ->getControlPrototype()->class = 'btn btn-success';
 
+        $form->setDefaults($this->userData);
         $form->onSuccess[] = array($this, 'formSent');
         return $form;
     }

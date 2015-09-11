@@ -105,7 +105,15 @@ class User extends BaseModel
         return $this
                 ->getTable()
                 ->where('user.id = ?', $userId)
-                ->select('user.*, privacy.description AS privacy_description, privacy.name AS privacy_name')
+                ->select('user.id, 
+                          user.firstname,
+                          user.surname,
+                          user.email,
+                          user.username,
+                          user.bio,
+                          user.privacy_id,
+                          privacy.description AS privacy_description,
+                          privacy.name AS privacy_name')
                 ->fetch();
     }
 }

@@ -4,7 +4,8 @@
 interface IUserProfileFormFactory
 {
     /**
+     * @param int $userId
      * @return \App\Components\UserProfileForm
      */
-    function create();
+    function create($userId);
 }
