@@ -55,8 +55,8 @@ class User extends BaseModel
             'password' => Passwords::hash($values->password),
             'email' => $values->email,
             'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
-            'privacy' => $privacyModel::FRIENDS_AND_GROUPS,
-            'role' => $roleModel::USER,
+            'privacy_id' => $privacyModel::FRIENDS_AND_GROUPS,
+            'role_id' => $roleModel::USER,
             'state' => self::USER_STATE_NEW,
             'created_at' => $this->getDateTime(),
             'update_at' => $this->getDateTime()

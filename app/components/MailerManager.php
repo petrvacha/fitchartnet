@@ -85,9 +85,14 @@ class MailerManager extends Nette\Object
             $time = date("Y-m-d H:i:s");
 
             $template = strip_tags($template);
+
+            $fromArray = $this->message->getHeader('From');
+            reset($fromArray);
+            $from = key($fromArray);
+
             $message = "Odesílám email [{$time}]\n"
-                     . "From: {$this->message->getHeader('From')}"
-                     . "To: {$this->message->getHeader('To')}"
+                     . "From: {$from}"
+                     . "To: {$data['email']}"
                      . "Subject: {$subject}"
                      . "Body:\n{$template}"
                      . "\n\n Konec -----------------------------------\n\n\n\n";
