@@ -28,6 +28,12 @@ class LogicException extends \LogicException {};
 
 
 /**
+ * Unaccetable state
+ */
+class SecurityException extends LogicException {};
+
+
+/**
  * Methods which are partially / not implemented
  */
 class NotImplementedException extends LogicException {};

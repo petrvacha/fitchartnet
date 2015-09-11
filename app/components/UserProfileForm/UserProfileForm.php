@@ -18,6 +18,9 @@ class UserProfileForm extends \Fitchart\Application\Control
     /** @var \Nette\Database\Table\ActiveRow */
     protected $userData;
 
+    /** @var int */
+    protected $userId;
+
 
 
     /**
@@ -30,8 +33,9 @@ class UserProfileForm extends \Fitchart\Application\Control
                                 \App\Model\Privacy $privacyModel)
     {
         parent::__construct();
+        $this->userId = $userId;
         $this->userModel = $userModel;
-        $this->userData = $this->userModel->getUserInfo($userId);
+        $this->userData = $this->userModel->getUserData($userId);
         $this->privacyModel = $privacyModel;
     }
 
@@ -66,18 +70,18 @@ class UserProfileForm extends \Fitchart\Application\Control
             ->getControlPrototype()->class = 'form-control';
 
         
-        $form->addText('old_password', 'Old password');
+        $form->addPassword('old_password', 'Old password');
         
-        $form->addText('password', 'New password')
+        $form->addPassword('password', 'New password')
             ->addConditionOn($form['old_password'], Form::FILLED);
 
-        $form->addText('password_confirm', 'New password')
+        $form->addPassword('confirm_password', 'New password')
             ->addConditionOn($form['old_password'], Form::FILLED)
                 ->addRule(Form::EQUAL, "Passwords don't match", $form['password']);
 
         $form['old_password']->getControlPrototype()->class = 'form-control';
         $form['password']->getControlPrototype()->class = 'form-control';
-        $form['password_confirm']->getControlPrototype()->class = 'form-control';
+        $form['confirm_password']->getControlPrototype()->class = 'form-control';
 
         $form->addSubmit('submit', 'Save')
             ->getControlPrototype()->class = 'btn btn-success';
@@ -99,10 +103,13 @@ class UserProfileForm extends \Fitchart\Application\Control
      */
     public function formSent(Form $form, ArrayHash $values)
     {
-        $values['user_id'] = $this->user->getId();
-        
-        $values['updated_at'] = new \DateTime;
-        $this->activityLogModel->update($values);
+        $values['id'] = $this->userId;
+        try {
+            $this->userModel->updateUserData($values);
+            
+        } catch (\Fitchart\Application\SecurityException $e) {
+            $form->addError($e->getMessage());
+        }
     }
 
 
@@ -113,7 +120,15 @@ class UserProfileForm extends \Fitchart\Application\Control
      */
     public function isUsernameAvailable($userNameCandidate)
     {
-        return $this->userModel->findOneBy(['username' => $userNameCandidate->value]) ? FALSE : TRUE;
+        $user = $this->userModel->findOneBy(['username' => $userNameCandidate->value]);
+
+        if ($user && $user->id === $this->userId) {
+            return TRUE;
+        } else if ($user) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 
 
@@ -123,6 +138,14 @@ class UserProfileForm extends \Fitchart\Application\Control
      */
     public function isEmailAvailable($emailCandidate)
     {
-        return $this->userModel->findOneBy(['email' => $emailCandidate->value]) ? FALSE : TRUE;
+        $user = $this->userModel->findOneBy(['email' => $emailCandidate->value]);
+
+        if ($user && $user->id === $this->userId) {
+            return TRUE;
+        } else if ($user) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 }

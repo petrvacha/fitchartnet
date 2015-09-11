@@ -59,7 +59,7 @@ class User extends BaseModel
             'role_id' => $roleModel::USER,
             'state' => self::USER_STATE_NEW,
             'created_at' => $this->getDateTime(),
-            'update_at' => $this->getDateTime()
+            'updated_at' => $this->getDateTime()
         ];
         $this->context->table($this->getTableName())->insert($insert);
 
@@ -100,7 +100,7 @@ class User extends BaseModel
      * @param int $userId
      * @return ActiveRow
      */
-    public function getUserInfo($userId)
+    public function getUserData($userId)
     {
         return $this
                 ->getTable()
@@ -115,5 +115,25 @@ class User extends BaseModel
                           privacy.description AS privacy_description,
                           privacy.name AS privacy_name')
                 ->fetch();
+    }
+
+    /**
+     * @param array $data
+     * @throws SecurityException
+     */
+    public function updateUserData($data)
+    {
+        $user = $this->findRow($data['id']);
+        if (!empty($data['old_password']) && !empty($data['password']) && !empty($data['confirm_password'])) {
+            if (!Passwords::verify($data['old_password'], $user->password)) {
+                throw new \Fitchart\Application\SecurityException('Password is incorrect.');
+            }
+            $data['password'] = Passwords::hash($data['password']);
+        }
+        unset($data['old_password']);
+        unset($data['confirm_password']);
+        
+        $data['updated_at'] = $this->getDateTime();
+        $user->update($data);
     }
 }

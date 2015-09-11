@@ -26,7 +26,7 @@ class UserPresenter extends LoginBasePresenter
 
     public function renderProfile()
     {
-        $this->template->user = $this->userModel->getUserInfo($this->user->id);
+        $this->template->user = $this->userModel->getUserData($this->user->id);
     }
 
     public function renderEdit()
