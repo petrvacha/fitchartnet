@@ -51,6 +51,7 @@ class MainPresenter extends LoginBasePresenter
         $form = $this->activityFormFactory->create();
 
         $form->onSuccess[] = function () {
+            $this->flashMessage('Good job!', parent::MESSAGE_TYPE_INFO);
             $this->redirect('Main:default');
         };
         return $form;

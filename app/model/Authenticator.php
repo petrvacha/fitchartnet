@@ -45,10 +45,10 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
                 ->fetch();
 
         if (!$row) {
-                throw new Nette\Security\AuthenticationException('The is incorrect.', self::IDENTITY_NOT_FOUND);
+                throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
 
         } elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
-                throw new Nette\Security\AuthenticationException('Your nickname or password are incorrect.', self::INVALID_CREDENTIAL);
+                throw new Nette\Security\AuthenticationException('Your password is incorrect.', self::INVALID_CREDENTIAL);
         }
         //elseif (Passwords::needsRehash($user['password'])) {
         // $user->update(array(

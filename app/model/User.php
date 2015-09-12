@@ -131,15 +131,16 @@ class User extends BaseModel
     public function updateUserData($data)
     {
         $user = $this->findRow($data['id']);
-        if (!empty($data['old_password']) && !empty($data['password']) && !empty($data['confirm_password'])) {
+        if (!empty($data['password']) && !empty($data['confirm_password'])) {
             if (!Passwords::verify($data['old_password'], $user->password)) {
                 throw new \Fitchart\Application\SecurityException('Password is incorrect.');
             }
             $data['password'] = Passwords::hash($data['password']);
+        } else {
+            unset($data['password']);
         }
         unset($data['old_password']);
         unset($data['confirm_password']);
-        
         $data['updated_at'] = $this->getDateTime();
         $user->update($data);
     }
