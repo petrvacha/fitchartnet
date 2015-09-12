@@ -2,13 +2,17 @@
 
 namespace App\Components;
 
-use Nette;
 use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
 
-
+/**
+ * ActivityForm component
+ */
 class ActivityForm extends \Fitchart\Application\Control
 {
+    /** @var int */
+    protected $userId;
+    
     /** @var \App\Model\User */
     protected $userModel;
 
@@ -20,20 +24,22 @@ class ActivityForm extends \Fitchart\Application\Control
     
 
     /**
+     * @param int $userId
      * @param \App\Model\User $userModel
      * @param \App\Model\Activity $activityModel
+     * @param \App\Model\ActivityLog $activityLogModel
      */
-    public function __construct(\App\Model\User $userModel,
+    public function __construct($userId,
+                                \App\Model\User $userModel,
                                 \App\Model\Activity $activityModel,
-                                \App\Model\ActivityLog $activityLogModel
-                                )
+                                \App\Model\ActivityLog $activityLogModel)
     {
         parent::__construct();
+        $this->userId = $userId;
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;
         $this->activityLogModel = $activityLogModel;
     }
-
 
     /**
      * @return Form
@@ -74,7 +80,7 @@ class ActivityForm extends \Fitchart\Application\Control
     public function render()
     {
         $this->template->setFile($this->getTemplatePath());
-        $this->template->time = date('Y/m/d H:00');
+        $this->template->time = date('Y/m/d H:00'); //@todo trunc minutes down
         $this->template->render();
     }
 
@@ -84,9 +90,9 @@ class ActivityForm extends \Fitchart\Application\Control
      */
     public function formSent(Form $form, ArrayHash $values)
     {
-        $values['user_id'] = $this->presenter->getUser()->getId();
-        $values['activity_id'] = 1;
-        
+        $values['user_id'] = $this->userId;
+        $values['activity_id'] = 1; //push-up
+
         if (empty($values['id'])) {
             if (empty($values['created_at'])) {
                 $values['created_at'] = new \DateTime;
@@ -97,4 +103,5 @@ class ActivityForm extends \Fitchart\Application\Control
             $this->activityLogModel->update($values);
         }
     }
+    
 }

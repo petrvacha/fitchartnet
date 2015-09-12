@@ -44,17 +44,18 @@ class MainPresenter extends LoginBasePresenter
     }
 
     /**
-     * @return Form
+     * @return \App\Components\ActivityForm
      */
     protected function createComponentActivityForm()
     {
-        $form = $this->activityFormFactory->create();
-
-        $form->onSuccess[] = function () {
-            $this->flashMessage('Good job!', parent::MESSAGE_TYPE_INFO);
+        $control = $this->activityFormFactory->create($this->user->id);
+        
+        $control->getComponent('activityForm')->onSuccess[] = function() {
+            $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
+            $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_INFO);
             $this->redirect('Main:default');
         };
-        return $form;
+        return $control;
     }
 
 }
