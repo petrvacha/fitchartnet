@@ -4,6 +4,7 @@
 </div>
 
 <div id="content">
+    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
     {control signInForm}
     {control registrationForm}
 </div>
