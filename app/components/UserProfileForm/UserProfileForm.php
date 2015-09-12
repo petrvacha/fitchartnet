@@ -69,6 +69,10 @@ class UserProfileForm extends \Fitchart\Application\Control
         $form->addSelect('privacy_id', 'Who can see my stats', $this->privacyModel->getList())
             ->getControlPrototype()->class = 'form-control';
 
+        $form->addTextArea('bio', 'Something about you')
+            ->addRule(Form::MAX_LENGTH, '%label is way too long', 1000)
+            ->getControlPrototype()->class = 'form-control';
+
         
         $form->addPassword('old_password', 'Old password');
         

@@ -6,5 +6,5 @@
 /htdocs/js/script.min.js
 /node_modules/
 /app/config/config.local.neon
-!/htdocs/user/profilePhoto/no-photo-available.png
-/htdocs/user/profilePhoto/
+!/htdocs/images/user/profilePhoto/no-photo-available.png
+/htdocs/images/user/profilePhoto/
