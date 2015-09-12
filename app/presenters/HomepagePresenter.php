@@ -17,7 +17,7 @@ class HomepagePresenter extends BasePresenter
     /** @var \ISignFormFactory @inject */
     public $signFormFactory;
 
-    /** @var RegistrationFormFactory @inject */
+    /** @var \IRegistrationFormFactory @inject */
     public $registrationFormFactory;
 
     /** @var \ILaunchAlertFormFactory @inject */
@@ -60,12 +60,12 @@ class HomepagePresenter extends BasePresenter
      */
     protected function createComponentRegistrationForm()
     {
-        $form = $this->registrationFormFactory->create();
-        $form->onSuccess[] = function ($form) {
+        $control = $this->registrationFormFactory->create();
+        $control->getComponent('registrationForm')->onSuccess[] = function() {
             $this->flashMessage('Check your mail box and confirm the registration.', 'info');
-            $form->getPresenter()->redirect('Homepage:');
+            $this->redirect('Homepage:');
         };
-        return $form;
+        return $control;
     }
 
     /**

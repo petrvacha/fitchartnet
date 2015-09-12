@@ -99,7 +99,7 @@ class User extends BaseModel
     {
         return $this
                 ->findOneBy(['token' => $token])
-                ->update(['token' => NULL, 'active' => TRUE, 'update_at' => $this->getDateTime()]);
+                ->update(['token' => NULL, 'active' => TRUE, 'updated_at' => $this->getDateTime()]);
     }
 
     /**

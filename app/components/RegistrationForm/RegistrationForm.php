@@ -3,10 +3,11 @@
 namespace App\Components;
 
 use Nette;
+use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
 
 
-class RegistrationFormFactory extends Nette\Object
+class RegistrationForm extends \Fitchart\Application\Control
 {
     /** @var MailerManagerFactory */
     public $mailerManagerFactory;
@@ -20,8 +21,7 @@ class RegistrationFormFactory extends Nette\Object
      * @param \App\Model\User $userModel
      * @param MailerManagerFactory $mailerManagerFactory
      */
-    public function __construct(\App\Model\User $userModel,
-                                MailerManagerFactory $mailerManagerFactory)
+    public function __construct(\App\Model\User $userModel, MailerManagerFactory $mailerManagerFactory)
     {
         $this->userModel = $userModel;
         $this->mailerManagerFactory = $mailerManagerFactory;
@@ -31,7 +31,7 @@ class RegistrationFormFactory extends Nette\Object
     /**
      * @return Form
      */
-    public function create()
+    public function createComponentRegistrationForm()
     {
         $form = new Form;
         $form->addText('username', 'Username')
@@ -51,15 +51,21 @@ class RegistrationFormFactory extends Nette\Object
 
         $form->addSubmit('send', 'Sign Up');
 
-        $form->onSuccess[] = array($this, 'registrationFormSent');
+        $form->onSuccess[] = array($this, 'formSent');
         return $form;
+    }
+
+    public function render()
+    {
+        $this->template->setFile($this->getTemplatePath());
+        $this->template->render();
     }
 
     /**
      * @param Form $form
-     * @param $values
+     * @param ArrayHash $values
      */
-    public function registrationFormSent($form, $values)
+    public function formSent(Form $form, ArrayHash $values)
     {
         try {
             $userData = $this->userModel->add($values);
@@ -71,7 +77,6 @@ class RegistrationFormFactory extends Nette\Object
         }
     }
 
-
     /**
      * @param \Nette\Forms\IControl $userNameCandidate
      * @return bool
@@ -80,7 +85,6 @@ class RegistrationFormFactory extends Nette\Object
     {
         return $this->userModel->findOneBy(['username' => $userNameCandidate->value]) ? FALSE : TRUE;
     }
-
 
     /**
      * @param \Nette\Forms\IControl $emailCandidate
