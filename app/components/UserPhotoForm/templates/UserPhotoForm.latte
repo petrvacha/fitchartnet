@@ -10,11 +10,7 @@
 		{label photo /}{input photo}
 	    </div>
 	    <div style="padding-top: 24px;">
-                {if $user['profile_photo']}
-                    <img style="max-width: 250px" src="{$basePath}/images/user/profilePhoto/{$user->profile_photo}">
-                {else}
-                    <img style="max-width: 250px" src="{$basePath}/images/user/profilePhoto/no-photo-available.png">
-                {/if}
+                <img style="max-width: 250px" src="{$basePath}/images/user/profilePhoto/{if $user['profile_photo']}{$user->profile_photo}{else}no-photo-available.png{/if}">
 		{input upload}
 	    </div>
 	</div>

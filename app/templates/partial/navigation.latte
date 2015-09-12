@@ -10,8 +10,9 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li id="fat-menu" class="dropdown" aria-expanded="true">
-              <a id="drop3" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                 {$userData['username']}
+              <a id="drop3" href="#" style="padding: 5px 0px 5px 0px;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <img style="max-width: 40px; max-height: 40px;" src="{$basePath}/images/user/profilePhoto/{if isset($userData['profile_photo']) && !empty($userData['profile_photo'])}{$userData['profile_photo']}{else}no-photo-available.png{/if}">
+                {$userData['username']}
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="drop3">

@@ -27,16 +27,24 @@ class User extends BaseModel
 
     /** @var \App\Model\Role */
     protected $roleModel;
+    
+    /** @var \App\Model\Role $roleModel */
+    protected $user;
 
-
+            
     /**
+     * @param \Nette\Database\Context $context
+     * @param \Nette\Security\User $user
      * @param \App\Model\Privacy $privacyModel
+     * @param \App\Model\Role $roleModel
      */
-    public function __construct(\Nette\Database\Context $context, 
+    public function __construct(\Nette\Database\Context $context,
+                                \Nette\Security\User $user,
                                 \App\Model\Privacy $privacyModel,
                                 \App\Model\Role $roleModel)
     {
         parent::__construct($context);
+        $this->user = $user;
         $this->privacyModel = $privacyModel;
         $this->roleModel = $roleModel;
     }
@@ -150,6 +158,7 @@ class User extends BaseModel
             $data['photo']->move(USER_AVATAR_DIR . '/' . $fileName);
 
             $this->findRow($data['userId'])->update(['profile_photo' => $fileName]);
+            $this->user->getIdentity()->profile_photo = $fileName;
         } else {
             throw new \Fitchart\Application\DataException('An error occurred in the upload.');
        }

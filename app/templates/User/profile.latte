@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Profile</h1>
     <a n:href="User:edit">edit profile</a> <br />
+    <img style="max-width: 250px" src="{$basePath}/images/user/profilePhoto/{if $user['profile_photo']}{$user->profile_photo}{else}no-photo-available.png{/if}"><br /><br />
     Name: {$user->firstname} {$user->surname} <br />
     Email: {$user->email} <br />
     Username: {$user->username} <br />
