@@ -15,6 +15,9 @@ class UserPresenter extends LoginBasePresenter
     /** @var \IUserProfileFormFactory @inject */
     public $userProfileFormFactory;
 
+    /** @var \IUserPhotoFormFactory @inject */
+    public $userPhotoFormFactory;
+
     
     /**
      * @param \App\Model\User $userModel
@@ -40,6 +43,19 @@ class UserPresenter extends LoginBasePresenter
     protected function createComponentUserProfileForm()
     {
         $form = $this->userProfileFormFactory->create($this->user->id);
+
+        $form->onSuccess[] = function () {
+            $this->redirect('User:profile');
+        };
+        return $form;
+    }
+
+    /**
+     * @return Form
+     */
+    protected function createComponentUserPhotoForm()
+    {
+        $form = $this->userPhotoFormFactory->create($this->user->id);
 
         $form->onSuccess[] = function () {
             $this->redirect('User:profile');

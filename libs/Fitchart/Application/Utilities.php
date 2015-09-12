@@ -97,4 +97,13 @@ class Utilities extends \Nette\Object
     {
         return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $className)), '_');
     }
+
+    /**
+     * @param string $fileName
+     * @return string|FALSE
+     */
+    public static function getFileExtension($fileName)
+    {
+        return substr(strrchr($fileName, '.'), 1);
+    }
 }

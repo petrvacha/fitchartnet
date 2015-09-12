@@ -112,13 +112,14 @@ class User extends BaseModel
                           user.username,
                           user.bio,
                           user.privacy_id,
+                          user.profile_photo,
                           privacy.description AS privacy_description,
                           privacy.name AS privacy_name')
                 ->fetch();
     }
 
     /**
-     * @param array $data
+     * @param ArrayHash $data
      * @throws SecurityException
      */
     public function updateUserData($data)
@@ -135,5 +136,22 @@ class User extends BaseModel
         
         $data['updated_at'] = $this->getDateTime();
         $user->update($data);
+    }
+
+    /**
+     * @param ArrayHash $data
+     * @throws \Fitchart\Application\DataException
+     */
+    public function updatePhoto($data)
+    {
+        if ($data['photo']->isOk()) {
+            $extension = Utilities::getFileExtension($data['photo']->getName());
+            $fileName = $data['userId'] . '.' . $extension;
+            $data['photo']->move(USER_AVATAR_DIR . '/' . $fileName);
+
+            $this->findRow($data['userId'])->update(['profile_photo' => $fileName]);
+        } else {
+            throw new \Fitchart\Application\DataException('An error occurred in the upload.');
+       }
     }
 }

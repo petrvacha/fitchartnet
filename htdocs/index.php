@@ -5,6 +5,11 @@
 
 define('APP_DIR', __DIR__ . '/../app');
 
+define('HTDOCS_DIR', __DIR__ . '/../htdocs');
+
+define('USER_AVATAR_DIR', __DIR__ . '/../htdocs/images/user/profilePhoto');
+
+
 $container = require __DIR__ . '/../app/bootstrap.php';
 
 $container->getByType('Nette\Application\Application')->run();

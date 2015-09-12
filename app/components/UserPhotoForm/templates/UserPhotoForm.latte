@@ -1,0 +1,22 @@
+{form userPhotoForm}
+
+    <ul class="error" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+
+    <div>
+	<div class="left">
+	    <div style="float: left; padding-right: 50px;">
+		{label photo /}{input photo}
+	    </div>
+	    <div style="padding-top: 24px;">
+                {if $user['profile_photo']}
+                    <img style="max-width: 250px" src="{$basePath}/images/user/profilePhoto/{$user->profile_photo}">
+                {else}
+                    <img style="max-width: 250px" src="{$basePath}/images/user/profilePhoto/no-photo-available.png">
+                {/if}
+		{input upload}
+	    </div>
+	</div>
+    </div>
+{/form}
