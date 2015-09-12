@@ -25,3 +25,4 @@ services:
     - \ILaunchAlertFormFactory
     - \IUserProfileFormFactory
     - \IUserPhotoFormFactory
+    - \ISignFormFactory

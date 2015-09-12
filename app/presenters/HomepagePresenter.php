@@ -10,11 +10,11 @@ use App\Model\User;
 use \Nette\Utils\DateTime;
 
 /**
- * Homepage presenter.
+ * Homepage presenter
  */
 class HomepagePresenter extends BasePresenter
 {
-    /** @var SignFormFactory @inject */
+    /** @var \ISignFormFactory @inject */
     public $signFormFactory;
 
     /** @var RegistrationFormFactory @inject */
@@ -22,9 +22,7 @@ class HomepagePresenter extends BasePresenter
 
     /** @var \ILaunchAlertFormFactory @inject */
     public $launchAlertFormFactory;
-
-
-
+    
 
     public function renderDefault()
     {
@@ -48,12 +46,12 @@ class HomepagePresenter extends BasePresenter
      */
     protected function createComponentSignInForm()
     {
-        $form = $this->signFormFactory->create();
-        $form->onSuccess[] = function ($form) {
-            $this->flashMessage('Welcome!', 'info');
-            $form->getPresenter()->redirect('Main:');
+        $control = $this->signFormFactory->create();
+        $control->getComponent('signForm')->onSuccess[] = function() {
+            $this->flashMessage('Welcome on board!', 'info');
+            $this->redirect('Main:');
         };
-        return $form;
+        return $control;
     }
 
     /**
