@@ -3,11 +3,6 @@
 namespace App\Presenters;
 
 use Nette;
-use App\Model;
-use App\Components\SignFormFactory;
-use App\Components\RegistrationFormFactory;
-use App\Model\User;
-use \Nette\Utils\DateTime;
 
 /**
  * Homepage presenter
