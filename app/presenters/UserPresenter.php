@@ -4,7 +4,7 @@ namespace App\Presenters;
 
 
 /**
- * User presenter.
+ * User presenter
  */
 class UserPresenter extends LoginBasePresenter
 {
@@ -12,10 +12,10 @@ class UserPresenter extends LoginBasePresenter
     protected $userModel;
     
     
-    /** @var \IUserProfileFormFactory @inject */
+    /** @var \App\Components\UserProfileForm\IUserProfileFormFactory @inject */
     public $userProfileFormFactory;
 
-    /** @var \IUserPhotoFormFactory @inject */
+    /** @var \App\Components\UserPhotoForm\IUserPhotoFormFactory @inject */
     public $userPhotoFormFactory;
 
     

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Components\LaunchAlertForm;
+
 
 interface ILaunchAlertFormFactory
 {

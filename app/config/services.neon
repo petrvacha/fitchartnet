@@ -19,9 +19,9 @@ services:
     - App\Components\MailerFactory(@App\Model\LoggerModel)
     - App\Components\MessageFactory
 
-    - \IActivityFormFactory
-    - \ILaunchAlertFormFactory
-    - \IUserProfileFormFactory
-    - \IUserPhotoFormFactory
-    - \ISignFormFactory
-    - \IRegistrationFormFactory
+    - App\Components\ActivityForm\IActivityFormFactory
+    - App\Components\LaunchAlertForm\ILaunchAlertFormFactory
+    - App\Components\UserProfileForm\IUserProfileFormFactory
+    - App\Components\UserPhotoForm\IUserPhotoFormFactory
+    - App\Components\SignForm\ISignFormFactory
+    - App\Components\RegistrationForm\IRegistrationFormFactory

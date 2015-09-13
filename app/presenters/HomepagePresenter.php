@@ -9,13 +9,13 @@ use Nette;
  */
 class HomepagePresenter extends BasePresenter
 {
-    /** @var \ISignFormFactory @inject */
+    /** @var \App\Components\SignForm\ISignFormFactory @inject */
     public $signFormFactory;
 
-    /** @var \IRegistrationFormFactory @inject */
+    /** @var \App\Components\RegistrationForm\IRegistrationFormFactory @inject */
     public $registrationFormFactory;
 
-    /** @var \ILaunchAlertFormFactory @inject */
+    /** @var \App\Components\LaunchAlertForm\ILaunchAlertFormFactory @inject */
     public $launchAlertFormFactory;
     
 

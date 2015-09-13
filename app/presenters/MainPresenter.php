@@ -12,7 +12,7 @@ class MainPresenter extends LoginBasePresenter
     protected $activityLog;
 
 
-    /** @var \IActivityFormFactory @inject */
+    /** @var \App\Components\ActivityForm\IActivityFormFactory @inject */
     public $activityFormFactory;
 
     

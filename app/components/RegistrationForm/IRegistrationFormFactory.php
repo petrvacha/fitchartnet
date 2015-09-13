@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Components\RegistrationForm;
+
 
 interface IRegistrationFormFactory
 {

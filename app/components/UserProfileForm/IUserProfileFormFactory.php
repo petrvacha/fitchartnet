@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Components\UserProfileForm;
+
 
 interface IUserProfileFormFactory
 {

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Components\SignForm;
+
 
 interface ISignFormFactory
 {
