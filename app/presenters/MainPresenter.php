@@ -26,7 +26,7 @@ class MainPresenter extends LoginBasePresenter
 
     public function renderDefault()
     {
-        
+        $this->template->title = 'Overview';
     }
 
     public function actionLogout()
@@ -40,6 +40,7 @@ class MainPresenter extends LoginBasePresenter
      */
     public function actionList($id)
     {
+        $this->template->title = 'list';
         $this->template->activities = $this->activityLog->getUserActities($this->user->id, $id);
     }
 

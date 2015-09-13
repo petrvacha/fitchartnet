@@ -30,11 +30,12 @@ class UserPresenter extends LoginBasePresenter
     public function renderProfile()
     {
         $this->template->user = $this->userModel->getUserData($this->user->id);
+        $this->template->title = 'your profile';
     }
 
     public function renderEdit()
     {
-        
+        $this->template->title = 'profile edit';
     }
 
     /**

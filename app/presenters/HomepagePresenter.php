@@ -21,11 +21,12 @@ class HomepagePresenter extends BasePresenter
 
     public function renderDefault()
     {
-        
+        $this->template->title = 'Fitchart - gamma version';
     }
 
     public function renderLaunch()
     {
+        $this->template->title = 'Fitchart.net';
         $this->setLayout('launch');
     }
 
