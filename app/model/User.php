@@ -119,6 +119,8 @@ class User extends BaseModel
                           user.bio,
                           user.privacy_id,
                           user.profile_photo,
+                          user.gender_id,
+                          gender.name AS gender,
                           privacy.description AS privacy_description,
                           privacy.name AS privacy_name')
                 ->fetch();

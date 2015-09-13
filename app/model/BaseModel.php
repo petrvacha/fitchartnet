@@ -79,6 +79,17 @@ class BaseModel extends \Nette\Object
     }
 
     /**
+     * @param string $keyName
+     * @param string $valueName
+     * @return Nette\Database\Table\Selection
+     */
+    public function findPairs($keyName = 'id', $valueName = 'name')
+    {
+        return $this->getTable()
+                    ->fetchPairs($keyName, $valueName);
+    }
+
+    /**
      * @param array $by
      * @return Nette\Database\Row
      */

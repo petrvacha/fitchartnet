@@ -19,7 +19,9 @@ class Privacy extends BaseModel
     /** @const PUBLIC_FOR_ALL int */
     const PUBLIC_FOR_ALL = 5;
 
-
+    /**
+     * @return type
+     */
     public function getList()
     {
         return $this->findActivePairs();

@@ -12,6 +12,9 @@ class UserProfileForm extends \Fitchart\Application\Control
     /** @var \App\Model\User */
     protected $userModel;
 
+    /** @var \App\Model\Gender */
+    protected $genderModel;
+
     /** @var \App\Model\Privacy */
     protected $privacyModel;
 
@@ -22,19 +25,21 @@ class UserProfileForm extends \Fitchart\Application\Control
     protected $userId;
 
 
-
     /**
      * @param int $userId
      * @param \App\Model\User $userModel
+     * @param \App\Model\Gender $genderModel
      * @param \App\Model\Privacy $privacyModel
      */
     public function __construct($userId,
                                 \App\Model\User $userModel,
+                                \App\Model\Gender $genderModel,
                                 \App\Model\Privacy $privacyModel)
     {
         parent::__construct();
         $this->userId = $userId;
         $this->userModel = $userModel;
+        $this->genderModel = $genderModel;
         $this->userData = $this->userModel->getUserData($userId);
         $this->privacyModel = $privacyModel;
     }
@@ -64,6 +69,10 @@ class UserProfileForm extends \Fitchart\Application\Control
             ->addRule(Form::FILLED, '%label must be filled')
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
             ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!')
+            ->getControlPrototype()->class = 'form-control';
+
+        $form->addSelect('gender_id', 'Gender', $this->genderModel->getList())
+            ->setPrompt('None')
             ->getControlPrototype()->class = 'form-control';
 
         $form->addSelect('privacy_id', 'Who can see my stats', $this->privacyModel->getList())

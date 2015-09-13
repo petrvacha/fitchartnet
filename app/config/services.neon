@@ -7,6 +7,7 @@ services:
 
     - App\Model\BaseModel
     - App\Model\User
+    - App\Model\Gender
     - App\Model\LoggerModel
     - App\Model\Activity
     - App\Model\ActivityLog
