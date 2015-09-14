@@ -30,6 +30,28 @@ class Control extends \Nette\Application\UI\Control
     public $onSuccess = [];
 
     /**
+     * @param \Nette\Application\UI\Form $form
+     */
+    protected function addBootstrapStyling(\Nette\Application\UI\Form $form)
+    {
+        $form->getElementPrototype()->class('form-horizontalss');
+        $usedPrimary = FALSE;
+        
+        foreach ($form->getControls() as $control) {
+            if ($control instanceof \Nette\Forms\Controls\Button) {
+                    $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-primary' : 'btn btn-default');
+                    $usedPrimary = TRUE;
+
+            } elseif ($control instanceof \Nette\Forms\Controls\TextBase || $control instanceof \Nette\Forms\Controls\SelectBox || $control instanceof \Nette\Forms\Controls\MultiSelectBox) {
+                    $control->getControlPrototype()->addClass('form-control');
+
+            } elseif ($control instanceof \Nette\Forms\Controls\Checkbox || $control instanceof \Nette\Forms\Controls\CheckboxList || $control instanceof \Nette\Forms\Controls\RadioList) {
+                    $control->getSeparatorPrototype()->setName('div')->addClass($control->getControlPrototype()->type);
+            }
+        }
+    }
+
+    /**
      * @return string
      */
     protected function getTemplatePath()

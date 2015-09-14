@@ -52,35 +52,28 @@ class UserProfileForm extends \Fitchart\Application\Control
     {
         $form = new Form;
         $form->addText('firstname', 'Firstname')
-            ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
-            ->getControlPrototype()->class = 'form-control';
+            ->addRule(Form::MAX_LENGTH, '%label is way too long', 50);
 
         $form->addText('surname', 'Surname')
-            ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
-            ->getControlPrototype()->class = 'form-control';
+            ->addRule(Form::MAX_LENGTH, '%label is way too long', 50);
 
         $form->addText('email', 'Email')
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
             ->addRule(Form::EMAIL, '%label is not a valid email')
-            ->addRule(callback($this, 'isEmailAvailable'), 'This email is already taken!')
-            ->getControlPrototype()->class = 'form-control';
+            ->addRule(callback($this, 'isEmailAvailable'), 'This email is already taken!');
 
         $form->addText('username', 'Username')
             ->addRule(Form::FILLED, '%label must be filled')
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
-            ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!')
-            ->getControlPrototype()->class = 'form-control';
+            ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!');
 
         $form->addSelect('gender_id', 'Gender', $this->genderModel->getList())
-            ->setPrompt('None')
-            ->getControlPrototype()->class = 'form-control';
+            ->setPrompt('None');
 
-        $form->addSelect('privacy_id', 'Who can see my stats', $this->privacyModel->getList())
-            ->getControlPrototype()->class = 'form-control';
+        $form->addSelect('privacy_id', 'Who can see my stats', $this->privacyModel->getList());
 
         $form->addTextArea('bio', 'Something about you')
-            ->addRule(Form::MAX_LENGTH, '%label is way too long', 1000)
-            ->getControlPrototype()->class = 'form-control';
+            ->addRule(Form::MAX_LENGTH, '%label is way too long', 1000);
 
         
         $form->addPassword('old_password', 'Old password');
@@ -92,15 +85,13 @@ class UserProfileForm extends \Fitchart\Application\Control
             ->addConditionOn($form['old_password'], Form::FILLED)
                 ->addRule(Form::EQUAL, "Passwords don't match", $form['password']);
 
-        $form['old_password']->getControlPrototype()->class = 'form-control';
-        $form['password']->getControlPrototype()->class = 'form-control';
-        $form['confirm_password']->getControlPrototype()->class = 'form-control';
-
         $form->addSubmit('submit', 'Save')
-            ->getControlPrototype()->class = 'btn btn-success';
+            ->getControlPrototype()->addClass('btn-success');
 
         $form->setDefaults($this->userData);
         $form->onSuccess[] = array($this, 'formSent');
+
+        $this->addBootstrapStyling($form);
         return $form;
     }
 
