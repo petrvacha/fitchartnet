@@ -34,13 +34,13 @@ class UserPhotoForm extends \Fitchart\Application\Control
     {
         $form = new Form;
         $form->addUpload('photo', 'Photo:')
-            ->addRule(Form::IMAGE, 'File has to be JPEG, PNG or GIF.')
-            ->getControlPrototype()->class = 'form-control';
+            ->addRule(Form::IMAGE, 'File has to be JPEG, PNG or GIF.');
 
-        $form->addSubmit('upload', 'Upload')
-            ->getControlPrototype()->class = 'btn btn-success';
+        $form->addSubmit('upload', 'Upload');
 
         $form->onSuccess[] = array($this, 'formSent');
+
+        $this->addBootstrapStyling($form);
         return $form;
     }
 

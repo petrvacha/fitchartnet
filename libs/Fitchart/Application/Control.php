@@ -2,6 +2,16 @@
 
 namespace Fitchart\Application;
 
+use \Nette\Forms\Controls\Button;
+use \Nette\Forms\Controls\TextBase;
+use \Nette\Forms\Controls\UploadControl;
+use \Nette\Forms\Controls\SelectBox;
+use \Nette\Forms\Controls\MultiSelectBox;
+use \Nette\Forms\Controls\Checkbox;
+use \Nette\Forms\Controls\CheckboxList;
+use \Nette\Forms\Controls\RadioList;
+
+
 /**
  * Control
  */
@@ -29,6 +39,7 @@ class Control extends \Nette\Application\UI\Control
     
     public $onSuccess = [];
 
+
     /**
      * @param \Nette\Application\UI\Form $form
      */
@@ -38,14 +49,14 @@ class Control extends \Nette\Application\UI\Control
         $usedPrimary = FALSE;
         
         foreach ($form->getControls() as $control) {
-            if ($control instanceof \Nette\Forms\Controls\Button) {
+            if ($control instanceof Button) {
                     $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-primary' : 'btn btn-default');
                     $usedPrimary = TRUE;
 
-            } elseif ($control instanceof \Nette\Forms\Controls\TextBase || $control instanceof \Nette\Forms\Controls\SelectBox || $control instanceof \Nette\Forms\Controls\MultiSelectBox) {
+            } elseif ($control instanceof UploadControl || $control instanceof TextBase || $control instanceof SelectBox || $control instanceof MultiSelectBox) {
                     $control->getControlPrototype()->addClass('form-control');
 
-            } elseif ($control instanceof \Nette\Forms\Controls\Checkbox || $control instanceof \Nette\Forms\Controls\CheckboxList || $control instanceof \Nette\Forms\Controls\RadioList) {
+            } elseif ($control instanceof Checkbox || $control instanceof CheckboxList || $control instanceof RadioList) {
                     $control->getSeparatorPrototype()->setName('div')->addClass($control->getControlPrototype()->type);
             }
         }
