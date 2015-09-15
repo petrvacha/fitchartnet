@@ -52,6 +52,8 @@ class RegistrationForm extends \Fitchart\Application\Control
         $form->addSubmit('send', 'Sign Up');
 
         $form->onSuccess[] = array($this, 'formSent');
+
+        $this->addBootstrapStyling($form);
         return $form;
     }
 
