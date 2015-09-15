@@ -49,15 +49,14 @@ class ActivityForm extends \Fitchart\Application\Control
         $form = new Form;
         $form->addText('created_at', 'Time')
             ->setAttribute('placeholder', 'now')
-            ->getControlPrototype()->class = 'datetimepicker form-control';
+            ->getControlPrototype()->addClass('datetimepicker');
 
         $form['created_at']->getLabelPrototype()->style = 'float: left; width: 60px;';
 
         $form->addText('value', 'Count')
             ->setAttribute('placeholder', '0')
             ->setRequired('You forget fill important number.')
-            ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.')
-            ->getControlPrototype()->class = 'form-control';
+            ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.');
         $form['value']->getLabelPrototype()->style = 'float: left; width: 60px;';
 
         //$form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
@@ -70,10 +69,11 @@ class ActivityForm extends \Fitchart\Application\Control
             }
             $form->setDefaults($this->data);
         }
-        $form->addSubmit('submit', 'Add')
-            ->getControlPrototype()->class = 'btn btn-success';
+        $form->addSubmit('submit', 'Add');
 
         $form->onSuccess[] = array($this, 'formSent');
+        
+        $this->addBootstrapStyling($form);
         return $form;
     }
 
