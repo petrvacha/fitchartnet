@@ -43,6 +43,8 @@ class SignForm extends \Fitchart\Application\Control
         $form->addSubmit('send', 'Sign in');
 
         $form->onSuccess[] = array($this, 'formSent');
+        
+        $this->addBootstrapStyling($form);
         return $form;
     }
 
