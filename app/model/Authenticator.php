@@ -15,6 +15,7 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
     const TABLE_NAME = 'user';
     const COLUMN_ID = 'id';
     const COLUMN_NAME = 'username';
+    const COLUMN_EMAIL = 'email';
     const COLUMN_PASSWORD_HASH = 'password';
     const COLUMN_ROLE = 'role';
 
@@ -37,18 +38,18 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
      */
     public function authenticate(array $credentials)
     {
-        list($username, $password) = $credentials;
+        list($login, $password) = $credentials;
 
         $row = $this->database->table(self::TABLE_NAME)
-                ->where(self::COLUMN_NAME, $username)
+                ->where(self::COLUMN_NAME . '= ? OR ' . self::COLUMN_EMAIL . '= ?', $login, $login)
                 ->select('user.*, role.name AS role')
                 ->fetch();
 
         if (!$row) {
-                throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
+            throw new Nette\Security\AuthenticationException('Username or email is incorrect.', self::IDENTITY_NOT_FOUND);
 
         } elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
-                throw new Nette\Security\AuthenticationException('Your password is incorrect.', self::INVALID_CREDENTIAL);
+            throw new Nette\Security\AuthenticationException('Your password is incorrect.', self::INVALID_CREDENTIAL);
         }
         //elseif (Passwords::needsRehash($user['password'])) {
         // $user->update(array(
