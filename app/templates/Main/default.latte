@@ -1,9 +1,16 @@
 {block content}
 {include '../partial/navigation.latte'}
 
-<div class="container">
-    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-    {control activityForm}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="col-xs-2">
+        <img style="max-width: 200px" src="{$basePath}/images/user/profilePhoto/{if isset($userData['profile_photo']) && !empty($userData['profile_photo'])}{$userData['profile_photo']}{else}no-photo-available.png{/if}">
+    </div>
+    <div class="col-xs-10">
+        <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+        {control activityForm}
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript">
