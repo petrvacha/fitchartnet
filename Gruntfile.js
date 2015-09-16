@@ -7,10 +7,10 @@ module.exports = function(grunt) {
                 },
                 files: {
                     './htdocs/css/style.min.css': [
-                        './htdocs/css/style.css',
                         './htdocs/css/libs/bootstrap-theme.css',
                         './htdocs/css/libs/bootstrap.css',
                         './htdocs/css/libs/jquery.datetimepicker.css',
+                        './htdocs/css/style.css',
                     ]
                 }
             },
@@ -31,11 +31,11 @@ module.exports = function(grunt) {
 
         watch: {
             web_css:{
-                files: ['./htdocs/css/**', '!./css/*.min.css'],
+                files: ['./htdocs/css/**', '!./htdocs/css/*.min.css'],
                 tasks: ['less:web']
             },
             web_js:{
-                files: ['./htdocs/js/*', '!./js/*.min.js'],
+                files: ['./htdocs/js/*', '!./htdocs/js/*.min.js'],
                 tasks: ['uglify:web']
             },
         }
