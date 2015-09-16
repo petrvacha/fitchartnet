@@ -1,16 +1,14 @@
 {block content}
 {include '../partial/navigation.latte'}
 
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="col-xs-2">
-        <img class="img-thumbnail" style="max-width: 200px" src="{$basePath}/images/user/profilePhoto/{if isset($userData['profile_photo']) && !empty($userData['profile_photo'])}{$userData['profile_photo']}{else}no-photo-available.png{/if}">
+<div class="container-fluid sidebar">
+    <div class="" style="width: 250px; height: 100%; background: #394a59; float: left">
+        {include '../partial/profileBlok.latte'}
     </div>
-    <div class="col-xs-10">
+    <div class="col-xs-9" style="padding-top: 25px;">
         <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
         {control activityForm}
     </div>
-  </div>
 </div>
 
 <script type="text/javascript">

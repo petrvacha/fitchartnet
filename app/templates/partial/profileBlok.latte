@@ -1,0 +1,5 @@
+<div style="margin-left: 20px; margin-top: 20px">
+    <img class="img-thumbnail" style="max-width: 210px" src="{$basePath}/images/user/profilePhoto/{if isset($userData['profile_photo']) && !empty($userData['profile_photo'])}{$userData['profile_photo']}{else}no-photo-available.png{/if}">
+    <h3>{$userData['username']}</h3>
+    <a class="btn btn-success" n:href='Main:default'>Add workout</a>
+</div>

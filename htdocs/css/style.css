@@ -1,3 +1,38 @@
-body {
-  padding-top: 70px;
+html, body, .container-fluid{
+   height:100%;
 }
+
+body {
+  padding-top: 50px;
+}
+
+.container-fluid.sidebar {
+    padding-left: 0px;
+    color: white;
+}
+
+.sidebar h3 {
+    color: white;
+}
+
+nav .container-fluent {
+    background-color: #394a59;
+    padding-right: 107px;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+    padding-right: 140px;
+}
+
+.navbar-default a:hower {
+    color: #5cb85c;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #FFFFFF;
+}
+
+.navbar-default .navbar-nav > .active > a {
+    color: #FFFFFF;
+} 
