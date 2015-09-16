@@ -27,21 +27,13 @@ class MainPresenter extends LoginBasePresenter
     public function renderDefault()
     {
         $this->template->title = 'Overview';
+        $this->template->activities = $this->activityLog->getUserActities($this->user->id, 1);
     }
 
     public function actionLogout()
     {
         $this->user->logout();
         $this->redirect('Homepage:default');
-    }
-    
-    /**
-     * @param int $id activity_id
-     */
-    public function actionList($id)
-    {
-        $this->template->title = 'list';
-        $this->template->activities = $this->activityLog->getUserActities($this->user->id, $id);
     }
 
     /**

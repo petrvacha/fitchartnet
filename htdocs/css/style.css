@@ -17,22 +17,40 @@ body {
 
 nav .container-fluent {
     background-color: #394a59;
-    padding-right: 107px;
 }
 
 .navbar-default .navbar-brand {
     color: #FFFFFF;
-    padding-right: 140px;
-}
-
-.navbar-default a:hower {
-    color: #5cb85c;
+    padding-right: 145px;
 }
 
 .navbar-default .navbar-nav > li > a {
     color: #FFFFFF;
 }
 
+.navbar-default .navbar-nav > li > a:hower {
+    color: #5cb85c !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: #5cb85c !important;
+}
+
 .navbar-default .navbar-nav > .active > a {
-    color: #FFFFFF;
-} 
+    color: darkgreen;
+}
+
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #5cb85c !important;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #5cb85c !important;
+}
+
+#main-container {
+    color: #000000;
+}
