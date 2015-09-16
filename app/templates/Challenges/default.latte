@@ -1,0 +1,18 @@
+{block content}
+{include '../partial/navigation.latte'}
+
+<div class="container-fluid sidebar">
+    <div class="" style="width: 250px; height: 100%; background: #394a59; float: left">
+        {include '../partial/profileBlok.latte'}
+    </div>
+    <div class="col-xs-9" style="padding-top: 25px;">
+        <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+        
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+});
+</script>
+{/block}
