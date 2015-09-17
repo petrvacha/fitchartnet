@@ -1,0 +1,4 @@
+<div n:foreach="$flashes as $flash" class="alert alert-dismissable alert-{$flash->type}">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <i class="glyphicon glyphicon-info-sign"></i> {$flash->message}
+</div>

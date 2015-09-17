@@ -1,0 +1,19 @@
+{block content}
+{include '../partial/navigation.latte'}
+
+<div id="content-wrapper" class="container-fluid">
+    {include '../partial/sidebar-profile-blok.latte'}
+    
+    <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
+        <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+        <h2>Add workout</h2>
+        {control activityForm}
+        <br />
+        <table class="table table-striped">
+            <tr><th>Date</th><th>Count</th></tr>
+            <tr n:foreach="$activities as $id => $activity"><td>{$activity->updated_at|date:'d.m.Y H:i'}</td><td>{$activity->value}</td></tr>
+        </table>
+    </div>
+</div>
+{/block}

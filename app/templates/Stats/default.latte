@@ -5,7 +5,7 @@
     {include '../partial/sidebar-profile-blok.latte'}
 
     <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
-        <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+        {include '../partial/flashMessages.latte'}
 
         <h2>Stats</h2>
     </div>
