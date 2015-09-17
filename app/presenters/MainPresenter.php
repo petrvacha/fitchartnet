@@ -26,8 +26,13 @@ class MainPresenter extends LoginBasePresenter
 
     public function renderDefault()
     {
-        $this->template->title = 'Overview';
+        $this->template->title = 'News Feed';
+    }
+
+    public function renderAddWorkout()
+    {
         $this->template->activities = $this->activityLog->getUserActities($this->user->id, 1);
+        $this->template->title = 'Add workout';
     }
 
     public function actionLogout()
@@ -45,8 +50,8 @@ class MainPresenter extends LoginBasePresenter
         
         $control->getComponent('activityForm')->onSuccess[] = function() {
             $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
-            $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_INFO);
-            $this->redirect('Main:default');
+            $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_SUCCESS);
+            $this->redirect('Main:AddWorkout');
         };
         return $control;
     }

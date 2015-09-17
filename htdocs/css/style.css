@@ -8,6 +8,14 @@ body {
   padding-top: 50px;
 }
 
+.alert {
+    padding: 8px;
+}
+
+.alert-dismissable .close, .alert-dismissible .close {
+    right: 0px;
+}
+
 #content-wrapper {
     padding-left: 0px;
     position: relative;
@@ -73,4 +81,12 @@ nav .container-fluent {
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
     color: #5cb85c !important;
+}
+
+#main-container .glyphicon.glyphicon-info-sign {
+    top: 3px;
+}
+
+.page-header {
+    margin: 0px;
 }
