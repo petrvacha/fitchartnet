@@ -1,14 +1,38 @@
-html, body, .container-fluid{
-   height:100%;
+html, body {
+    margin:0;
+    height: 100%;
 }
 
 body {
+  margin: 0 auto;
   padding-top: 50px;
 }
 
-.container-fluid.sidebar {
+#content-wrapper {
     padding-left: 0px;
+    position: relative;
+    overflow: auto;
+    min-height: 100%;
+}
+
+.container-fluid .sidebar {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    
+    padding-left: 0px;
+    float: left;
+    width: 250px;
+    background: #394a59;
     color: white;
+}
+
+#main-container {
+    position: relative;
+    left: 250px;
+    color: #000000;
 }
 
 .sidebar h3 {
@@ -49,8 +73,4 @@ nav .container-fluent {
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
     color: #5cb85c !important;
-}
-
-#main-container {
-    color: #000000;
 }
