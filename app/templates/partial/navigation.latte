@@ -1,23 +1,26 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluent">
         <div class="navbar-header{if $presenter->isLinkCurrent('Main:')} active{/if}">
-            <a class="navbar-brand" n:href='Main:default'>Fitchart.net</a>
+            <a class="navbar-brand" n:href='Main:default'>
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                Fitchart.net
+            </a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li n:class="$presenter->isLinkCurrent('Stats:') ? active">
                     <a n:href='Stats:default'>
-                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span> Stats
+                        <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> Stats
                     </a>
                 </li>
                 <li n:class="$presenter->isLinkCurrent('Challenges:') ? active">
                     <a n:href='Challenges:default'>
-                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span> Challenges
+                        <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Challenges
                     </a>
                 </li>
                 <li n:class="$presenter->isLinkCurrent('Friends:') ? active">
                     <a n:href='Friends:default'>
-                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span> Friends
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Friends
                     </a>
                 </li>
             </ul>
@@ -29,7 +32,7 @@
                     <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="drop3">
-                    <li><a n:href="User:profile"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profile</a></li>
+                    <li><a n:href="User:profile"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Profile</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a n:href='Main:logout' ><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
                   </ul>
