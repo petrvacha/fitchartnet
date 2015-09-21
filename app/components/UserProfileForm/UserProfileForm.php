@@ -82,12 +82,11 @@ class UserProfileForm extends \Fitchart\Application\Control
             ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6)
             ->addConditionOn($form['old_password'], Form::FILLED);
 
-        $form->addPassword('confirm_password', 'New password')
+        $form->addPassword('confirm_password', 'Confirm new password')
             ->addConditionOn($form['old_password'], Form::FILLED)
                 ->addRule(Form::EQUAL, "Passwords don't match", $form['password']);
 
-        $form->addSubmit('submit', 'Save')
-            ->getControlPrototype()->addClass('btn-success');
+        $form->addSubmit('submit', 'Save');
 
         $form->setDefaults($this->userData);
         $form->onSuccess[] = array($this, 'formSent');
