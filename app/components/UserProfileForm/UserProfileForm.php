@@ -79,6 +79,7 @@ class UserProfileForm extends \Fitchart\Application\Control
         $form->addPassword('old_password', 'Old password');
         
         $form->addPassword('password', 'New password')
+            ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6)
             ->addConditionOn($form['old_password'], Form::FILLED);
 
         $form->addPassword('confirm_password', 'New password')
