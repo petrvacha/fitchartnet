@@ -27,7 +27,24 @@ class RouterFactory
             $router[] = new Route('', 'Homepage:launch');
             $router[] = new Route('/gamma', 'Homepage:default');
             $router[] = new Route('/registration/confirm/<hash>', 'Registration:check');
+
+            $router[] = new Route('/api[/v<apiVersion>]', [
+                    'presenter' => 'Api',
+                    'action' => 'test',
+                    'apiVersion' => NULL
+            ]);
+            $router[] = new Route('/api[/v<apiVersion>[/<apiToken>[/<actionType>[/<activityId>[/<value>[/datetime]]]]]]', [
+                    'presenter' => 'Api',
+                    'action' => 'process',
+                    'apiVersion' => NULL,
+                    'apiToken' => NULL,
+                    'actionType' => NULL,
+                    'activityId' => NULL,
+                    'value' => NULL,
+                    'datetime' => NULL
+            ]);
             $router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:launch');
+            
             return $router;
         }
 

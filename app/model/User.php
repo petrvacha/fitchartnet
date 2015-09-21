@@ -19,6 +19,9 @@ class User extends BaseModel
     /** @const ACTIVE_BY_ID string */
     const ACTIVE_BY_ID = 'id';
 
+    /** @const API_TOKEN_LENGTH int */
+    const API_TOKEN_LENGTH = 6;
+
     
     /** @var \App\Model\Privacy */
     protected $privacyModel;
@@ -56,11 +59,14 @@ class User extends BaseModel
     {
         $roleModel = $this->roleModel;
         $privacyModel = $this->privacyModel;
+
+
         $insert = [
             'username' => $values->username,
             'password' => Passwords::hash($values->password),
             'email' => $values->email,
             'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
+            'api_token' => $this->getFreeApiToken($values->username),
             'privacy_id' => $privacyModel::FRIENDS_AND_GROUPS,
             'role_id' => $roleModel::USER,
             'state' => self::USER_STATE_NEW,
@@ -71,6 +77,19 @@ class User extends BaseModel
 
         unset($insert['password']);
         return $insert;
+    }
+
+    /**
+     * @param string $hash
+     * @return string
+     */
+    public function getFreeApiToken($hash)
+    {
+        do {
+            $apiToken = Utilities::create_sha1_hash($hash, $this->getDateTime(), self::API_TOKEN_LENGTH);
+        } while ($this->findBy(['api_token' => $apiToken])->fetch());
+
+        return $apiToken;
     }
 
     /**
@@ -120,6 +139,7 @@ class User extends BaseModel
                           user.privacy_id,
                           user.profile_photo,
                           user.gender_id,
+                          user.api_token,
                           gender.name AS gender,
                           privacy.description AS privacy_description,
                           privacy.name AS privacy_name')

@@ -73,11 +73,12 @@ class Utilities extends \Nette\Object
     /**
      * @param string $input
      * @param string $salt
+     * @param int|NULL $truncateTo
      * @return bool
      */
-    public static function create_sha1_hash($input, $salt = '')
+    public static function create_sha1_hash($input, $salt = '', $truncateTo = NULL)
     {
-        return sha1($input . $salt);
+        return $truncateTo ? substr(sha1($input . $salt), 0, $truncateTo) : sha1($input . $salt);
     }
 
     /**
@@ -106,4 +107,16 @@ class Utilities extends \Nette\Object
     {
         return substr(strrchr($fileName, '.'), 1);
     }
+
+    static public function verifyDate($date, $strict = true)
+    {
+        $dateTime = DateTime::createFromFormat('m/d/Y', $date);
+        if ($strict) {
+            $errors = DateTime::getLastErrors();
+            if (!empty($errors['warning_count'])) {
+                return false;
+            }
+        }
+        return $dateTime !== false;
+    }    
 }
