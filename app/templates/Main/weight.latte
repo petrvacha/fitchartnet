@@ -1,0 +1,22 @@
+{block content}
+{include '../partial/navigation.latte'}
+
+<div id="content-wrapper" class="container-fluid">
+    {include '../partial/sidebar-profile-blok.latte'}
+    
+    <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
+        {include '../partial/flashMessages.latte'}
+
+        <h2 class="page-header">Weight</h2>
+        {control weightForm}
+        <br />
+        <table class="table table-striped">
+            <tr><th>Date</th><th>weight [kg]</th></tr>
+            <tr n:foreach="$weights as $weight">
+                <td>{$weight->datetime|date:'d.m.Y H:i'}</td>
+                <td>{$weight->value}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{/block}

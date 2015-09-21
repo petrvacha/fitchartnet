@@ -1,0 +1,16 @@
+{form userWeightForm}
+    <ul class="error" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+    <br />
+    <div>
+	<div class="left">
+	    <div style="float: left; padding-right: 50px;">
+		{label value /} [kg]{input value}
+	    </div>
+	    <div style="padding-top: 24px;">
+		{input submit}
+	    </div>
+	</div>
+    </div>
+{/form}

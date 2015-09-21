@@ -15,6 +15,7 @@ services:
     - App\Model\Privacy
     - App\Model\Role
     - App\Model\Email
+    - App\Model\Weight
 
     - App\Components\MailerManagerFactory(@App\Components\MailerFactory, @App\Components\MessageFactory , @Nette\Http\Request , @Nette\Application\UI\ITemplateFactory , %config%)
     - App\Components\MailerFactory(@App\Model\LoggerModel)
@@ -26,3 +27,4 @@ services:
     - App\Components\UserPhotoForm\IUserPhotoFormFactory
     - App\Components\SignForm\ISignFormFactory
     - App\Components\RegistrationForm\IRegistrationFormFactory
+    - App\Components\UserWeightForm\IUserWeightFormFactory

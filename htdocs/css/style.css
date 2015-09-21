@@ -47,6 +47,10 @@ body {
     color: white;
 }
 
+.sidebar .simple-link {
+    color: lightcoral;
+}
+
 nav .container-fluent {
     background-color: #394a59;
 }

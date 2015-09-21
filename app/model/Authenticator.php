@@ -44,7 +44,7 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
                 ->where(self::COLUMN_NAME . '= ? OR ' . self::COLUMN_EMAIL . '= ?', $login, $login)
                 ->select('user.*, role.name AS role')
                 ->fetch();
-
+        
         if (!$row) {
             if (strpos($login, '@')) {
                 throw new Nette\Security\AuthenticationException('The email is incorrect.', self::IDENTITY_NOT_FOUND);
@@ -62,6 +62,12 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
         //}
 
         $arr = $row->toArray();
+        $weight = $row->related('weight.user_id')->fetch();
+        if ($weight) {
+            $arr['weight'] = $weight->value;
+            $arr['weight_last_update'] = $weight->datetime;
+        }
+        
         unset($arr[self::COLUMN_PASSWORD_HASH]);
         return new Nette\Security\Identity($row[self::COLUMN_ID], $row[self::COLUMN_ROLE], $arr);
     }

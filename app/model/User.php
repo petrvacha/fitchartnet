@@ -127,7 +127,7 @@ class User extends BaseModel
     }
 
     /**
-     * @param ArrayHash $data
+     * @param Nette\Utils\ArrayHash $data
      * @throws SecurityException
      */
     public function updateUserData($data)
