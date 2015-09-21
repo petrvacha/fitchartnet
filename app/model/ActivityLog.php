@@ -15,6 +15,6 @@ class ActivityLog extends BaseModel
      */
     public function getUserActities($userId, $activityId)
     {
-        return $this->findBy(['user_id' => $userId, 'activity_id' => $activityId, 'active' => TRUE])->fetchAll();
+        return $this->findBy(['user_id' => $userId, 'activity_id' => $activityId, 'active' => TRUE])->order('updated_at DESC')->fetchAll();
     }
 }
