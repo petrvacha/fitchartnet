@@ -17,4 +17,13 @@ class ActivityLog extends BaseModel
     {
         return $this->findBy(['user_id' => $userId, 'activity_id' => $activityId, 'active' => TRUE])->order('updated_at DESC')->fetchAll();
     }
+
+    /**
+     * @param int $id
+     * @param int $userId
+     */
+    public function deleteActivity($id, $userId)
+    {
+        $this->findBy(['id' => $id, 'user_id' => $userId])->delete();
+    }
 }

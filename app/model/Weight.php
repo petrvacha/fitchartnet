@@ -40,5 +40,14 @@ class Weight extends BaseModel
         $this->insert($values);
         $this->user->getIdentity()->weight = $values['value'];
     }
+
+    /**
+     * @param int $id
+     * @param int $userId
+     */
+    public function deleteWeight($id, $userId)
+    {
+        $this->findBy(['id' => $id, 'user_id' => $userId])->delete();
+    }
     
 }

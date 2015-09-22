@@ -44,10 +44,30 @@ class MainPresenter extends LoginBasePresenter
         $this->template->title = 'Add workout';
     }
 
+    /**
+     * @param int $id
+     */
+    public function actionDeleteWorknout($id)
+    {
+        $this->activityLog->deleteActivity($id, $this->user->id);
+        $this->flashMessage('Worknout has been deleted.', self::MESSAGE_TYPE_INFO);
+        $this->redirect('Main:addWorkout');
+    }
+
     public function renderWeight()
     {
         $this->template->title = 'Your weight';
         $this->template->weights = $this->weightModel->findBy(['user_id' => $this->user->id]);
+    }
+
+    /**
+     * @param int $id
+     */
+    public function actionDeleteWeight($id)
+    {
+        $this->weightModel->deleteWeight($id, $this->user->id);
+        $this->flashMessage('Weight record has been deleted.', self::MESSAGE_TYPE_INFO);
+        $this->redirect('Main:weight');
     }
 
     public function actionLogout()

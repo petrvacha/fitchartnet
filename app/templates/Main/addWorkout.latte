@@ -11,8 +11,12 @@
         {control activityForm}
         <br />
         <table class="table table-striped">
-            <tr><th>Date</th><th>Count</th></tr>
-            <tr n:foreach="$activities as $id => $activity"><td>{$activity->updated_at|date:'d.m.Y H:i'}</td><td>{$activity->value}</td></tr>
+            <tr><th>Date</th><th>Count</th><th>Action</th></tr>
+            <tr n:foreach="$activities as $id => $activity">
+                <td>{$activity->updated_at|date:'d.m.Y H:i'}</td>
+                <td>{$activity->value}</td>
+                <td><a n:href="Main:deleteWorknout $activity->id"><span class="glyphicon glyphicon-remove" aria-hidden="true" title="remove worknout"></span></a></td>
+            </tr>
         </table>
     </div>
 </div>
