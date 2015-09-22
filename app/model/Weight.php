@@ -32,6 +32,15 @@ class Weight extends BaseModel
     }
 
     /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getUserWeights($userId)
+    {
+        return $this->findBy(['user_id' => $userId])->order('datetime DESC');
+    }
+
+    /**
      * @param Nette\Utils\ArrayHash $values
      */
     public function insertWeight($values)

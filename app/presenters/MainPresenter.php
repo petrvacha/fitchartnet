@@ -57,7 +57,7 @@ class MainPresenter extends LoginBasePresenter
     public function renderWeight()
     {
         $this->template->title = 'Your weight';
-        $this->template->weights = $this->weightModel->findBy(['user_id' => $this->user->id]);
+        $this->template->weights = $this->weightModel->getUserWeights($this->user->id);
     }
 
     /**
