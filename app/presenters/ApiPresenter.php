@@ -70,7 +70,7 @@ class ApiPresenter extends \Nette\Application\UI\Presenter
     {
         $apiVersionMethod = 'processVersion' . str_replace('.', '', $apiVersion);
         $userModel = $this->userModel;
-        //dump(is_numeric($activityId));die;
+        
         if (!$apiVersion || strlen($apiVersion) > 4 || !method_exists($this, $apiVersionMethod) ||
              !$apiToken || strlen($apiToken) !== $userModel::API_TOKEN_LENGTH || !ctype_alnum($apiToken) ||
              !$actionType  || !in_array($actionType, self::$ACTION_TYPES) ||
