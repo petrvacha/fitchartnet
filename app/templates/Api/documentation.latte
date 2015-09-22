@@ -1,0 +1,24 @@
+{block content}
+<div class="container">
+    <h1><i class="glyphicon glyphicon-bullhorn"></i> Simple API documentation</h1>
+
+    <h2>API test</h2>
+    <code>$ curl "http://fitchart.net/api"</code><br />
+
+    <h2>API version test</h2>
+    <code>$ curl "http://fitchart.net/api/v&lt;version&gt;</code><br />
+
+    <h2>Insert new value</h2>
+    <code>$ curl "http://fitchart.net/api/v&lt;version&gt;/&lt;your-api-token&gt;/&lt;action-type&gt;/&lt;activity-id&gt;/&lt;value&gt;[/datetime]"</code><br />
+
+    <h4>Example</h4>
+    How to insert 100 push-ups: <code>$ curl "http://fitchart.net/api/v0.1/abc123/insert/1/100"</code>
+
+    <h2>API responses</h2>
+    <i class="glyphicon glyphicon-ok" title="Bored?"></i> <code>{"status":"ok"}</code><br />
+    <i class="glyphicon glyphicon-thumbs-down" title="Something Went Terribly Wrong"></i> <code>{"status":"error"}</code><br /><br /><br />
+
+    Your API TOKEN is located in profile setting. Current API version: 0.1
+
+</div>
+{/block}

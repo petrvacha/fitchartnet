@@ -28,6 +28,8 @@ class RouterFactory
             $router[] = new Route('/gamma', 'Homepage:default');
             $router[] = new Route('/registration/confirm/<hash>', 'Registration:check');
 
+            $router[] = new Route('/api/documentation', 'Api:documentation');
+            
             $router[] = new Route('/api[/v<apiVersion>]', [
                     'presenter' => 'Api',
                     'action' => 'test',

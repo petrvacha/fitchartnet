@@ -43,6 +43,11 @@ class ApiPresenter extends \Nette\Application\UI\Presenter
         $this->activityLogModel = $activityLogModel;
     }
 
+    public function renderDocumentation()
+    {
+        $this->template->title = 'API Documentation';
+    }
+
     /**
      * @param string $apiVersion
      */
