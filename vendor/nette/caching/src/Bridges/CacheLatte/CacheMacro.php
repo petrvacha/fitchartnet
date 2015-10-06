@@ -7,14 +7,12 @@
 
 namespace Nette\Bridges\CacheLatte;
 
-use Nette,
-	Latte;
+use Nette;
+use Latte;
 
 
 /**
  * Macro {cache} ... {/cache}
- *
- * @author     David Grudl
  */
 class CacheMacro extends Nette\Object implements Latte\IMacro
 {

@@ -11,13 +11,11 @@ use Nette;
 
 
 /**
- * Class method description.
- *
- * @author     David Grudl
+ * Method or function description.
  */
 class Method extends Nette\Object
 {
-	/** @var string */
+	/** @var string|NULL */
 	private $name;
 
 	/** @var array of name => Parameter */
@@ -27,7 +25,7 @@ class Method extends Nette\Object
 	private $uses = array();
 
 	/** @var string|FALSE */
-	private $body;
+	private $body = '';
 
 	/** @var bool */
 	private $static = FALSE;
@@ -47,10 +45,10 @@ class Method extends Nette\Object
 	/** @var bool */
 	private $variadic = FALSE;
 
-	/** @var array of string */
+	/** @var string[] */
 	private $documents = array();
 
-	/** @var PhpNamespace */
+	/** @var PhpNamespace|NULL */
 	private $namespace;
 
 
@@ -59,20 +57,29 @@ class Method extends Nette\Object
 	 */
 	public static function from($from)
 	{
-		$from = $from instanceof \ReflectionMethod ? $from : new \ReflectionMethod($from);
+		if (is_string($from) && strpos($from, '::')) {
+			$from = new \ReflectionMethod($from);
+		} elseif (is_array($from)) {
+			$from = new \ReflectionMethod($from[0], $from[1]);
+		} elseif (!$from instanceof \ReflectionFunctionAbstract) {
+			$from = new \ReflectionFunction($from);
+		}
+
 		$method = new static;
-		$method->name = $from->getName();
+		$method->name = $from->isClosure() ? NULL : $from->getName();
 		foreach ($from->getParameters() as $param) {
 			$method->parameters[$param->getName()] = Parameter::from($param);
 		}
-		$method->static = $from->isStatic();
-		$method->visibility = $from->isPrivate() ? 'private' : ($from->isProtected() ? 'protected' : '');
-		$method->final = $from->isFinal();
-		$method->abstract = $from->isAbstract() && !$from->getDeclaringClass()->isInterface();
-		$method->body = $from->isAbstract() ? FALSE : '';
+		if ($from instanceof \ReflectionMethod) {
+			$method->static = $from->isStatic();
+			$method->visibility = $from->isPrivate() ? 'private' : ($from->isProtected() ? 'protected' : NULL);
+			$method->final = $from->isFinal();
+			$method->abstract = $from->isAbstract() && !$from->getDeclaringClass()->isInterface();
+			$method->body = $from->isAbstract() ? FALSE : '';
+		}
 		$method->returnReference = $from->returnsReference();
 		$method->variadic = PHP_VERSION_ID >= 50600 && $from->isVariadic();
-		$method->documents = preg_replace('#^\s*\* ?#m', '', trim($from->getDocComment(), "/* \r\n\t"));
+		$method->documents = $from->getDocComment() ? array(preg_replace('#^\s*\* ?#m', '', trim($from->getDocComment(), "/* \r\n\t"))) : array();
 		return $method;
 	}
 
@@ -82,12 +89,13 @@ class Method extends Nette\Object
 	 */
 	public function __toString()
 	{
+		static $builtinTypes = array('array', 'self', 'parent', 'callable', NULL);
 		$parameters = array();
 		foreach ($this->parameters as $param) {
 			$variadic = $this->variadic && $param === end($this->parameters);
-			$hint = in_array($param->getTypeHint(), array('array', ''))
+			$hint = !$this->namespace || in_array($param->getTypeHint(), $builtinTypes, TRUE)
 				? $param->getTypeHint()
-				: ($this->namespace ? $this->namespace->unresolveName($param->getTypeHint()) : $param->getTypeHint());
+				: $this->namespace->unresolveName($param->getTypeHint());
 
 			$parameters[] = ($hint ? $hint . ' ' : '')
 				. ($param->isReference() ? '&' : '')
@@ -99,34 +107,35 @@ class Method extends Nette\Object
 		foreach ($this->uses as $param) {
 			$uses[] = ($param->isReference() ? '&' : '') . '$' . $param->getName();
 		}
-		return ($this->documents ? str_replace("\n", "\n * ", "/**\n" . implode("\n", (array) $this->documents)) . "\n */\n" : '')
+
+		return ($this->documents ? str_replace("\n", "\n * ", "/**\n" . implode("\n", $this->documents)) . "\n */\n" : '')
 			. ($this->abstract ? 'abstract ' : '')
 			. ($this->final ? 'final ' : '')
 			. ($this->visibility ? $this->visibility . ' ' : '')
 			. ($this->static ? 'static ' : '')
 			. 'function'
 			. ($this->returnReference ? ' &' : '')
-			. ($this->name ? ' ' . $this->name : '')
+			. ' ' . $this->name
 			. '(' . implode(', ', $parameters) . ')'
 			. ($this->uses ? ' use (' . implode(', ', $uses) . ')' : '')
 			. ($this->abstract || $this->body === FALSE ? ';'
-				: ($this->name ? "\n" : ' ') . "{\n" . Nette\Utils\Strings::indent(trim($this->body), 1) . "\n}");
+				: ($this->name ? "\n" : ' ') . "{\n" . Nette\Utils\Strings::indent(ltrim(rtrim($this->body) . "\n"), 1) . '}');
 	}
 
 
 	/**
-	 * @param  string
+	 * @param  string|NULL
 	 * @return self
 	 */
 	public function setName($name)
 	{
-		$this->name = (string) $name;
+		$this->name = $name ? (string) $name : NULL;
 		return $this;
 	}
 
 
 	/**
-	 * @return string
+	 * @return string|NULL
 	 */
 	public function getName()
 	{
@@ -260,7 +269,7 @@ class Method extends Nette\Object
 		if (!in_array($val, array('public', 'protected', 'private', NULL), TRUE)) {
 			throw new Nette\InvalidArgumentException('Argument must be public|protected|private|NULL.');
 		}
-		$this->visibility = (string) $val;
+		$this->visibility = $val ? (string) $val : NULL;
 		return $this;
 	}
 

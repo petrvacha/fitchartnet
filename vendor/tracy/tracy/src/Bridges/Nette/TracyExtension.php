@@ -12,8 +12,6 @@ use Nette;
 
 /**
  * Tracy extension for Nette DI.
- *
- * @author     David Grudl
  */
 class TracyExtension extends Nette\DI\CompilerExtension
 {
@@ -83,8 +81,8 @@ class TracyExtension extends Nette\DI\CompilerExtension
 					'$this->getService(?)->addPanel(?);',
 					Nette\DI\Compiler::filterArguments(array(
 						$this->prefix('bar'),
-						is_string($item) ? new Nette\DI\Statement($item) : $item)
-					)
+						is_string($item) ? new Nette\DI\Statement($item) : $item,
+					))
 				));
 			}
 		}

@@ -13,8 +13,6 @@ use Nette;
 /**
  * Creates, validates and renders HTML forms.
  *
- * @author     David Grudl
- *
  * @property   mixed $action
  * @property   string $method
  * @property-read array $groups
@@ -83,13 +81,13 @@ class Form extends Container implements Nette\Utils\IHtmlString
 	/** @internal protection token ID */
 	const PROTECTOR_ID = '_token_';
 
-	/** @var callable[]  function(Form $sender); Occurs when the form is submitted and successfully validated */
+	/** @var callable[]  function (Form $sender); Occurs when the form is submitted and successfully validated */
 	public $onSuccess;
 
-	/** @var callable[]  function(Form $sender); Occurs when the form is submitted and is not valid */
+	/** @var callable[]  function (Form $sender); Occurs when the form is submitted and is not valid */
 	public $onError;
 
-	/** @var callable[]  function(Form $sender); Occurs when the form is submitted */
+	/** @var callable[]  function (Form $sender); Occurs when the form is submitted */
 	public $onSubmit;
 
 	/** @var mixed or NULL meaning: not detected yet */
@@ -159,7 +157,7 @@ class Form extends Container implements Nette\Utils\IHtmlString
 
 	/**
 	 * Returns self.
-	 * @return Form
+	 * @return self
 	 */
 	public function getForm($need = TRUE)
 	{

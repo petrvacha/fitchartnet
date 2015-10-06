@@ -12,8 +12,6 @@ use Nette;
 
 /**
  * Cached reflection of database structure.
- *
- * @author     Jan Skrasek
  */
 class Structure extends Nette\Object implements IStructure
 {
@@ -48,10 +46,6 @@ class Structure extends Nette\Object implements IStructure
 	{
 		$this->needStructure();
 		$table = $this->resolveFQTableName($table);
-
-		if (!isset($this->structure['columns'][$table])) {
-			throw new Nette\InvalidArgumentException("Table '$table' does not exist.");
-		}
 
 		return $this->structure['columns'][$table];
 	}
@@ -143,7 +137,6 @@ class Structure extends Nette\Object implements IStructure
 	{
 		$this->structure = $this->loadStructure();
 		$this->cache->save('structure', $this->structure);
-		$this->isRebuilt = TRUE;
 	}
 
 
@@ -165,7 +158,6 @@ class Structure extends Nette\Object implements IStructure
 
 	/**
 	 * @internal
-	 * @ignore
 	 */
 	public function loadStructure()
 	{
@@ -193,11 +185,13 @@ class Structure extends Nette\Object implements IStructure
 
 		if (isset($structure['hasMany'])) {
 			foreach ($structure['hasMany'] as & $table) {
-				uksort($table, function($a, $b) {
+				uksort($table, function ($a, $b) {
 					return strlen($a) - strlen($b);
 				});
 			}
 		}
+
+		$this->isRebuilt = TRUE;
 
 		return $structure;
 	}
@@ -230,7 +224,7 @@ class Structure extends Nette\Object implements IStructure
 		}
 
 		if (isset($structure['belongsTo'][$table])) {
-			uksort($structure['belongsTo'][$table], function($a, $b) {
+			uksort($structure['belongsTo'][$table], function ($a, $b) {
 				return strlen($a) - strlen($b);
 			});
 		}
@@ -248,7 +242,12 @@ class Structure extends Nette\Object implements IStructure
 			return $this->structure['aliases'][$name];
 		}
 
-		return $name;
+		if (!$this->isRebuilt()) {
+			$this->rebuild();
+			return $this->resolveFQTableName($table);
+		}
+
+		throw new Nette\InvalidArgumentException("Table '$name' does not exist.");
 	}
 
 }

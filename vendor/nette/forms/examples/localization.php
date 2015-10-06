@@ -10,10 +10,9 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 }
 
 
-use Nette\Forms\Form,
-	Tracy\Debugger,
-	Tracy\Dumper,
-	Nette\Utils\Html;
+use Nette\Forms\Form;
+use Tracy\Debugger;
+use Tracy\Dumper;
 
 Debugger::enable();
 
@@ -57,7 +56,7 @@ $countries = array(
 		'qu' => 'Qumran',
 		'st' => 'Saint Georges Island',
 	),
-	'?'  => 'other',
+	'?' => 'other',
 );
 $form->addSelect('country', 'Country:', $countries)
 	->setPrompt('Select your country');

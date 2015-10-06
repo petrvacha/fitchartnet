@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Nette Framework (http://nette.org)
- * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
+ * This file is part of the Latte (http://latte.nette.org)
+ * Copyright (c) 2008 David Grudl (http://davidgrudl.com)
  */
 
 namespace Latte;
@@ -10,12 +10,10 @@ namespace Latte;
 
 /**
  * Templating engine Latte.
- *
- * @author     David Grudl
  */
 class Engine extends Object
 {
-	const VERSION = '2.3.2';
+	const VERSION = '2.3.4';
 
 	/** Content types */
 	const CONTENT_HTML = 'html',
@@ -147,6 +145,25 @@ class Engine extends Object
 		}
 		$code = Helpers::optimizePhp($code);
 		return $code;
+	}
+
+
+	/**
+	 * Compiles template to cache.
+	 * @param  string
+	 * @return void
+	 * @throws \LogicException
+	 */
+	public function warmupCache($name)
+	{
+		if (!$this->tempDirectory) {
+			throw new \LogicException('Path to temporary directory is not set.');
+		}
+
+		$class = $this->getTemplateClass($name);
+		if (!class_exists($class, FALSE)) {
+			$this->loadCacheFile($name);
+		}
 	}
 
 

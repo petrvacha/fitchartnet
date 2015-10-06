@@ -18,13 +18,11 @@ use Nette\Utils\Strings;
  * - opening tag (<?php)
  * - doc comments
  * - one or more namespaces
- *
- * @author Jakub Kulhan <jakub.kulhan@gmail.com>
  */
 class PhpFile extends Object
 {
 	/** @var string[] */
-	private $documents;
+	private $documents = array();
 
 	/** @var PhpNamespace[] */
 	private $namespaces = array();
@@ -121,7 +119,7 @@ class PhpFile extends Object
 
 		return Strings::normalize(
 			"<?php\n"
-			. ($this->documents ? "\n" . str_replace("\n", "\n * ", "/**\n" . implode("\n", (array) $this->documents)) . "\n */\n\n" : '')
+			. ($this->documents ? "\n" . str_replace("\n", "\n * ", "/**\n" . implode("\n", $this->documents)) . "\n */\n\n" : '')
 			. implode("\n\n", $this->namespaces)
 		) . "\n";
 	}

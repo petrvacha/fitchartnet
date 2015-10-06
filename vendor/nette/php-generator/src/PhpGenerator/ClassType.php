@@ -7,14 +7,12 @@
 
 namespace Nette\PhpGenerator;
 
-use Nette,
-	Nette\Utils\Strings;
+use Nette;
+use Nette\Utils\Strings;
 
 
 /**
  * Class/Interface/Trait description.
- *
- * @author     David Grudl
  */
 class ClassType extends Nette\Object
 {
@@ -24,7 +22,7 @@ class ClassType extends Nette\Object
 
 	const TYPE_TRAIT = 'trait';
 
-	/** @var PhpNamespace */
+	/** @var PhpNamespace|NULL */
 	private $namespace;
 
 	/** @var string */
@@ -39,7 +37,7 @@ class ClassType extends Nette\Object
 	/** @var bool */
 	private $abstract = FALSE;
 
-	/** @var strings|string[] */
+	/** @var string|string[] */
 	private $extends = array();
 
 	/** @var string[] */
@@ -73,7 +71,7 @@ class ClassType extends Nette\Object
 		$class->final = $from->isFinal() && $class->type === 'class';
 		$class->abstract = $from->isAbstract() && $class->type === 'class';
 		$class->implements = $from->getInterfaceNames();
-		$class->documents = preg_replace('#^\s*\* ?#m', '', trim($from->getDocComment(), "/* \r\n\t"));
+		$class->documents = $from->getDocComment() ? array(preg_replace('#^\s*\* ?#m', '', trim($from->getDocComment(), "/* \r\n\t"))) : array();
 		$namespace = $from->getNamespaceName();
 		if ($from->getParentClass()) {
 			$class->extends = $from->getParentClass()->getName();
@@ -120,52 +118,41 @@ class ClassType extends Nette\Object
 
 		$properties = array();
 		foreach ($this->properties as $property) {
-			$doc = str_replace("\n", "\n * ", implode("\n", (array) $property->getDocuments()));
+			$doc = str_replace("\n", "\n * ", implode("\n", $property->getDocuments()));
 			$properties[] = ($property->getDocuments() ? (strpos($doc, "\n") === FALSE ? "/** $doc */\n" : "/**\n * $doc\n */\n") : '')
 				. $property->getVisibility() . ($property->isStatic() ? ' static' : '') . ' $' . $property->getName()
 				. ($property->value === NULL ? '' : ' = ' . Helpers::dump($property->value))
 				. ";\n";
 		}
 
-		$extends = $implements = $traits = array();
+		$extends = (array) $this->extends;
+		$implements = $this->implements;
+		$traits = $this->traits;
 		if ($this->namespace) {
-			foreach ((array) $this->extends as $name) {
-				$extends[] = $this->namespace->unresolveName($name);
+			$extends = array_map(array($this->namespace, 'unresolveName'), $extends);
+			$implements = array_map(array($this->namespace, 'unresolveName'), $implements);
+			$traits = array_map(array($this->namespace, 'unresolveName'), $traits);
 			}
-
-			foreach ((array) $this->implements as $name) {
-				$implements[] = $this->namespace->unresolveName($name);
-			}
-
-			foreach ((array) $this->traits as $name) {
-				$traits[] = $this->namespace->unresolveName($name);
-			}
-
-		} else {
-			$extends = (array) $this->extends;
-			$implements = (array) $this->implements;
-			$traits = (array) $this->traits;
-		}
 
 		foreach ($this->methods as $method) {
 			$method->setNamespace($this->namespace);
 		}
 
 		return Strings::normalize(
-			($this->documents ? str_replace("\n", "\n * ", "/**\n" . implode("\n", (array) $this->documents)) . "\n */\n" : '')
+			($this->documents ? str_replace("\n", "\n * ", "/**\n" . implode("\n", $this->documents)) . "\n */\n" : '')
 			. ($this->abstract ? 'abstract ' : '')
 			. ($this->final ? 'final ' : '')
 			. $this->type . ' '
 			. $this->name . ' '
-			. ($this->extends ? 'extends ' . implode(', ', $extends) . ' ' : '')
-			. ($this->implements ? 'implements ' . implode(', ', $implements) . ' ' : '')
-			. "\n{\n\n"
+			. ($extends ? 'extends ' . implode(', ', $extends) . ' ' : '')
+			. ($implements ? 'implements ' . implode(', ', $implements) . ' ' : '')
+			. "\n{\n"
 			. Strings::indent(
-				($this->traits ? 'use ' . implode(', ', $traits) . ";\n\n" : '')
-				. ($this->consts ? implode('', $consts) . "\n\n" : '')
-				. ($this->properties ? implode("\n", $properties) . "\n\n" : '')
-				. implode("\n\n\n", $this->methods), 1)
-			. "\n\n}"
+				($traits ? 'use ' . implode(', ', $traits) . ";\n\n" : '')
+				. ($this->consts ? implode('', $consts) . "\n" : '')
+				. ($this->properties ? implode("\n", $properties) . "\n" : '')
+				. ($this->methods ? "\n" . implode("\n\n\n", $this->methods) . "\n\n" : ''), 1)
+			. '}'
 		) . "\n";
 	}
 
@@ -263,7 +250,7 @@ class ClassType extends Nette\Object
 
 
 	/**
-	 * @param  strings|string[]
+	 * @param  string|string[]
 	 * @return self
 	 */
 	public function setExtends($types)
@@ -277,7 +264,7 @@ class ClassType extends Nette\Object
 
 
 	/**
-	 * @return strings|string[]
+	 * @return string|string[]
 	 */
 	public function getExtends()
 	{

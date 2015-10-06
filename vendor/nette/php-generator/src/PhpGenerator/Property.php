@@ -12,8 +12,6 @@ use Nette;
 
 /**
  * Class property description.
- *
- * @author     David Grudl
  */
 class Property extends Nette\Object
 {
@@ -29,7 +27,7 @@ class Property extends Nette\Object
 	/** @var string  public|protected|private */
 	private $visibility = 'public';
 
-	/** @var array of string */
+	/** @var string[] */
 	private $documents = array();
 
 
@@ -44,7 +42,7 @@ class Property extends Nette\Object
 		$prop->value = isset($defaults[$prop->name]) ? $defaults[$prop->name] : NULL;
 		$prop->static = $from->isStatic();
 		$prop->visibility = $from->isPrivate() ? 'private' : ($from->isProtected() ? 'protected' : 'public');
-		$prop->documents = preg_replace('#^\s*\* ?#m', '', trim($from->getDocComment(), "/* \r\n\t"));
+		$prop->documents = $from->getDocComment() ? array(preg_replace('#^\s*\* ?#m', '', trim($from->getDocComment(), "/* \r\n\t"))) : array();
 		return $prop;
 	}
 
