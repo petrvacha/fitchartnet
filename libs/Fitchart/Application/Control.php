@@ -10,7 +10,7 @@ use \Nette\Forms\Controls\MultiSelectBox;
 use \Nette\Forms\Controls\Checkbox;
 use \Nette\Forms\Controls\CheckboxList;
 use \Nette\Forms\Controls\RadioList;
-
+use Nette\Utils\Strings;
 
 /**
  * Control
@@ -45,13 +45,11 @@ class Control extends \Nette\Application\UI\Control
      */
     protected function addBootstrapStyling(\Nette\Application\UI\Form $form)
     {
-        $form->getElementPrototype()->class('form-horizontalss');
-        $usedPrimary = FALSE;
+        $form->getElementPrototype()->class('form-horizontal');
         
         foreach ($form->getControls() as $control) {
             if ($control instanceof Button) {
-                    $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-primary' : 'btn btn-default');
-                    $usedPrimary = TRUE;
+                $control->getControlPrototype()->addClass(Strings::startsWith($control->getName(), 'submit') ? 'btn btn-success' : 'btn btn-default');
 
             } elseif ($control instanceof UploadControl || $control instanceof TextBase || $control instanceof SelectBox || $control instanceof MultiSelectBox) {
                     $control->getControlPrototype()->addClass('form-control');
