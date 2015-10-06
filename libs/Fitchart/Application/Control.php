@@ -49,7 +49,7 @@ class Control extends \Nette\Application\UI\Control
         
         foreach ($form->getControls() as $control) {
             if ($control instanceof Button) {
-                $control->getControlPrototype()->addClass(Strings::startsWith($control->getName(), 'submit') ? 'btn btn-success' : 'btn btn-default');
+                $control->getControlPrototype()->addClass(Strings::startsWith($control->getName(), 'submit') ? 'btn btn-success' : 'btn btn-primary');
 
             } elseif ($control instanceof UploadControl || $control instanceof TextBase || $control instanceof SelectBox || $control instanceof MultiSelectBox) {
                     $control->getControlPrototype()->addClass('form-control');

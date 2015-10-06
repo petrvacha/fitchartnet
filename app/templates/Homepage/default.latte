@@ -4,8 +4,19 @@
 </div>
 
 <div id="content">
-    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-    {control signInForm}
-    {control registrationForm}
+    <div n:foreach="$flashes as $flash" class="alert, alert-{$flash->type}">{$flash->message}</div>
+    
+    <div class="container">
+        {control signInForm}
+        {control registrationForm}
+   </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        if($('#signupbox #login-alert').length) {
+            $('#loginbox').hide();
+            $('#signupbox').show();
+        }
+    });
+</script>
 {/block}

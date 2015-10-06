@@ -35,12 +35,16 @@ class SignForm extends \Fitchart\Application\Control
     {
         $form = new Form;
         $form->addText('username', 'Username:')
-            ->setRequired('Please enter your username.');
+            ->setRequired('Please enter your username.')
+            ->setAttribute('placeholder', 'username or email');
 
         $form->addPassword('password', 'Password:')
-            ->setRequired('Please enter your password.');
+            ->setRequired('Please enter your password.')
+            ->setAttribute('placeholder', 'password');
 
-        $form->addSubmit('send', 'Sign in');
+        $form->addSubmit('submit', 'Login');
+
+        $form->addSubmit('fblogin', 'Login with Facebook');
 
         $form->onSuccess[] = array($this, 'formSent');
         
@@ -58,13 +62,15 @@ class SignForm extends \Fitchart\Application\Control
      * @param Form $form
      * @param ArrayHash $values
      */
-    public function formSent(Form $form, ArrayHash $values)
+    public function formSent($form, $values)
     {
         $this->user->setExpiration('14 days', FALSE);
 
         try {
             $this->user->login($values->username, $values->password);
+            
         } catch (\Nette\Security\AuthenticationException $e) {
+            
             $form->addError($e->getMessage());
         }
     }

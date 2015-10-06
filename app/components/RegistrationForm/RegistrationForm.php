@@ -37,19 +37,24 @@ class RegistrationForm extends \Fitchart\Application\Control
         $form->addText('username', 'Username')
             ->setRequired('Please enter your username.')
             ->addRule(Form::MIN_LENGTH, '%label must be at least %s characters.', 4)
-            ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!');
+            ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!')
+            ->setAttribute('placeholder', 'Username');
 
-        $form->addText('email', 'Email')
+        $form->addText('email', 'Username or email')
             ->setRequired('Please enter your email.')
             ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email.')
-            ->addRule(callback($this, 'isEmailAvailable'), 'This email is already taken!');
+            ->addRule(callback($this, 'isEmailAvailable'), 'This email is already taken!')
+            ->setAttribute('placeholder', 'Email Address');
 
         $form->addPassword('password', 'Password')
             ->setRequired('Please enter your password.')
-            ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6);
+            ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6)
+            ->setAttribute('placeholder', 'password');
 
 
-        $form->addSubmit('send', 'Sign Up');
+        $form->addSubmit('submit', 'Sign Up');
+        
+        $form->addSubmit('fbregistration', 'Sign Up with Facebook');
 
         $form->onSuccess[] = array($this, 'formSent');
 
