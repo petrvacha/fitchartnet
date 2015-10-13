@@ -16,4 +16,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
     /** @const MESSAGE_TYPE_ERROR string */
     const MESSAGE_TYPE_ERROR = 'error';
+
+    protected function beforeRender() {
+        parent::beforeRender();
+        $this->template->t = time();
+    }
 }

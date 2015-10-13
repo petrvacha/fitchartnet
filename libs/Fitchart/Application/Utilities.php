@@ -108,7 +108,7 @@ class Utilities extends \Nette\Object
         return substr(strrchr($fileName, '.'), 1);
     }
 
-    static public function verifyDate($date, $strict = true)
+    public static function verifyDate($date, $strict = true)
     {
         $dateTime = DateTime::createFromFormat('m/d/Y', $date);
         if ($strict) {
@@ -118,5 +118,20 @@ class Utilities extends \Nette\Object
             }
         }
         return $dateTime !== false;
-    }    
+    }
+
+    /**
+     * @param string $uri
+     * @param string $path
+     */
+    public static function storeFile($uri, $path)
+    {
+        $ch = curl_init($uri);
+        $fp = fopen($path, 'wb');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+    }
 }

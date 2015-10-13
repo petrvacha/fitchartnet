@@ -184,4 +184,95 @@ class User extends BaseModel
             throw new \Fitchart\Application\DataException('An error occurred in the upload.');
        }
     }
+
+    /**
+     * @param int $id
+     * @return ActiveRow
+     */
+    public function findByFacebookId($id)
+    {
+        return $this->findBy(['facebook_id' => $id])->fetch();
+    }
+
+    /**
+     * @param ArrayHash $data
+     */
+    public function registerFromFacebook(\Nette\Utils\ArrayHash $data)
+    {
+        $roleModel = $this->roleModel;
+        $privacyModel = $this->privacyModel;
+
+        $existingUser = $this->findBy(['email' => $data['email']]);
+
+        if ($existingUser) {
+            $update = ['facebook_id' => $data['id'], 'updated_at' => $this->getDateTime()];
+
+            $existingUserData = $existingUser->fetch();
+            if (!empty($existingUserData['profile_photo'])) {
+                $fileName = $existingUserData['id'] . '.jpg';
+                Utilities::storeFile($data['picture']['data']['url'], USER_AVATAR_DIR . '/' . $fileName);
+                $update['profile_photo'] = $fileName;
+            }
+
+            $existingUser->update($update);
+            return $existingUserData;
+            
+        } else {
+            $fileName = $data['userId'] . '.jpg';
+            Utilities::storeFile($data['picture']['data']['url'], USER_AVATAR_DIR . '/' . $fileName);
+            $update['profile_photo'] = $fileName;
+
+            $insert = [
+                'facebook_id' => $data['id'],
+                'email' => $data['email'],
+                'firstname' => $data['first_name'],
+                'surname' => $data['surname_name'],
+                'api_token' => $this->getFreeApiToken($data['surname_name']),
+                'privacy_id' => $privacyModel::FRIENDS_AND_GROUPS,
+                'role_id' => $roleModel::USER,
+                'state' => self::USER_STATE_NEW,
+                'active' => TRUE,
+                'profile_photo' => $fileName,
+                'created_at' => $this->getDateTime(),
+                'updated_at' => $this->getDateTime()
+            ];
+
+            $this->insert($insert);
+
+            return $this->findBy(['facebook_id' => $data['id']])->fetch();
+        }
+    }
+
+    /**
+     * @param int $id
+     * @param string $accessToken
+     */
+    public function updateFacebookAccessToken($id, $accessToken)
+    {
+        $user = $this->findByFacebookId($id);
+        $user->update(['facebook_access_token' => $accessToken]);
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function getUserLoginData($id)
+    {
+        $row = $this->findBy(['user.id' => $id])
+                ->select('user.*, role.name AS role')
+                ->fetch();
+
+        if ($row) {
+            $arr = $row->toArray();
+            $weight = $row->related('weight.user_id')->fetch();
+            if ($weight) {
+                $arr['weight'] = $weight->value;
+                $arr['weight_last_update'] = $weight->datetime;
+            }
+            return $arr;
+        }
+
+        return FALSE;
+    }
 }
