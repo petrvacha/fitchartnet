@@ -196,6 +196,7 @@ class User extends BaseModel
 
     /**
      * @param ArrayHash $data
+     * @return ArrayHash
      */
     public function registerFromFacebook(\Nette\Utils\ArrayHash $data)
     {
@@ -203,11 +204,9 @@ class User extends BaseModel
         $privacyModel = $this->privacyModel;
 
         $existingUser = $this->findBy(['email' => $data['email']]);
-
-        if ($existingUser) {
+        $existingUserData = $existingUser->fetch();
+        if ($existingUserData) {
             $update = ['facebook_id' => $data['id'], 'updated_at' => $this->getDateTime()];
-
-            $existingUserData = $existingUser->fetch();
             if (!empty($existingUserData['profile_photo'])) {
                 $fileName = $existingUserData['id'] . '.jpg';
                 Utilities::storeFile($data['picture']['data']['url'], USER_AVATAR_DIR . '/' . $fileName);
@@ -218,26 +217,28 @@ class User extends BaseModel
             return $existingUserData;
             
         } else {
-            $fileName = $data['userId'] . '.jpg';
-            Utilities::storeFile($data['picture']['data']['url'], USER_AVATAR_DIR . '/' . $fileName);
-            $update['profile_photo'] = $fileName;
-
             $insert = [
                 'facebook_id' => $data['id'],
                 'email' => $data['email'],
                 'firstname' => $data['first_name'],
-                'surname' => $data['surname_name'],
-                'api_token' => $this->getFreeApiToken($data['surname_name']),
+                'surname' => $data['last_name'],
+                'api_token' => $this->getFreeApiToken($data['last_name']),
                 'privacy_id' => $privacyModel::FRIENDS_AND_GROUPS,
                 'role_id' => $roleModel::USER,
                 'state' => self::USER_STATE_NEW,
                 'active' => TRUE,
-                'profile_photo' => $fileName,
                 'created_at' => $this->getDateTime(),
                 'updated_at' => $this->getDateTime()
             ];
 
             $this->insert($insert);
+
+            $user = $this->findBy(['facebook_id' => $data['id']]);
+            $userData = $user->fetch();
+            $fileName = $userData['id'] . '.jpg';
+            Utilities::storeFile($data['picture']['data']['url'], USER_AVATAR_DIR . '/' . $fileName);
+            $update['profile_photo'] = $fileName;
+            $user->update($update);
 
             return $this->findBy(['facebook_id' => $data['id']])->fetch();
         }
