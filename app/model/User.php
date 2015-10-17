@@ -276,4 +276,28 @@ class User extends BaseModel
 
         return FALSE;
     }
+
+    /**
+     * @param string $subject
+     * @return ArrayHash
+     */
+    public function getUserList($subject = NULL)
+    {
+        $privacyModel = $this->privacyModel;
+        $query = "privacy_id <= ?";
+        if (!empty($subject)) {
+            $query .= " AND (firstname LIKE ? OR surname LIKE ? OR username LIKE ? OR CONCAT(firstname, ' ', surname) LIKE ?)";
+            return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM, $subject, $subject, $subject, $subject)->fetchAll();
+        }
+
+        return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM)->fetchAll();
+    }
+
+    /**
+     * @return ArrayHash
+     */
+    public function getFriendList()
+    {
+        return $this->getTable()->where(':friend.user_id2 = ?', $this->user->getIdentity()->id)->fetchAll();
+    }
 }

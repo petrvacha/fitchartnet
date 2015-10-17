@@ -6,8 +6,31 @@
 
     <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
         {include '../partial/flashMessages.latte'}
-
         <h2 class="page-header">Friends</h2>
+        <table n:if="!empty($friendList)">
+            <tr n:foreach="$friendList as $friend">
+                <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
+                <td>{$friend->username} {if !empty($friend->firstname) || !empty($friend->surname)}({/if}{$friend->firstname} {$friend->surname}{if !empty($friend->firstname) || !empty($friend->surname)}){/if}</td>
+                <td>
+                    <a n:href="Friends:removeFriend $friend->id" onclick="return confirm('Are you sure you want to remove this friend?');">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" title="unfriend"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <h2 class="page-header">Users</h2>
+        <table n:if="!empty($userList)">
+            <tr n:foreach="$userList as $user">
+                <td>{include '../makro/photo.latte', photoWidth => 75, photo => $user->profile_photo}<td>
+                <td>{$user->username} {if !empty($user->firstname) || !empty($user->surname)}({/if}{$user->firstname} {$user->surname}{if !empty($user->firstname) || !empty($user->surname)}){/if}</td>
+                <td>
+                    <a n:href="Friends:friendshipRequest $user->id" onclick="return confirm('Are you sure you want to add this friend?');">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true" title="add new friend"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 

@@ -16,6 +16,8 @@ services:
     - App\Model\Role
     - App\Model\Email
     - App\Model\Weight
+    - App\Model\Friend
+    - App\Model\FriendshipRequest
 
     - App\Components\MailerManagerFactory(@App\Components\MailerFactory, @App\Components\MessageFactory , @Nette\Http\Request , @Nette\Application\UI\ITemplateFactory , %config%)
     - App\Components\MailerFactory(@App\Model\LoggerModel)
