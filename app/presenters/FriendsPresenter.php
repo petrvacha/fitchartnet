@@ -30,7 +30,8 @@ class FriendsPresenter extends LoginBasePresenter
     public function __construct(\App\Model\ActivityLog $activityLog,
                                 \App\Model\User $userModel,
                                 \App\Model\FriendshipRequest $friendshipRequestModel,
-                                \App\Model\Friend $friendModel)
+                                \App\Model\Friend $friendModel
+            )
     {
         $this->activityLog = $activityLog;
         $this->userModel = $userModel;
@@ -43,6 +44,8 @@ class FriendsPresenter extends LoginBasePresenter
         $this->template->title = 'Friends';
         $this->template->userList = $this->userModel->getUserList();
         $this->template->friendList = $this->userModel->getFriendList();
+        $this->template->friendshipRequestList = $this->userModel->getFriendshipRequestList();
+        $this->template->friendshipOfferList = $this->userModel->getFriendshipOfferList();
     }
 
     /**
@@ -59,7 +62,10 @@ class FriendsPresenter extends LoginBasePresenter
      */
     public function actionRemoveFriend($id)
     {
-        $this->friendModel->removeFriend($id);
+        $friend = $this->friendModel->removeFriend($id);
+        if ($friend) {
+            $this->flashMessage("$friend and you are no longer friends :(", 'info');
+        }
         $this->redirect('Friends:default');
     }
 
@@ -68,7 +74,34 @@ class FriendsPresenter extends LoginBasePresenter
      */
     public function actionFriendshipRequest($id)
     {
-        $this->friendshipRequestModel->addfriendshipRequest($id);
+        $friendshipRequestSent = $this->friendshipRequestModel->addFriendshipRequest($id);
+        if ($friendshipRequestSent) {
+            $this->flashMessage('Your friendship request has been sent.', 'info');
+        }
+        $this->redirect('Friends:default');
+    }
+
+    /**
+     * @param int $id
+     */
+    public function actionAcceptFriendship($id)
+    {
+        $friend = $this->friendshipRequestModel->acceptFriendshipRequest($id);
+        if ($friend) {
+            $this->flashMessage("$friend->username and you are friends now!", 'success');
+        }
+        $this->redirect('Friends:default');
+    }
+
+    /**
+     * @param int $id
+     */
+    public function actionRemoveFriendshipRequest($id)
+    {
+        $removed = $this->friendshipRequestModel->removeFriendshipRequest($id, FALSE);
+        if ($removed) {
+            $this->flashMessage('Friendship request has been removed.', 'info');
+        }
         $this->redirect('Friends:default');
     }
 

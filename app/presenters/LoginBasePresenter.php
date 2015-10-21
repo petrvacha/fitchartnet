@@ -15,6 +15,7 @@ abstract class LoginBasePresenter extends BasePresenter
         if (!$this->getUser()->isLoggedIn()) {
             $this->getUser()->logout();
             $this->redirect('Homepage:default');
+
         }
     }
 

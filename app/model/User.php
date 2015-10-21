@@ -28,6 +28,9 @@ class User extends BaseModel
 
     /** @var \App\Model\Role */
     protected $roleModel;
+
+    /** @var \App\Model\FriendshipRequest */
+    protected $friendshipRequest;
     
     /** @var \App\Model\Role $roleModel */
     protected $user;
@@ -42,12 +45,14 @@ class User extends BaseModel
     public function __construct(\Nette\Database\Context $context,
                                 \Nette\Security\User $user,
                                 \App\Model\Privacy $privacyModel,
-                                \App\Model\Role $roleModel)
+                                \App\Model\Role $roleModel,
+                                \App\Model\FriendshipRequest $friendshipRequest)
     {
         parent::__construct($context);
         $this->user = $user;
         $this->privacyModel = $privacyModel;
         $this->roleModel = $roleModel;
+        $this->friendshipRequest = $friendshipRequest;
     }
 
     /**
@@ -299,5 +304,23 @@ class User extends BaseModel
     public function getFriendList()
     {
         return $this->getTable()->where(':friend.user_id2 = ?', $this->user->getIdentity()->id)->fetchAll();
+    }
+
+    /**
+     * @return ArrayHash
+     */
+    public function getFriendshipRequestList()
+    {
+        return $this->getTable()->where(':friendship_request.approved IS NULL AND :friendship_request.from_user_id = ?', $this->user->getIdentity()->id)->fetchAll();
+    }
+
+    /**
+     * @return ArrayHash
+     */
+    public function getFriendshipOfferList()
+    {
+        $toUserId = $this->user->getIdentity()->id;
+        $inIDs = $this->context->table('friendship_request')->where('approved IS NULL AND to_user_id', $toUserId)->select('from_user_id id')->fetchAll();
+        return $this->getTable()->where('id', $inIDs)->select('*')->fetchAll();
     }
 }
