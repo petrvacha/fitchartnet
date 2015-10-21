@@ -30,8 +30,7 @@ class FriendsPresenter extends LoginBasePresenter
     public function __construct(\App\Model\ActivityLog $activityLog,
                                 \App\Model\User $userModel,
                                 \App\Model\FriendshipRequest $friendshipRequestModel,
-                                \App\Model\Friend $friendModel
-            )
+                                \App\Model\Friend $friendModel)
     {
         $this->activityLog = $activityLog;
         $this->userModel = $userModel;
