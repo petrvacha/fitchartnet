@@ -289,13 +289,14 @@ class User extends BaseModel
     public function getUserList($subject = NULL)
     {
         $privacyModel = $this->privacyModel;
-        $query = "privacy_id <= ?";
+        $userId = $this->user->getIdentity()->id;
+        $query = "privacy_id <= ? AND id <> ?";
         if (!empty($subject)) {
             $query .= " AND (firstname LIKE ? OR surname LIKE ? OR username LIKE ? OR CONCAT(firstname, ' ', surname) LIKE ?)";
-            return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM, $subject, $subject, $subject, $subject)->fetchAll();
+            return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM, $userId, $subject, $subject, $subject, $subject)->fetchAll();
         }
-
-        return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM)->fetchAll();
+        
+        return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM, $userId)->fetchAll();
     }
 
     /**
