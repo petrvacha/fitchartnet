@@ -227,6 +227,7 @@ class User extends BaseModel
                 'email' => $data['email'],
                 'firstname' => $data['first_name'],
                 'surname' => $data['last_name'],
+                'username' => $this->findFreeUsername($data['first_name'], $data['last_name']),
                 'api_token' => $this->getFreeApiToken($data['last_name']),
                 'privacy_id' => $privacyModel::FRIENDS_AND_GROUPS,
                 'role_id' => $roleModel::USER,
@@ -246,6 +247,30 @@ class User extends BaseModel
             $user->update($update);
 
             return $this->findBy(['facebook_id' => $data['id']])->fetch();
+        }
+    }
+
+    /**
+     * @param string $firstname
+     * @param string $surname
+     * @return string
+     */
+    protected function findFreeUsername($firstname, $surname)
+    {
+        $firstname = \Nette\Utils\Strings::webalize($firstname);
+        $surname = \Nette\Utils\Strings::webalize($surname);
+
+        $user = $this->findBy(['username' => $firstname.$surname])->fetch();
+        if ($user) {
+            $number = 1;
+            do {
+                $user = $this->findBy(['username' => $firstname.$surname.$number])->fetch();
+                $number++;
+            } while ($user);
+            return $firstname.$surname.$number--;
+            
+        } else {
+            return $firstname.$surname;
         }
     }
 

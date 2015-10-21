@@ -1,0 +1,7 @@
+{if !empty($user->username) && (!empty($user->firstname) || !empty($user->surname))}
+    {$user->username} ({$user->firstname} {$user->surname})
+{elseif empty($user->username) && !empty($user->firstname) && !empty($user->surname)}
+    {$user->firstname} {$user->surname}
+{elseif !empty($user->username) && empty($user->firstname) && empty($user->surname)}
+    {$user->username}
+{/if}
