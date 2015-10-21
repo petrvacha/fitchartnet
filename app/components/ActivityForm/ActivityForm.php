@@ -59,7 +59,7 @@ class ActivityForm extends \Fitchart\Application\Control
             ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.');
         $form['value']->getLabelPrototype()->style = 'float: left; width: 60px;';
 
-        //$form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
+        $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
 
         if (isset($this->data['id'])) {
             $form->setDefaults($this->data);
@@ -91,7 +91,6 @@ class ActivityForm extends \Fitchart\Application\Control
     public function formSent(Form $form, ArrayHash $values)
     {
         $values['user_id'] = $this->userId;
-        $values['activity_id'] = 1; //push-up
 
         if (empty($values['id'])) {
             if (empty($values['created_at'])) {

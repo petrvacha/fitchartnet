@@ -40,7 +40,7 @@ class MainPresenter extends LoginBasePresenter
 
     public function renderAddWorkout()
     {
-        $this->template->activities = $this->activityLog->getUserActities($this->user->id, 1);
+        $this->template->activities = $this->activityLog->getUserActities($this->user->id);
         $this->template->title = 'Add workout';
     }
 
