@@ -26,10 +26,15 @@
         <table>
             <tr n:foreach="$friendshipOfferList as $friend">
                 <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
-                <td>{include '../makro/username.latte', user => $user}</td>
+                <td>{include '../makro/username.latte', user => $friend}</td>
                 <td>
                     <a n:href="Friends:acceptFriendship $friend->id">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true" title="accept friendship"></span>
+                    </a>
+                </td>
+                <td>
+                    <a n:href="Friends:acceptFriendship $friend->id, FALSE" onclick="return confirm('Are you sure you want to refuse this friendship?');">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" title="refuse friendship"></span>
                     </a>
                 </td>
             </tr>

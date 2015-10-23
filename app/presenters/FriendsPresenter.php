@@ -83,10 +83,10 @@ class FriendsPresenter extends LoginBasePresenter
     /**
      * @param int $id
      */
-    public function actionAcceptFriendship($id)
+    public function actionAcceptFriendship($id, $approve = TRUE)
     {
-        $friend = $this->friendshipRequestModel->acceptFriendshipRequest($id);
-        if ($friend) {
+        $friend = $this->friendshipRequestModel->acceptFriendshipRequest($id, $approve);
+        if ($friend && $approve) {
             $this->flashMessage("$friend->username and you are friends now!", 'success');
         }
         $this->redirect('Friends:default');
