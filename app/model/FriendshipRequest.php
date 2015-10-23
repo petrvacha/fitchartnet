@@ -59,7 +59,7 @@ class FriendshipRequest extends BaseModel
         $updateData = ['approved' => $approve, 'updated_at' => $this->getDateTime()];
         $updated = $this->findBy(['approved' => NULL, 'from_user_id' => $userId, 'to_user_id' => $toUserId])->update($updateData);
 
-        if ($updated) {
+        if ($updated && $approve) {
             return $this->friendModel->addFriend($userId);
         }
         return FALSE;
