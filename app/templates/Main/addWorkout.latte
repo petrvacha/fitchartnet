@@ -10,6 +10,30 @@
         <h2 class="page-header">Add workout</h2>
         {control activityForm}
         <br />
+
+        <ul class="nav nav-tabs">
+            <li n:foreach="$activityList as $id => $activity" {first}class="active"{/first}>
+                <a data-toggle="tab" data-activity-id="{$activity->activity_id}" href="#activity_{$activity->activity_id}">{$activity->activity->name}</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content">
+            <div class="row" style="margin-top: 10px; margin-left: 3px">
+                <a id="week" href="#" class="btn btn-default active" role="button">this week</a>
+                <a id="month" href="#" class="btn btn-default" role="button">this month</a>
+                <a id="year" href="#" class="btn btn-default" role="button">this year</a>
+                <a id="all" href="#" class="btn btn-default" role="button">all</a>
+            </div>
+
+          <div n:foreach="$activityList as $id => $activity" id="activity_{$activity->activity_id}" data-id="{$activity->activity_id}" class="tab-pane fade in{first} active{/first}">
+            <h3>{$activity->activity->name}</h3>
+            <div class="demo-container">
+                <div style="width:1500px;height:400px" class="placeholder_{$activity->activity_id}"></div>
+            </div>
+          </div>
+        </div>
+
+        <br />
         <table class="table table-striped">
             <tr><th>Date</th><th>Exercise</th><th>Count</th><th>Action</th></tr>
             <tr n:foreach="$activities as $id => $activity">
@@ -21,4 +45,72 @@
         </table>
     </div>
 </div>
+
+<script type="text/javascript">
+	$(function() {
+            var data = {$chartData};
+            var dates = {$dates};
+            var interval = 'week';
+            var tickSize = 'day';
+            var format = '%a';
+
+            var firstActivityId = Object.keys(data)[0];
+            if (firstActivityId) {
+                plot(firstActivityId, dates[interval][0], dates[interval][1], tickSize, format);
+            }
+
+            $('.nav.nav-tabs a').on('click', function () {
+                plot($(this).data('activity-id'), dates[interval][0], dates[interval][1], tickSize, format);
+            });
+
+            function plot(activityId, min, max, tickSize, format) {
+                $.plot(".placeholder_"+activityId, [data[activityId]["all"]], {
+                    bars: {
+                        show: true,
+                        barWidth: 24*60*60*500,
+                        fill: true
+                    },
+                    xaxis: {
+                        mode: "time",
+                        minTickSize: [1, tickSize],
+                        min: min,
+                        max: max,
+                        timeformat: format
+                    }
+                });
+            }
+
+            $('#week').on('click', function() {
+                interval = 'week';
+                var activityId = $('.nav.nav-tabs .active a').data('activity-id');
+                plot(activityId, dates[interval][0], dates[interval][1], 'day', '%a');
+                $(this).parent().find('a.active').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $('#month').on('click', function() {
+                interval = 'month';
+                var activityId = $('.nav.nav-tabs .active a').data('activity-id');
+                plot(activityId, dates[interval][0], dates[interval][1], 'month', '%d');
+                $(this).parent().find('a.active').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $('#year').on('click', function() {
+                interval = 'year';
+                var activityId = $('.nav.nav-tabs .active a').data('activity-id');
+                plot(activityId, dates[interval][0], dates[interval][1], 'month', '%b');
+                $(this).parent().find('a.active').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $('#all').on('click', function() {
+                interval = 'all';
+                var activityId = $('.nav.nav-tabs .active a').data('activity-id');
+                plot(activityId, dates[interval][0], dates[interval][1], 'month', '%m.%y');
+                $(this).parent().find('a.active').removeClass('active');
+                $(this).addClass('active');
+            });
+	});
+	</script>
 {/block}

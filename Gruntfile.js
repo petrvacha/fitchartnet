@@ -20,6 +20,8 @@ module.exports = function(grunt) {
             web: {
                 src: [
                     './htdocs/js/libs/jquery-2.1.4.js',
+                    './htdocs/js/libs/jquery.flot.js',
+                    './htdocs/js/libs/jquery.flot.time.js',
                     './htdocs/js/libs/netteForms.js',
                     './htdocs/js/libs/jquery.datetimepicker.js',
                     './htdocs/js/libs/bootstrap.min.js',

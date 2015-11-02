@@ -13,13 +13,94 @@ class ActivityLog extends BaseModel
      * @param int|NULL $activityId
      * @return mixed
      */
-    public function getUserActities($userId, $activityId = NULL)
+    public function getUserActities($userId)
     {
         $conditions = ['user_id' => $userId, 'active' => TRUE];
-        if ($activityId) {
-            $conditions = array_merge($conditions,  ['activity_id' => $activityId]);
-        }
         return $this->findBy($conditions)->order('updated_at DESC')->fetchAll();
+    }
+
+    public function getUserActivityList($userId)
+    {
+        $conditions = ['user_id' => $userId, 'active' => TRUE];
+        return $this->findBy($conditions)->group('activity_id')->fetchAll();
+    }
+
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function getUserPreparedData($userId)
+    {
+        $data = $this
+                    ->findBy(['user_id' => $userId, 'active' => TRUE])
+                    ->order('updated_at ASC')
+                    ->fetchAll();
+
+
+        $thisWeekStart = date('Y-m-d 00:00:00', strtotime('monday this week'));
+        
+        $thisMonthStart = date('Y-m-01 00:00:00');
+        $thisYearStart = date('Y-01-01 00:00:00');
+
+        $preparedData = [];
+        
+        foreach($data as $i => $item) {
+            if (!isset($preparedData[$item->activity_id])) {
+                $preparedData[$item->activity_id] = ['week' => [], 'month' => [], 'year' => [], 'all' => []];
+            }
+
+            $itemTime = $item->updated_at->format('Y-m-d H:i:s');
+            $keyItemTime = ($item->updated_at->getTimestamp() + $item->updated_at->getOffset() - (($item->updated_at->getTimestamp() + $item->updated_at->getOffset()) % 86400)) * 1000;
+            if ($itemTime >= $thisWeekStart) {
+                $this->addValue($preparedData[$item->activity_id]['week'], $keyItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['year'], $keyItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+
+            } elseif ($item->updated_at >= $thisMonthStart) {
+                $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['year'], $keyItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+
+            } elseif ($item->updated_at >= $thisYearStart) {
+                $this->addValue($preparedData[$item->activity_id]['year'], $keyItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+
+            } else {
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+            }
+        }
+
+        $preparedArray = $preparedData;
+        foreach ($preparedData as $activityId => $activity) {
+            foreach ($activity as $interval => $data) {
+                $first = TRUE;
+                foreach ($data as $x => $y) {
+                    if ($first) {
+                        $preparedArray[$activityId][$interval] = [];
+                        $first = FALSE;
+                    }
+                    $preparedArray[$activityId][$interval][] = [$x, $y];
+                }
+            }
+        }
+        
+        return $preparedArray;
+    }
+
+    /**
+     *
+     * @param array $array
+     * @param string $key
+     * @param int $value
+     */
+    private function addValue(&$array, $key, $value)
+    {
+        if (isset($array[(int) $key])) {
+            $array[(int) $key] += $value;
+        } else {
+            $array[(int) $key] = $value;
+        }
     }
 
     /**
