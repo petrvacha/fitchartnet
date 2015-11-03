@@ -50,24 +50,30 @@ class ActivityLog extends BaseModel
             }
 
             $itemTime = $item->updated_at->format('Y-m-d H:i:s');
-            $keyItemTime = ($item->updated_at->getTimestamp() + $item->updated_at->getOffset() - (($item->updated_at->getTimestamp() + $item->updated_at->getOffset()) % 86400)) * 1000;
+            
             if ($itemTime >= $thisWeekStart) {
+                $keyItemTime = ($item->updated_at->modify('midnight')->getTimestamp() ) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['week'], $keyItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['year'], $keyItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->getTimestamp()) * 1000;
+                $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
 
             } elseif ($item->updated_at >= $thisMonthStart) {
+                $keyItemTime = ($item->updated_at->modify('midnight')->getTimestamp()) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['year'], $keyItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->getTimestamp() + $item->updated_at->getOffset()) * 1000;
+                $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
 
             } elseif ($item->updated_at >= $thisYearStart) {
-                $this->addValue($preparedData[$item->activity_id]['year'], $keyItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->modify('midnight')->getTimestamp() + $item->updated_at->getOffset()) * 1000;
+                $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
 
             } else {
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyItemTime, $item->value);
+                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->modify('midnight')->getTimestamp() + $item->updated_at->getOffset()) * 1000;
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
             }
         }
 
@@ -84,7 +90,8 @@ class ActivityLog extends BaseModel
                 }
             }
         }
-        
+        //echo '<pre>';
+        //var_dump($preparedArray);die;
         return $preparedArray;
     }
 

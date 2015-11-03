@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 	$(function() {
             var data = {$chartData};
             var dates = {$dates};
@@ -56,23 +56,36 @@
 
             var firstActivityId = Object.keys(data)[0];
             if (firstActivityId) {
-                plot(firstActivityId, dates[interval][0], dates[interval][1], tickSize, format);
+                plot(firstActivityId, interval, dates[interval][0], dates[interval][1], tickSize, format);
             }
 
             $('.nav.nav-tabs a').on('click', function () {
-                plot($(this).data('activity-id'), dates[interval][0], dates[interval][1], tickSize, format);
+                plot($(this).data('activity-id'), interval, dates[interval][0], dates[interval][1], tickSize, format);
             });
 
-            function plot(activityId, min, max, tickSize, format) {
-                $.plot(".placeholder_"+activityId, [data[activityId]["all"]], {
+            function plot(activityId, dataInterval, min, max, tickSize, format) {
+                var barWidth = 24*60*60*500;
+                var minus = 24*60*60*255;
+                if (tickSize === 'month') {
+                    barWidth *= 30;
+                    minus *= 30;
+                }
+                min -= minus;
+                $.plot(".placeholder_"+activityId, [data[activityId][dataInterval]], {
                     bars: {
                         show: true,
-                        barWidth: 24*60*60*500,
+                        barWidth: barWidth,
+                        align: 'center',
                         fill: true
                     },
+                    grid: {
+                        hoverable: true,
+                        clickable: true
+                    },
                     xaxis: {
-                        mode: "time",
+                        mode: 'time',
                         minTickSize: [1, tickSize],
+                        tickLength: 0,
                         min: min,
                         max: max,
                         timeformat: format
@@ -83,7 +96,7 @@
             $('#week').on('click', function() {
                 interval = 'week';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, dates[interval][0], dates[interval][1], 'day', '%a');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], 'day', '%a');
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
@@ -91,7 +104,7 @@
             $('#month').on('click', function() {
                 interval = 'month';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, dates[interval][0], dates[interval][1], 'month', '%d');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], 'day', '%d');
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
@@ -99,7 +112,7 @@
             $('#year').on('click', function() {
                 interval = 'year';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, dates[interval][0], dates[interval][1], 'month', '%b');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], 'month', '%b');
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
@@ -107,10 +120,10 @@
             $('#all').on('click', function() {
                 interval = 'all';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, dates[interval][0], dates[interval][1], 'month', '%m.%y');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], 'month', '%b %Y');
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
 	});
-	</script>
+    </script>
 {/block}
