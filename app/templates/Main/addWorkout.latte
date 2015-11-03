@@ -95,32 +95,40 @@
 
             $('#week').on('click', function() {
                 interval = 'week';
+                format = '%a';
+                tickSize = 'day';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, interval, dates[interval][0], dates[interval][1], 'day', '%a');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], tickSize, format);
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
 
             $('#month').on('click', function() {
                 interval = 'month';
+                format = '%d';
+                tickSize = 'day';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, interval, dates[interval][0], dates[interval][1], 'day', '%d');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], tickSize, format);
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
 
             $('#year').on('click', function() {
                 interval = 'year';
+                format = '%b';
+                tickSize = 'month';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, interval, dates[interval][0], dates[interval][1], 'month', '%b');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], tickSize, format);
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
 
             $('#all').on('click', function() {
                 interval = 'all';
+                format = '%b %Y';
+                tickSize = 'month';
                 var activityId = $('.nav.nav-tabs .active a').data('activity-id');
-                plot(activityId, interval, dates[interval][0], dates[interval][1], 'month', '%b %Y');
+                plot(activityId, interval, dates[interval][0], dates[interval][1], tickSize, format);
                 $(this).parent().find('a.active').removeClass('active');
                 $(this).addClass('active');
             });
