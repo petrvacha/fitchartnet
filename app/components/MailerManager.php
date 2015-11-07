@@ -5,10 +5,9 @@ namespace App\Components;
 
 use Latte\Template;
 use Nette;
-use Fitchart\Application\Control;
 use Fitchart\Application\IMailer;
 use Nette\Mail\Message;
-use Fitchart\Application\LogicException;
+use Fitchart\Application\NotImplementedException;
 
 
 class MailerManager extends Nette\Object
@@ -35,11 +34,17 @@ class MailerManager extends Nette\Object
 
 
     /**
-     * @param IMailer $mailer
-     * @param Message $message
+     * @param \Fitchart\Application\IMailer $mailer
+     * @param \Nette\Mail\Message $message
      * @param Nette\Http\IRequest $httpRequest
+     * @param Nette\Application\UI\ITemplateFactory $templateFactory
+     * @param array $config
      */
-    public function __construct(IMailer $mailer, Message $message, Nette\Http\IRequest $httpRequest, Nette\Application\UI\ITemplateFactory $templateFactory, $config)
+    public function __construct(IMailer $mailer, 
+                                Message $message,
+                                Nette\Http\IRequest $httpRequest,
+                                Nette\Application\UI\ITemplateFactory $templateFactory,
+                                $config)
     {
         $this->mailer = $mailer;
         $this->message = $message;
