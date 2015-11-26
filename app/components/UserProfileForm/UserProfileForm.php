@@ -79,12 +79,13 @@ class UserProfileForm extends \Fitchart\Application\Control
         $form->addPassword('old_password', 'Old password');
         
         $form->addPassword('password', 'New password')
-            ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6)
-            ->addConditionOn($form['old_password'], Form::FILLED);
+            ->addCondition(Form::FILLED)
+                ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6);
 
         $form->addPassword('confirm_password', 'Confirm new password')
-            ->addConditionOn($form['old_password'], Form::FILLED)
+            ->addConditionOn($form['password'], Form::FILLED)
                 ->addRule(Form::EQUAL, "Passwords don't match", $form['password']);
+
 
         $form->addSubmit('submit', 'Save');
 
@@ -92,6 +93,7 @@ class UserProfileForm extends \Fitchart\Application\Control
         $form->onSuccess[] = array($this, 'formSent');
 
         $this->addBootstrapStyling($form);
+
         return $form;
     }
 

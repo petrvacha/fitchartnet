@@ -159,10 +159,13 @@ class User extends BaseModel
     {
         $user = $this->findRow($data['id']);
         if (!empty($data['password']) && !empty($data['confirm_password'])) {
-            if (!Passwords::verify($data['old_password'], $user->password)) {
+
+            if (empty($data['old_password']) && !empty($user->password) ||
+                !empty($data['old_password']) && !Passwords::verify($data['old_password'], $user->password)) {
                 throw new \Fitchart\Application\SecurityException('Password is incorrect.');
             }
             $data['password'] = Passwords::hash($data['password']);
+
         } else {
             unset($data['password']);
         }
