@@ -29,7 +29,7 @@ class LaunchAlertForm extends \Fitchart\Application\Control
         $form = new Form;
         
         $form->addText('email', 'Email')
-            ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email eee.')
+            ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email.')
             ->setAttribute('placeholder', 'Email Address');
 
         $form->addSubmit('submit', 'Sign Up')
