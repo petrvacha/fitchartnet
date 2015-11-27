@@ -49,8 +49,8 @@ class FriendshipRequest extends BaseModel
 
 
     /**
-     * @param int $id
-     * @param bool|TRUE $approve
+     * @param int $userId
+     * @param bool $approve
      * @return mixed
      */
     public function acceptFriendshipRequest($userId, $approve = TRUE)

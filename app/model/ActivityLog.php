@@ -55,7 +55,7 @@ class ActivityLog extends BaseModel
                 $keyItemTime = ($item->updated_at->modify('midnight')->getTimestamp() ) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['week'], $keyItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
-                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->getTimestamp()) * 1000;
+                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->getTimestamp()+ $item->updated_at->getOffset()) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
 

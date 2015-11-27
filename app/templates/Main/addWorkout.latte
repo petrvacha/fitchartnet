@@ -64,8 +64,8 @@
             });
 
             function plot(activityId, dataInterval, min, max, tickSize, format) {
-                var barWidth = 24*60*60*500;
-                var minus = 24*60*60*255;
+                var barWidth = 43200000; // 24*60*60*500
+                var minus = 22032000; // 24*60*60*255
                 if (tickSize === 'month') {
                     barWidth *= 30;
                     minus *= 30;
