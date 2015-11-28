@@ -137,7 +137,7 @@ class BaseModel extends \Nette\Object
     }
 
     /**
-     * @param array
+     * @param array $data
      * @return bool|int
      */
     public function insertUpdate($data)
@@ -173,7 +173,7 @@ class BaseModel extends \Nette\Object
     }
 
     /**
-     * @param string $format
+     * @param string|NULL $format
      * @return DateTime
      */
     public function getDateTime($format = NULL)

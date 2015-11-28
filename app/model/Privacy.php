@@ -19,8 +19,9 @@ class Privacy extends BaseModel
     /** @const PUBLIC_FOR_ALL int */
     const PUBLIC_FOR_ALL = 5;
 
+
     /**
-     * @return type
+     * @return mixed
      */
     public function getList()
     {

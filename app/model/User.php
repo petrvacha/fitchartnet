@@ -35,12 +35,13 @@ class User extends BaseModel
     /** @var \App\Model\Role $roleModel */
     protected $user;
 
-            
+
     /**
      * @param \Nette\Database\Context $context
      * @param \Nette\Security\User $user
      * @param \App\Model\Privacy $privacyModel
      * @param \App\Model\Role $roleModel
+     * @param \App\Model\FriendshipRequest $friendshipRequest
      */
     public function __construct(\Nette\Database\Context $context,
                                 \Nette\Security\User $user,

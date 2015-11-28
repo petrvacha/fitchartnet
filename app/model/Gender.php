@@ -5,7 +5,7 @@ namespace App\Model;
 class Gender extends BaseModel
 {
     /**
-     * @return 
+     * @return mixed
      */
     public function getList()
     {

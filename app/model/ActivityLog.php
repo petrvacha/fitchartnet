@@ -10,7 +10,6 @@ class ActivityLog extends BaseModel
 {
     /**
      * @param int $userId
-     * @param int|NULL $activityId
      * @return mixed
      */
     public function getUserActities($userId)
@@ -19,6 +18,10 @@ class ActivityLog extends BaseModel
         return $this->findBy($conditions)->order('updated_at DESC')->fetchAll();
     }
 
+    /**
+     * @param int $userId
+     * @return mixed
+     */
     public function getUserActivityList($userId)
     {
         $conditions = ['user_id' => $userId, 'active' => TRUE];

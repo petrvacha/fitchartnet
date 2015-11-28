@@ -12,7 +12,6 @@ class Friend extends BaseModel
     /**
      * @param \Nette\Database\Context $context
      * @param \Nette\Security\User $user
-     * @param \App\Model\User $userModel
      */
     public function __construct(\Nette\Database\Context $context,
                                 \Nette\Security\User $user)
