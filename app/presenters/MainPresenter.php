@@ -11,6 +11,7 @@ class MainPresenter extends LoginBasePresenter
     /** @const NUMBER_THOUSAND int */
     const NUMBER_THOUSAND = 1000;
 
+
     /** @var \App\Model\ActivityLog */
     protected $activityLog;
 
@@ -110,8 +111,6 @@ class MainPresenter extends LoginBasePresenter
         };
         return $control;
     }
-
-
 
     /**
      * @return \App\Components\ActivityForm

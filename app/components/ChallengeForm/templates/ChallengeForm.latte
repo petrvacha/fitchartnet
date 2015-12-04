@@ -1,0 +1,55 @@
+{form challengeForm}
+
+    <ul class="error" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+
+        <div style="width: 600px;">
+            <div>
+                {label name /}{input name}
+            </div>
+            <div>
+                {label description /}{input description}
+            </div>
+            <div>
+                {label activity_id /}{input activity_id}
+            </div>
+            <div>
+                {label final_value /}{input final_value}
+            </div>
+            <div style="float: left; width: 250px; margin-right: 100px;">
+                {label start_at /}{input start_at}
+            </div>
+            <div style="float: left; width: 250px;">
+                {label end_at /}{input end_at}
+            </div>
+            <div class="token-input-list-facebook">
+                {label users /}{input users}
+            </div>
+
+            <div style="padding-top: 24px;">
+                {input submit}
+            </div>
+        </div>
+{/form}
+<script type="text/javascript">
+    $(function(){
+        $('.datetimepicker.start').datetimepicker({
+            dayOfWeekStart : 1,
+            lang: 'en',
+            showOnFocus: false,
+            timepicker:false,
+            format:'Y/m/d'
+        });
+
+        $('.datetimepicker.end').datetimepicker({
+            dayOfWeekStart : 1,
+            lang: 'en',
+            startDate: '{!$timeEndOfMonth}',
+            timepicker:false,
+            format:'Y/m/d'
+        });
+
+        $("#frm-challengeForm-challengeForm-users").tokenInput({$availableUsers}, { theme: "facebook" });
+    });
+</script>

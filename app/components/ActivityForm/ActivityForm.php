@@ -61,14 +61,8 @@ class ActivityForm extends \Fitchart\Application\Control
 
         $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
 
-        if (isset($this->data['id'])) {
-            $form->setDefaults($this->data);
-        } else {
-            if (empty($this->data['create_at'])) {
-                $this->data['create_at'] = date('Y/m/d H:00:00');
-            }
-            $form->setDefaults($this->data);
-        }
+        $form->setDefaults($this->data);
+
         $form->addSubmit('submit', 'Add');
 
         $form->onSuccess[] = array($this, 'formSent');

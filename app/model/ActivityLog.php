@@ -93,8 +93,7 @@ class ActivityLog extends BaseModel
                 }
             }
         }
-        //echo '<pre>';
-        //var_dump($preparedArray);die;
+
         return $preparedArray;
     }
 

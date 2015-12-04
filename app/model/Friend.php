@@ -45,5 +45,19 @@ class Friend extends BaseModel
         $this->findBy(['user_id' => $userId, 'user_id2' => $userId2])->delete();
         $this->findBy(['user_id' => $userId2, 'user_id2' => $userId])->delete();
     }
+
+    /**
+     * @param int $userId
+     * @param int|NULL $userId2
+     * @return mixed
+     */
+    public function areFriends($userId, $userId2 = NULL)
+    {
+        if ($userId2 === NULL) {
+            $userId2 = $this->user->getIdentity()->id;
+        }
+
+        return $this->findBy(['user_id' => $userId, 'user_id2' => $userId2])->fetch();
+    }
     
 }

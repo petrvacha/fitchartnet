@@ -1,0 +1,46 @@
+{block content}
+{include '../partial/navigation.latte'}
+
+<div id="content-wrapper" class="container-fluid">
+    {include '../partial/sidebar-profile-blok.latte'}
+
+    <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
+        {include '../partial/flashMessages.latte'}
+
+        <h2 class="page-header">Challenges</h2>
+            <a id="create-challenge-button" class="btn btn-success" href="#" style="margin: 10px 10px 0px 0px">Add Challenge</a>
+            <div id="create-challenge" class="hidden">
+                {control challengeForm}
+            </div>
+
+            <table class="table table-condensed" style="margin: 10px 10px 0px 0px">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Activity</th>
+                    <th>Your performance</th>
+                    <th></th>
+                </tr>
+                {foreach $challenges as $challenge}
+                    <tr>
+                        <td><a n:href="Challenge:challenge $challenge->id">{$challenge->name}</a></td>
+                        <td>{$challenge->description}</td>
+                        <td>{$challenge->activity_name}</td>
+                        <td>{$challenge->current_value}/{$challenge->final_value}</td>
+                        <td></td>
+                    </tr>
+                {/foreach}
+            </table>
+        <br />
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+    $('#create-challenge-button').on('click', function(){
+        $('#create-challenge').removeClass('hidden');
+        $('#create-challenge-button').hide();
+    });
+});
+</script>
+{/block}

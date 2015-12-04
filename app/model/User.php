@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Nette\Security\Passwords;
 use Fitchart\Application\Utilities;
+use \Nette\Utils\ArrayHash;
 
 class User extends BaseModel
 {
@@ -29,6 +30,9 @@ class User extends BaseModel
     /** @var \App\Model\Role */
     protected $roleModel;
 
+    /** @var \App\Model\Friend */
+    protected $friendModel;
+
     /** @var \App\Model\FriendshipRequest */
     protected $friendshipRequest;
     
@@ -41,18 +45,21 @@ class User extends BaseModel
      * @param \Nette\Security\User $user
      * @param \App\Model\Privacy $privacyModel
      * @param \App\Model\Role $roleModel
+     * @param \App\Model\Friend $friendModel
      * @param \App\Model\FriendshipRequest $friendshipRequest
      */
     public function __construct(\Nette\Database\Context $context,
                                 \Nette\Security\User $user,
-                                \App\Model\Privacy $privacyModel,
-                                \App\Model\Role $roleModel,
-                                \App\Model\FriendshipRequest $friendshipRequest)
+                                Privacy $privacyModel,
+                                Role $roleModel,
+                                Friend $friendModel,
+                                FriendshipRequest $friendshipRequest)
     {
         parent::__construct($context);
         $this->user = $user;
         $this->privacyModel = $privacyModel;
         $this->roleModel = $roleModel;
+        $this->friendModel = $friendModel;
         $this->friendshipRequest = $friendshipRequest;
     }
 
@@ -195,6 +202,17 @@ class User extends BaseModel
     }
 
     /**
+     * @param $userId
+     * @return bool
+     */
+    public function hasPermissionForUser($userId)
+    {
+        return $this->user->getIdentity()->role == Role::ADMIN ||
+                $this->user->getIdentity()->role == Role::SUPERADMIN ||
+                $this->friendModel->areFriends($userId);
+    }
+
+    /**
      * @param int $id
      * @return ActiveRow
      */
@@ -207,7 +225,7 @@ class User extends BaseModel
      * @param ArrayHash $data
      * @return ArrayHash
      */
-    public function registerFromFacebook(\Nette\Utils\ArrayHash $data)
+    public function registerFromFacebook(ArrayHash $data)
     {
         $roleModel = $this->roleModel;
         $privacyModel = $this->privacyModel;
@@ -352,5 +370,27 @@ class User extends BaseModel
         $toUserId = $this->user->getIdentity()->id;
         $inIDs = $this->context->table('friendship_request')->where('approved IS NULL AND to_user_id', $toUserId)->select('from_user_id id')->fetchAll();
         return $this->getTable()->where('id', $inIDs)->select('*')->fetchAll();
+    }
+
+    /**
+     * @param bool $transform
+     * @return mixed
+     */
+    public function getAvailableUsers($transform = FALSE)
+    {
+        if ($this->user->getIdentity()->role == Role::ADMIN || $this->user->getIdentity()->role == Role::SUPERADMIN) {
+            $users = $this->getTable()->where('id <> ?', $this->user->getIdentity()->id)->fetchPairs('id', 'username');
+        } else {
+            $users = $this->getTable()->where(':friend.user_id2 = ?', $this->user->getIdentity()->id)->fetchPairs('id', 'username');
+        }
+
+        if ($users && $transform) {
+            $transformUsers = [];
+            foreach ($users as $id => $name) {
+                $transformUsers[] = ['id' => $id, 'name' => $name];
+            }
+            return $transformUsers;
+        }
+        return $users;
     }
 }

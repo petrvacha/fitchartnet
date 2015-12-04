@@ -18,6 +18,8 @@ services:
     - App\Model\Weight
     - App\Model\Friend
     - App\Model\FriendshipRequest
+    - App\Model\Challenge
+    - App\Model\ChallengeUser
 
     - App\Components\MailerManagerFactory(@App\Components\MailerFactory, @App\Components\MessageFactory , @Nette\Http\Request , @Nette\Application\UI\ITemplateFactory , %config%)
     - App\Components\MailerFactory(@App\Model\LoggerModel)
@@ -30,3 +32,4 @@ services:
     - App\Components\SignForm\ISignFormFactory
     - App\Components\RegistrationForm\IRegistrationFormFactory
     - App\Components\UserWeightForm\IUserWeightFormFactory
+    - App\Components\ChallengeForm\IChallengeFormFactory
