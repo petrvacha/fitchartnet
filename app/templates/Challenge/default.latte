@@ -23,11 +23,23 @@
                 </tr>
                 {foreach $challenges as $challenge}
                     <tr>
-                        <td><a n:href="Challenge:challenge $challenge->id">{$challenge->name}</a></td>
+                        <td>
+                            {if $challenge->active === 0}
+                                {$challenge->name}
+                            {elseif $challenge->active ===1}
+                                <a n:href="Challenge:detail $challenge->id">{$challenge->name}</a>
+                            {/if}
+                        </td>
                         <td>{$challenge->description}</td>
                         <td>{$challenge->activity_name}</td>
                         <td>{$challenge->current_value}/{$challenge->final_value}</td>
-                        <td></td>
+                        <td>
+                            {if $challenge->active === 0}
+                                <a n:href="Challenge:join $challenge->id" title="Yes, want it!">join</a>
+                            {elseif $challenge->active ===1}
+                                <a n:href="Challenge:leave $challenge->id" title="Lazy?">leave</a>
+                            {/if}
+                        </td>
                     </tr>
                 {/foreach}
             </table>

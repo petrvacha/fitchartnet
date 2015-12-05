@@ -103,12 +103,12 @@ class Challenge extends BaseModel
      */
     public function addUsersToChallenge($challengeId, $users)
     {
-        foreach (explode(',', $users) as $userId) {
+        foreach (array_unique(explode(',', $users)) as $userId) {
             if (is_numeric($userId) && $this->userModel->hasPermissionForUser($userId)) {
                 $this->challengeUserModel->addNewUser($challengeId, $userId);
             }
         }
-        $this->challengeUserModel->addNewUser($challengeId, $this->user->getIdentity()->id);
+        $this->challengeUserModel->addNewUser($challengeId, $this->user->getIdentity()->id, TRUE);
     }
 
     /**
@@ -117,12 +117,12 @@ class Challenge extends BaseModel
     public function getUserChallenges()
     {
         return $this->context->query("
-            SELECT C.id, C.name, C.description, SUM(AL.value) current_value, C.final_value, A.name activity_name
+            SELECT C.id, C.name, C.description, IFNULL(SUM(AL.value),0) current_value, C.final_value, A.name activity_name, CU.active
             FROM challenge C
             JOIN challenge_user CU ON CU.challenge_id = C.id
-            JOIN activity_log AL ON AL.activity_id = C.activity_id
-            JOIN activity A ON A.id = AL.activity_id
-            WHERE CU.user_id = ? AND C.start_at < AL.created_at AND C.end_at > AL.created_at
+            LEFT JOIN activity_log AL ON AL.activity_id = C.activity_id AND C.start_at < AL.created_at AND C.end_at > AL.created_at
+            JOIN activity A ON A.id = C.activity_id
+            WHERE CU.user_id = ?
             GROUP BY C.id", $this->user->getIdentity()->id
         )->fetchAll();
     }

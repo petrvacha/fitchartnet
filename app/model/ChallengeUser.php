@@ -26,18 +26,19 @@ class ChallengeUser extends BaseModel
 
     /**
      * @param int $challengeId
-     * @param int
-     * @todo exception for duplication
+     * @param int $userId
+     * @param bool $active
      */
-    public function addNewUser($challengeId, $userId)
+    public function addNewUser($challengeId, $userId, $active = FALSE)
     {
         if (!$this->findBy(['challenge_id' => $challengeId, 'user_id' => $userId])->fetch()) {
             $this->insert(
                 [
                     'challenge_id' => $challengeId,
                     'user_id' => $userId,
-                    'add_by' => $this->user->getIdentity()->id,
-                    'add_at' => $this->getDateTime()
+                    'invited_by' => $this->user->getIdentity()->id,
+                    'invited_at' => $this->getDateTime(),
+                    'active' => $active
                 ]
             );
         }
@@ -50,5 +51,15 @@ class ChallengeUser extends BaseModel
     public function removeUser($challengeId, $userId)
     {
         $this->findBy(['challenge_id' => $challengeId, 'user_ud' => $userId])->delete();
+    }
+
+    /**
+     * @param $challengeId
+     * @param bool $active
+     */
+    public function attend($challengeId, $active = TRUE)
+    {
+        $this->findBy(['challenge_id' => $challengeId, 'user_ud' => $this->user->getIdentity()->id])
+            ->update(['active' => $active]);
     }
 }
