@@ -24,6 +24,9 @@ class ChallengePresenter extends LoginBasePresenter
     /** @var \App\Components\ChallengeForm\IChallengeFormFactory @inject */
     public $challengeFormFactory;
 
+    /** @var \App\Components\ActivityForm\IActivityFormFactory @inject */
+    public $activityFormFactory;
+
 
     /**
      * @param ActivityLog $activityLog
@@ -50,7 +53,7 @@ class ChallengePresenter extends LoginBasePresenter
      */
     public function renderDetail($id)
     {
-
+        $this->template->challenge = $this->challengeModel->findRow($id);
     }
 
     /**
@@ -59,7 +62,7 @@ class ChallengePresenter extends LoginBasePresenter
     public function actionJoin($challengeId)
     {
         $this->challengeUserModel->attend($challengeId);
-        $this->redirect('Challenge:');
+        $this->redirect('Challenge:detail', $challengeId);
     }
 
     /**
@@ -68,7 +71,7 @@ class ChallengePresenter extends LoginBasePresenter
     public function actionLeave($challengeId)
     {
         $this->challengeUserModel->attend($challengeId, FALSE);
-        $this->redirect('Challenge:detail', $challengeId);
+        $this->redirect('Challenge:');
     }
 
     /**
@@ -81,6 +84,21 @@ class ChallengePresenter extends LoginBasePresenter
         $control->getComponent('challengeForm')->onSuccess[] = function() {
             $this->flashMessage('New challenge has been created.', parent::MESSAGE_TYPE_SUCCESS);
             $this->redirect('Challenge:');
+        };
+        return $control;
+    }
+
+    /**
+     * @return \App\Components\ActivityForm
+     */
+    protected function createComponentActivityForm()
+    {
+        $control = $this->activityFormFactory->create($this->user->id);
+
+        $control->getComponent('activityForm')->onSuccess[] = function() {
+            $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
+            $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_SUCCESS);
+            $this->redirect('Challenge:detail', $this->getParameter('id'));
         };
         return $control;
     }

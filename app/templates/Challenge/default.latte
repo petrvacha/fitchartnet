@@ -35,9 +35,9 @@
                         <td>{$challenge->current_value}/{$challenge->final_value}</td>
                         <td>
                             {if $challenge->active === 0}
-                                <a n:href="Challenge:join $challenge->id" title="Yes, want it!">join</a>
+                                <a class="btn btn-info" n:href="Challenge:join $challenge->id" title="Yes, you want it!">join</a>
                             {elseif $challenge->active ===1}
-                                <a n:href="Challenge:leave $challenge->id" title="Lazy?">leave</a>
+                                <a class="btn btn-link" n:href="Challenge:leave $challenge->id" onclick="return confirm('Are you sure you want to leave this challenge?');" title="Lazy?">leave</a>
                             {/if}
                         </td>
                     </tr>

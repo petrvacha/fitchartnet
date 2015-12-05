@@ -50,7 +50,7 @@ class ChallengeUser extends BaseModel
      */
     public function removeUser($challengeId, $userId)
     {
-        $this->findBy(['challenge_id' => $challengeId, 'user_ud' => $userId])->delete();
+        $this->findBy(['challenge_id' => $challengeId, 'user_id' => $userId])->delete();
     }
 
     /**
@@ -59,7 +59,7 @@ class ChallengeUser extends BaseModel
      */
     public function attend($challengeId, $active = TRUE)
     {
-        $this->findBy(['challenge_id' => $challengeId, 'user_ud' => $this->user->getIdentity()->id])
+        $this->findBy(['challenge_id' => $challengeId, 'user_id' => $this->user->getIdentity()->id])
             ->update(['active' => $active]);
     }
 }
