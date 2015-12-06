@@ -140,6 +140,7 @@ class Challenge extends BaseModel
             JOIN challenge C ON C.activity_id = AL.activity_id AND C.end_at > AL.created_at AND C.start_at< AL.created_at
             JOIN challenge_user CU ON CU.user_id = U.id AND CU.challenge_id = C.id
             WHERE C.id = ?
-            GROUP BY U.id", $challengeId)->fetchAll();
+            GROUP BY U.id
+            ORDER BY current_performance DESC", $challengeId)->fetchAll();
     }
 }
