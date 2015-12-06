@@ -17,20 +17,20 @@
         {control activityForm}
 
         <br>
-        <table n:if="count($currentUserPerformaces)" class="table">
+        <table class="table" style="width: 230px">
         <tr><th>name</th><th>current performace</th></tr>
         {foreach $currentUserPerformaces as $userPerformace}
-            <tr><td>{$userPerformace['username']}</td><td>{$userPerformace['current_performace']}</td></tr>
+            <tr><td>{$userPerformace['username']}</td><td class="text-center">{$userPerformace['current_performace']}</td></tr>
         {/foreach}
+            <tr><td><strong>total</strong></td><td class="text-center"><strong>{$currentTotalPerformace}</strong></td></tr>
         </table>
 
-        <p class="lead">Total: {$currentTotalPerformace}</p>
         <br />
     </div>
 </div>
 
 <script type="text/javascript">
     var challengeActivityId = {$challenge->activity_id};
-    $("#frm-activityForm-activityForm-activity_id option[value='2']").attr("selected", "selected");
+    $("#frm-activityForm-activityForm-activity_id option[value=" + challengeActivityId + "]").attr("selected", "selected");
 </script>
 {/block}
