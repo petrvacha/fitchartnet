@@ -54,6 +54,10 @@ class ChallengePresenter extends LoginBasePresenter
     public function renderDetail($id)
     {
         $this->template->challenge = $this->challengeModel->findRow($id);
+        $this->template->currentUserPerformaces = $this->challengeModel->getCurrentUserPerformaces($id);
+        $this->template->currentTotalPerformace = 0 + array_reduce($this->template->currentUserPerformaces, function($i, $obj) {
+            return $i += $obj->current_performace;
+        });
     }
 
     /**

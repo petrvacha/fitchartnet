@@ -16,6 +16,15 @@
         <p class="lead">{$challenge->description}</p>
         {control activityForm}
 
+        <br>
+        <table n:if="count($currentUserPerformaces)" class="table">
+        <tr><th>name</th><th>current performace</th></tr>
+        {foreach $currentUserPerformaces as $userPerformace}
+            <tr><td>{$userPerformace['username']}</td><td>{$userPerformace['current_performace']}</td></tr>
+        {/foreach}
+        </table>
+
+        <p class="lead">Total: {$currentTotalPerformace}</p>
         <br />
     </div>
 </div>

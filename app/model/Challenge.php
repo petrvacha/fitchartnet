@@ -126,4 +126,20 @@ class Challenge extends BaseModel
             GROUP BY C.id", $this->user->getIdentity()->id
         )->fetchAll();
     }
+
+    /**
+     * @param $challengeId
+     * @return bool|\Nette\Database\IRow|\Nette\Database\Row
+     */
+    public function getCurrentUserPerformaces($challengeId)
+    {
+        return $this->context->query("
+            SELECT U.id, U.username, SUM(AL.value) current_performace
+            FROM activity_log AL
+            JOIN user U ON U.id = AL.user_id
+            JOIN challenge C ON C.activity_id = AL.activity_id AND C.end_at > AL.created_at AND C.start_at< AL.created_at
+            JOIN challenge_user CU ON CU.user_id = U.id AND CU.challenge_id = C.id
+            WHERE C.id = ?
+            GROUP BY U.id", $challengeId)->fetchAll();
+    }
 }
