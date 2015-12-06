@@ -17,12 +17,12 @@
         {control activityForm}
 
         <br>
-        <table class="table" style="width: 230px">
-        <tr><th>name</th><th>current performace</th></tr>
-        {foreach $currentUserPerformaces as $userPerformace}
-            <tr><td>{$userPerformace['username']}</td><td class="text-center">{$userPerformace['current_performace']}</td></tr>
+        <table class="table" style="width: 300px">
+        <tr><th>name</th><th>current performance</th></tr>
+        {foreach $currentUserPerformances as $userPerformance}
+            <tr><td>{$userPerformance['username']}</td><td class="text-center">{$userPerformance['current_performance']}</td></tr>
         {/foreach}
-            <tr><td><strong>total</strong></td><td class="text-center"><strong>{$currentTotalPerformace}</strong></td></tr>
+            <tr><td><strong>total</strong></td><td class="text-center"><strong>{$currentTotalPerformance}</strong></td></tr>
         </table>
 
         <br />

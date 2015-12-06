@@ -131,10 +131,10 @@ class Challenge extends BaseModel
      * @param $challengeId
      * @return bool|\Nette\Database\IRow|\Nette\Database\Row
      */
-    public function getCurrentUserPerformaces($challengeId)
+    public function getCurrentUserPerformances($challengeId)
     {
         return $this->context->query("
-            SELECT U.id, U.username, SUM(AL.value) current_performace
+            SELECT U.id, U.username, SUM(AL.value) current_performance
             FROM activity_log AL
             JOIN user U ON U.id = AL.user_id
             JOIN challenge C ON C.activity_id = AL.activity_id AND C.end_at > AL.created_at AND C.start_at< AL.created_at
