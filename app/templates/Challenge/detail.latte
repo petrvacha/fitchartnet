@@ -1,4 +1,5 @@
 {block content}
+
 {include '../partial/navigation.latte'}
 
 <div id="content-wrapper" class="container-fluid">
@@ -20,17 +21,71 @@
         <table class="table" style="width: 300px">
         <tr><th>name</th><th>current performance</th></tr>
         {foreach $currentUserPerformances as $userPerformance}
-            <tr><td>{$userPerformance['username']}</td><td class="text-center">{$userPerformance['current_performance']}</td></tr>
+            <tr>
+                <td>{$userPerformance['username']}</td>
+                <td class="text-center">{$userPerformance['current_performance']}</td>
+            </tr>
         {/foreach}
             <tr><td><strong>total</strong></td><td class="text-center"><strong>{$currentTotalPerformance}</strong></td></tr>
         </table>
 
         <br />
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Pie Chart</h3>
+                    </div>
+                    <div class="panel-body">
+                    <div style=" position: relative; height: 400px;">
+                        <div id="placeholder" style="width: 100%; height: 100%;"></div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
     </div>
 </div>
-
 <script type="text/javascript">
+$(function() {
     var challengeActivityId = {$challenge->activity_id};
     $("#frm-activityForm-activityForm-activity_id option[value=" + challengeActivityId + "]").attr("selected", "selected");
+
+
+    var data = {$userPieData};
+    var plotObj = $.plot($("#placeholder"), data, {
+      series: {
+        pie: {
+          show: true,
+          radius: 1,
+          label: {
+            show: false,
+            }
+        }
+      },
+      grid: {
+        hoverable: true
+      },
+      tooltip: {
+        show: true,
+        content: "%s %p.0% (%n)",
+        shifts: {
+          x: 20,
+          y: 0
+        },
+        defaultTheme: false
+      }
+    });
+});
 </script>
 {/block}

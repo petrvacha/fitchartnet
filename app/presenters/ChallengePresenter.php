@@ -58,6 +58,12 @@ class ChallengePresenter extends LoginBasePresenter
         $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {
             return $i += $obj->current_performance;
         });
+
+        $userPieData = [];
+        foreach ($this->template->currentUserPerformances as $p) {
+            $userPieData[] = ['label' => $p['username'], 'data' => $p['current_performance']];
+        }
+        $this->template->userPieData = $userPieData;
     }
 
     /**
