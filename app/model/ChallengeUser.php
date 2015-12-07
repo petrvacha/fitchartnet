@@ -38,6 +38,7 @@ class ChallengeUser extends BaseModel
                     'user_id' => $userId,
                     'invited_by' => $this->user->getIdentity()->id,
                     'invited_at' => $this->getDateTime(),
+                    'color' => '#' . substr(md5(rand()), 0, 6),
                     'active' => $active
                 ]
             );

@@ -11,6 +11,7 @@ module.exports = function(grunt) {
                         './htdocs/css/libs/bootstrap.css',
                         './htdocs/css/libs/jquery.datetimepicker.css',
                         './htdocs/css/libs/token-input-facebook.css',
+                        './htdocs/css/libs/sb-admin.css',
                         './htdocs/css/style.css',
                     ]
                 }
