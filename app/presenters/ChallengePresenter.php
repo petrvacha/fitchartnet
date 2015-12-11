@@ -63,7 +63,7 @@ class ChallengePresenter extends LoginBasePresenter
         foreach ($this->template->currentUserPerformances as $p) {
             $userPieData[] = ['label' => $p['username'], 'data' => $p['current_performance'], 'color' => $p['color']];
         }
-        
+
         $this->template->userPieData = $userPieData;
     }
 

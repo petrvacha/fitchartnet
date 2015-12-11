@@ -18,41 +18,46 @@
         {control activityForm}
 
         <br>
-        <table class="table" style="width: 300px">
-        <tr><th>name</th><th>current performance</th></tr>
-        {foreach $currentUserPerformances as $userPerformance}
-            <tr>
-                <td>{$userPerformance['username']}</td>
-                <td class="text-center">{$userPerformance['current_performance']}</td>
-            </tr>
-        {/foreach}
-            <tr><td><strong>total</strong></td><td class="text-center"><strong>{$currentTotalPerformance}</strong></td></tr>
-        </table>
-
-        <br />
 
         <div class="row">
             <div class="col-lg-4">
-                <div class="panel panel-green">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Score</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr><th>name</th><th class="text-center">current performance</th></tr>
+                            {foreach $currentUserPerformances as $userPerformance}
+                            <tr>
+                                <td>{$userPerformance['username']}</td>
+                                <td class="text-center">{$userPerformance['current_performance']}</td>
+                            </tr>
+                            {/foreach}
+                            <tr>
+                                <td><strong>total</strong></td><td class="text-center"><strong>{$currentTotalPerformance}</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-success">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Pie Chart</h3>
                     </div>
                     <div class="panel-body">
-                    <div style=" position: relative; height: 400px;">
-                        <div id="placeholder" style="width: 100%; height: 100%;"></div>
-                    </div>
+                        <div style=" position: relative; height: 400px;">
+                            <div id="placeholder" style="width: 100%; height: 100%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
-
-
-
-
-
-
 
     </div>
 </div>
