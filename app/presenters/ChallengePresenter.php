@@ -53,8 +53,12 @@ class ChallengePresenter extends LoginBasePresenter
      */
     public function renderDetail($id)
     {
+        $users = $this->challengeModel->getChallengeUsers($id);
+        $this->template->usersColors = $this->challengeModel->getChallengeUsersColors($id);
         $this->template->challenge = $this->challengeModel->findRow($id);
+        $this->template->usersContinuousPerformances = $this->challengeModel->getUsersContinuousPerformances($id, $users);
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
+
         $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {
             return $i += $obj->current_performance;
         });
@@ -64,6 +68,7 @@ class ChallengePresenter extends LoginBasePresenter
             $userPieData[] = ['label' => $p['username'], 'data' => $p['current_performance'], 'color' => $p['color']];
         }
 
+        $this->template->users = $users;
         $this->template->userPieData = $userPieData;
     }
 

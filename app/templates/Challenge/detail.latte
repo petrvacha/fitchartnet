@@ -59,6 +59,11 @@
             </div>
         </div>
 
+        <div>
+            <div id="users-performance" style="height: 550px;"></div>
+        </div>
+
+
     </div>
 </div>
 <script type="text/javascript">
@@ -91,6 +96,20 @@ $(function() {
         defaultTheme: false
       }
     });
+
+    // Area Chart
+
+    Morris.Area({
+        element: 'users-performance',
+        data: {$usersContinuousPerformances},
+        xkey: 'time',
+        ykeys: {$users},
+        labels: {$users},
+        lineColors: {$usersColors},
+        pointSize: 2,
+        hideHover: 'auto'
+    });
+
 });
 </script>
 {/block}

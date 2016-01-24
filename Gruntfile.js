@@ -12,6 +12,7 @@ module.exports = function(grunt) {
                         './htdocs/css/libs/jquery.datetimepicker.css',
                         './htdocs/css/libs/token-input-facebook.css',
                         './htdocs/css/libs/sb-admin.css',
+                        './htdocs/css/libs/morris.css',
                         './htdocs/css/style.css',
                     ]
                 }
@@ -27,6 +28,8 @@ module.exports = function(grunt) {
                     './htdocs/js/libs/jquery.flot.pie.min.js',
                     './htdocs/js/libs/jquery.flot.tooltip.js',
                     './htdocs/js/libs/jquery.tokeninput.js',
+                    './htdocs/js/libs/raphael-min.js',
+                    './htdocs/js/libs/morris.min.js',
                     './htdocs/js/libs/netteForms.js',
                     './htdocs/js/libs/jquery.datetimepicker.js',
                     './htdocs/js/libs/bootstrap.min.js',
