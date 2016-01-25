@@ -176,70 +176,100 @@ class Challenge extends BaseModel
     }
 
     /**
+     * Returns users' continuous and cumulative data
      * @param int $challengeId
      * @param array $users
      * @return array
      */
-    public function getUsersContinuousPerformances($challengeId, array $users)
+    public function getUsersPerformances($challengeId, array $users)
     {
-
-        //@todo make a view
         $data = $this->context->query("
             SELECT
-                SUM(AL.value) value,
-                AL.created_at,
-                U.id user_id,
-                U.username,
-                CU.color,
-                C.start_at,
-                C.end_at
+                *
             FROM
-                activity_log AL
-            JOIN
-                user U ON U.id = AL.user_id
-            JOIN
-                challenge C ON C.activity_id = AL.activity_id AND
-                C.end_at > AL.created_at AND
-                C.start_at < AL.created_at AND
-                AL.active = 1
-            JOIN
-                challenge_user CU ON CU.user_id = U.id AND
-                CU.challenge_id = C.id
+                user_challenge_performance_view
             WHERE
-                C.id = ?
-            GROUP BY
-                user_id,
-                (UNIX_TIMESTAMP(AL.created_at) + 7200) DIV 28800
-            ORDER BY
-                AL.created_at ASC", $challengeId)->fetchAll();
+                challenge_id = ?", $challengeId)->fetchAll();
 
         if (isset($data[0])) {
             $currentDateTime = new \DateTime($data[0]['start_at']);
             $currentDateTime->setTime(0,0,0);
+            $endDateTime = $data[0]['end_at'];
+
         } else {
-            //@todo
-            return [];
+            $metaData = $this->context->query("
+                    SELECT
+                        C.*,
+                        U.username
+                    FROM
+                        challenge C
+                    JOIN
+                        challenge_user CU ON CU.challenge_id = C.id AND CU.active = 1
+                    JOIN
+                        user U ON U.id = CU.user_id
+                    WHERE
+                        CU.challenge_id = ?", $challengeId)->fetchAll();
+
+            $currentDateTime = new \DateTime($metaData[0]['start_at']);
+            $currentDateTime->setTime(0,0,0);
+            $endDateTime = $metaData[0]['end_at'];
         }
 
         $preparedData = [];
+        $cumulative = [];
 
-        $currentDateTime->modify('+ 2 hours');
-        for (;$currentDateTime < $data[0]['end_at']; $currentDateTime->modify('+ 8 hours')) {
+        $currentDateTime->modify('- 14 hours'); // -8h (one more for iteration) -6h (for correct shift - it starts at 2 am)
+        $firstFakeDateTime = clone $currentDateTime;
+        for (;$currentDateTime < $endDateTime; $currentDateTime->modify('+ 8 hours')) {
+            $preparedData[$currentDateTime->format('Y-m-d H:i:s')] = [];
+            $cumulative[$currentDateTime->format('Y-m-d H:i:s')] = [];
             foreach ($users as $user) {
+                $cumulative[$currentDateTime->format('Y-m-d H:i:s')][$user] = 0;
                 $preparedData[$currentDateTime->format('Y-m-d H:i:s')][$user] = 0;
             }
+            $cumulative[$currentDateTime->format('Y-m-d H:i:s')]['time'] = $currentDateTime->format('Y-m-d H:i:s');
         }
 
-        foreach ($data as $item) {
-            foreach ($preparedData as $dateTime => $arrayData) {
-                $nextDateTime = new \DateTime($dateTime);
-                if ($dateTime <= $item['created_at'] && $nextDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s') > $item['created_at']) {
-                    $preparedData[$dateTime][$item['username']] = $item['value'];
+        unset($preparedData[$firstFakeDateTime->format('Y-m-d H:i:s')]);
+        unset($preparedData[$firstFakeDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s')]);
+
+        if (!empty($data)) {
+            foreach ($data as $item) {
+                foreach ($preparedData as $dateTime => $arrayData) {
+                    $nextDateTime = new \DateTime($dateTime);
+                    if ($dateTime <= $item['created_at'] && $nextDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s') > $item['created_at']) {
+                        $preparedData[$dateTime][$item['username']] = $item['value'];
+                    }
+                    $preparedData[$dateTime]['time'] = $dateTime;
                 }
-                $preparedData[$dateTime]['time'] = $dateTime;
+            }
+
+            foreach ($preparedData as $dateTime => $arrayData) {
+                $previousDateTime = new \DateTime($dateTime);
+                foreach($arrayData as $name => $value) {
+                    if ($name !== 'time') {
+                        $newValue = $value + $cumulative[$previousDateTime->format('Y-m-d H:i:s')][$name];
+
+                        $cumulative[$dateTime][$name] = $newValue;
+
+                        reset($cumulative);
+                        while (next($cumulative) !== FALSE) {
+                            if (key($cumulative) >= $dateTime) {
+                                $cumulative[key($cumulative)][$name] = $newValue;
+                            }
+                        }
+
+                    }
+                }
             }
         }
 
-        return array_values($preparedData);
+        unset($cumulative[$firstFakeDateTime->modify('- 8 hours')->format('Y-m-d H:i:s')]);
+        unset($cumulative[$firstFakeDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s')]);
+        $returnData = [];
+        $returnData['normal'] = array_values($preparedData);
+        $returnData['cumulative'] = array_values($cumulative);
+
+        return $returnData;
     }
 }
