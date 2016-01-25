@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-                            
+
     </div>
 </div>
 
@@ -128,6 +128,7 @@ $(function() {
         lineColors: {$usersColors},
         pointSize: 2,
         hideHover: 'auto',
+        behaveLikeLine: true,
         goals: [{$challenge->final_value}]
     });
 
@@ -141,6 +142,7 @@ $(function() {
         pointSize: 2,
         hideHover: 'auto',
         smooth: false,
+        behaveLikeLine: true,
         goals: [{$challenge->final_value}]
     });
 });
