@@ -25,7 +25,7 @@ class MainPresenter extends LoginBasePresenter
     /** @var \App\Components\UserWeightForm\IUserWeightFormFactory @inject */
     public $userWeightFormFactory;
 
-    
+
     /**
      * @param \App\Model\ActivityLog $activityLog
      * @param \App\Model\Weight $weightModel
@@ -49,6 +49,13 @@ class MainPresenter extends LoginBasePresenter
         $this->template->activityList = $this->activityLog->getUserActivityList($this->user->id);
         $this->template->chartData = $this->activityLog->getUserPreparedData($this->user->id);
 
+        if (empty($this->template->activities)) {
+            $firstAttemp = date('Y-01-01 00:00:00');
+        } else {
+            end($this->template->activities);
+            $firstAttemp= current($this->template->activities)['updated_at']->format('Y-m-01 00:00:00');
+        }
+
         if (date("l") === "Sunday"){
             $endOfWeek = strtotime(date("Y-m-d 23:59:59"));
         } else {
@@ -61,7 +68,7 @@ class MainPresenter extends LoginBasePresenter
             'week' => [strtotime(date('Y-m-d 00:00:00', strtotime('monday this week'))) * self::NUMBER_THOUSAND, $endOfWeek * self::NUMBER_THOUSAND],
             'month' => [strtotime(date('Y-m-01 00:00:00')) * self::NUMBER_THOUSAND, $endOfMonth],
             'year' => [strtotime(date('Y-01-01 00:00:00')) * self::NUMBER_THOUSAND, strtotime('Dec 31') * self::NUMBER_THOUSAND],
-            'all' => [strtotime(date('Y-01-01 00:00:00')) * self::NUMBER_THOUSAND, $endOfMonth] // @todo find first day of month of first log
+            'all' => [strtotime($firstAttemp) * self::NUMBER_THOUSAND, $endOfMonth]
         ];
     }
 
@@ -103,7 +110,7 @@ class MainPresenter extends LoginBasePresenter
     protected function createComponentActivityForm()
     {
         $control = $this->activityFormFactory->create($this->user->id);
-        
+
         $control->getComponent('activityForm')->onSuccess[] = function() {
             $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
             $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_SUCCESS);
