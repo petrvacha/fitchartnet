@@ -8,6 +8,12 @@ namespace App\Model;
  */
 class ChallengeUser extends BaseModel
 {
+    /** @const COLOR_BLACK string */
+    const COLOR_BLACK = '#000000';
+
+    /** @const COLOR_WHITE string */
+    const COLOR_WHITE = '#FFFFFF';
+
     /** @var \Nette\Security\User */
     protected $user;
 
@@ -38,11 +44,47 @@ class ChallengeUser extends BaseModel
                     'user_id' => $userId,
                     'invited_by' => $this->user->getIdentity()->id,
                     'invited_at' => $this->getDateTime(),
-                    'color' => '#' . substr(md5(rand()), 0, 6),
+                    'color' => $this->generateColor($challengeId),
                     'active' => $active
                 ]
             );
         }
+    }
+
+    /**
+     * @param int $challengeId
+     * @return string
+     */
+    private function generateColor($challengeId)
+    {
+        $hexArray = ['00', '33', '66', '99', 'CC', 'FF'];
+        $users = $this->findBy(['challenge_id' => $challengeId])->fetchAll();
+
+        $find = FALSE;
+        while ($find === FALSE) {
+            $r = array_rand($hexArray, 3);
+            $generatedColor = '#' . $hexArray[$r[0]] . $hexArray[$r[1]] . $hexArray[$r[2]];
+
+            if (!empty($users)) {
+                foreach ($users as $user) {
+                    if ($user['color'] !== $generatedColor &&
+                        $generatedColor !== self::COLOR_BLACK &&
+                        $generatedColor !== self::COLOR_WHITE) {
+
+                        $find = TRUE;
+                    }
+                }
+
+            } else {
+                if ($generatedColor !== self::COLOR_BLACK &&
+                    $generatedColor !== self::COLOR_WHITE) {
+
+                    $find = TRUE;
+                }
+            }
+        }
+
+        return $generatedColor;
     }
 
     /**
