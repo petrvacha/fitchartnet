@@ -23,6 +23,7 @@ common:
 
     session:
             expiration: 14 days
+            savePath: "%tempDir%/sessions"
 
     facebook:
         appId: "1593019784287489"
