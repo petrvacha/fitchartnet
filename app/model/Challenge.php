@@ -250,11 +250,16 @@ class Challenge extends BaseModel
         unset($preparedData[$firstFakeDateTime->format('Y-m-d H:i:s')]);
         unset($preparedData[$firstFakeDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s')]);
 
+        $firstKey = key($preparedData);
         if (!empty($data)) {
             foreach ($data as $item) {
                 foreach ($preparedData as $dateTime => $arrayData) {
                     $nextDateTime = new \DateTime($dateTime);
-                    if ($dateTime <= $item['created_at'] && $nextDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s') > $item['created_at']) {
+
+                    if ($dateTime <= $item['created_at']->format('Y-m-d H:i:s') &&
+                        $nextDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s') > $item['created_at']->format('Y-m-d H:i:s') ||
+                        $firstKey === $dateTime && $dateTime > $item['created_at']->format('Y-m-d H:i:s')) {
+
                         $preparedData[$dateTime][$item['username']] = $item['value'];
                     }
                     $preparedData[$dateTime]['time'] = $dateTime;
