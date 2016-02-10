@@ -58,42 +58,44 @@
         </div>
 
         {foreach $users as $user}
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-user"></i> {$user}</h3>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-striped">
-                            <tr><th>Date</th><th>Morning</th><th>Afternoon</th><th>Night</th><th>Sum per day</th><th>Cumulative sum</th></tr>
+            {if in_array($user, $activeUsers)}
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="glyphicon glyphicon-user"></i> {$user}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <tr><th>Date</th><th>Morning</th><th>Afternoon</th><th>Night</th><th>Sum per day</th><th>Cumulative sum</th></tr>
 
-                            {var $day = 0}
-                            {var $sum = 0}
-                            {foreach $usersPerformances['normal'] as $i => $dayPart}
-                                {if $dayPart['time'] > $tomorrow}
-                                    {? break}
-                                {/if}
-                                {if $i % 3 === 0}
-                                    <tr>
-                                    <td>{$dayPart['time']|date:'d.m.Y'}</td>
-                                {/if}
-                                <td>{$dayPart[$user]}</td>
-
-                                {var $sum += $dayPart[$user]}
-                                {var $day += $dayPart[$user]}
-                                {if $i % 3 === 2}
-                                    <td>{$day}</td>
-                                    <td>{$sum}</td>
-                                    </tr>
                                     {var $day = 0}
-                                {/if}
-                            {/foreach}
-                        </table>
+                                    {var $sum = 0}
+                                    {foreach $usersPerformances['normal'] as $i => $dayPart}
+                                        {if $dayPart['time'] > $tomorrow}
+                                            {? break}
+                                        {/if}
+                                        {if $i % 3 === 0}
+                                            <tr>
+                                            <td>{$dayPart['time']|date:'d.m.Y'}</td>
+                                        {/if}
+                                        <td>{$dayPart[$user]}</td>
+
+                                        {var $sum += $dayPart[$user]}
+                                        {var $day += $dayPart[$user]}
+                                        {if $i % 3 === 2}
+                                            <td>{$day}</td>
+                                            <td>{$sum}</td>
+                                            </tr>
+                                            {var $day = 0}
+                                        {/if}
+                                    {/foreach}
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            {/if}
         {/foreach}
 
         <div class="row">

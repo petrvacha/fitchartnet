@@ -260,7 +260,7 @@ class Challenge extends BaseModel
                         $nextDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s') > $item['created_at']->format('Y-m-d H:i:s') ||
                         $firstKey === $dateTime && $dateTime > $item['created_at']->format('Y-m-d H:i:s')) {
 
-                        $preparedData[$dateTime][$item['username']] = $item['value'];
+                        $preparedData[$dateTime][$item['username']] += $item['value'];
                     }
                     $preparedData[$dateTime]['time'] = $dateTime;
                 }

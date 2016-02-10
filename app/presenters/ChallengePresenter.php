@@ -57,7 +57,6 @@ class ChallengePresenter extends LoginBasePresenter
         $this->template->usersColors = $this->challengeModel->getChallengeUsersColors($id);
         $this->template->challenge = $this->challengeModel->findRow($id);
         $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
-        //dump($this->template->usersPerformances);die;
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
 
         $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {
@@ -65,8 +64,12 @@ class ChallengePresenter extends LoginBasePresenter
         });
 
         $userPieData = [];
+        $this->template->activeUsers = [];
         foreach ($this->template->currentUserPerformances as $p) {
             $userPieData[] = ['label' => $p['username'], 'data' => $p['current_performance'], 'color' => $p['color']];
+            if ($p['current_performance']) {
+                $this->template->activeUsers[] = $p['username'];
+            }
         }
 
         $this->template->users = $users;
