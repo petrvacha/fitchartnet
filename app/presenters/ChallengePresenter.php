@@ -57,6 +57,7 @@ class ChallengePresenter extends LoginBasePresenter
         $this->template->usersColors = $this->challengeModel->getChallengeUsersColors($id);
         $this->template->challenge = $this->challengeModel->findRow($id);
         $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
+        //dump($this->template->usersPerformances);die;
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
 
         $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {
@@ -70,6 +71,9 @@ class ChallengePresenter extends LoginBasePresenter
 
         $this->template->users = $users;
         $this->template->userPieData = $userPieData;
+
+        $tomorrow = new \DateTime('tomorrow');
+        $this->template->tomorrow = $tomorrow->format('Y-m-d H:i:s');
     }
 
     /**
