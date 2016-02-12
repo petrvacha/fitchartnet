@@ -5,7 +5,7 @@
 <div id="content-wrapper" class="container-fluid">
     {include '../partial/sidebar-profile-blok.latte'}
 
-    <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
+    <div id="main-container" class="col-lg-10" style="padding-top: 25px;">
         {include '../partial/flashMessages.latte'}
 
         <ul class="breadcrumb">
@@ -13,120 +13,161 @@
             <li class="active">{$challenge->name}</li>
         </ul>
 
-        <h2 class="page-header">{$challenge->name}</h2>
-        <p class="lead">{$challenge->description}</p>
+
+        <div class="row">
+            <div class="col-md-8"><h2>{$challenge->name}</h2></div>
+        </div>
+        <div class="row">
+            <div class="col-md-8"><p class="lead">{$challenge->description}</p></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><h4>Task</h4></div>
+            <div class="col-md-2"><h4>Challengers</h4></div>
+            <div class="col-md-2"><h4>Days remaining</h4></div>
+            <div class="col-md-2"><h4>Challange is</h4></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">{$challenge->final_value} in {$challengeDays} days</div>
+            <div class="col-md-2">{count($users)}</div>
+            <div class="col-md-2">{$daysRemaining}</div>
+            <div class="col-md-2">{$challengeStatus}</div>
+        </div>
+        <br>
+
         {control activityForm}
 
         <br>
 
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#overview">Overview</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#charts">Charts</a>
+            </li>
+        </ul>
 
+        <div class="tab-content">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Score</h3>
-                    </div>
-                    <div class="panel-body">
+          <div id="overview" class="tab-pane fade in active">
+            <h3>Overview</h3>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Score</h3>
+                        </div>
                         <table class="table">
-                            <tr><th>name</th><th class="text-center">current performance</th></tr>
+                            <tr><th>name</th><th colspan="3">current performance</th><th class="text-center">need to do per day</th><th></th></tr>
                             {foreach $currentUserPerformances as $userPerformance}
-                            <tr>
-                                <td>{$userPerformance['username']}</td>
-                                <td class="text-center">{$userPerformance['current_performance']}</td>
-                            </tr>
+                                <tr>
+                                    <td>{$userPerformance['username']}</td>
+                                    <td class="text-center" style="width: 10em;">
+                                        <div class="progress">
+                                          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$userPerformance['percentage']}" aria-valuemin="0" aria-valuemax="100" style="width: {$userPerformance['percentage']}%;">
+
+                                          </div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 1em;">
+                                        {$userPerformance['current_performance']}
+                                    </td>
+                                    <td style="width: 8em;">
+                                        {$userPerformance['percentage']} %
+                                    </td>
+                                    <td class="text-center">{$userPerformance['average_minimum']}</td>
+                                    <td><a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="glyphicon glyphicon-zoom-in"></i></a>
+                                </tr>
+                                <tr id="datalist-{$userPerformance['id']}" class="hidden">
+                                    <td colspan="6">
+                                        <table class="table small-table table-hover table-bordered">
+                                            <tr><th>Date</th><th>Morning</th><th>Afternoon</th><th>Night</th><th>Sum per day</th><th>Cumulative sum</th></tr>
+
+                                            {var $day = 0}
+                                            {var $sum = 0}
+                                            {foreach $usersPerformances['normal'] as $i => $dayPart}
+                                                {if $dayPart['time'] > $tomorrow}
+                                                    {? break}
+                                                {/if}
+                                                {if $i % 3 === 0}
+                                                    <tr>
+                                                    <td>{$dayPart['time']|date:'d.m.Y'}</td>
+                                                {/if}
+                                                <td>{$dayPart[$userPerformance['username']]}</td>
+
+                                                {var $sum += $dayPart[$userPerformance['username']]}
+                                                {var $day += $dayPart[$userPerformance['username']]}
+                                                {if $i % 3 === 2}
+                                                    <td>{$day}</td>
+                                                    <td>{$sum}</td>
+                                                    </tr>
+                                                    {var $day = 0}
+                                                {/if}
+                                            {/foreach}
+                                        </table>
+                                    </td>
+                                </tr>
                             {/foreach}
                             <tr>
-                                <td><strong>total</strong></td><td class="text-center"><strong>{$currentTotalPerformance}</strong></td>
+                                <td><strong>total</strong></td>
+                                <td colspan="3" class="text-center"><strong>{$currentTotalPerformance}</strong></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Pie Chart</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div style=" position: relative; height: 400px;">
-                            <div id="placeholder" style="width: 100%; height: 100%;"></div>
+
+          </div>
+          <div id="charts" class="big-shift">
+            <h3>Charts</h3>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Pie Chart</h3>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {foreach $users as $user}
-            {if in_array($user, $activeUsers)}
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="glyphicon glyphicon-user"></i> {$user}</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table table-striped">
-                                    <tr><th>Date</th><th>Morning</th><th>Afternoon</th><th>Night</th><th>Sum per day</th><th>Cumulative sum</th></tr>
-
-                                    {var $day = 0}
-                                    {var $sum = 0}
-                                    {foreach $usersPerformances['normal'] as $i => $dayPart}
-                                        {if $dayPart['time'] > $tomorrow}
-                                            {? break}
-                                        {/if}
-                                        {if $i % 3 === 0}
-                                            <tr>
-                                            <td>{$dayPart['time']|date:'d.m.Y'}</td>
-                                        {/if}
-                                        <td>{$dayPart[$user]}</td>
-
-                                        {var $sum += $dayPart[$user]}
-                                        {var $day += $dayPart[$user]}
-                                        {if $i % 3 === 2}
-                                            <td>{$day}</td>
-                                            <td>{$sum}</td>
-                                            </tr>
-                                            {var $day = 0}
-                                        {/if}
-                                    {/foreach}
-                                </table>
+                        <div class="panel-body">
+                            <div style="position: relative; width:400px;height:400px">
+                                <div id="placeholder" style="width:400px;height:400px"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            {/if}
-        {/foreach}
+            </div>
 
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users performances</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div>
-                            <div id="users-performance" style="height: 450px;"></div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users performances</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                            <div id="users-performance" style="height: 450px; width: 850px"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users cumulative performances</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div>
-                            <div id="users-cummulative-performance" style="height: 450px;"></div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users cumulative performances</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                            <div id="users-cummulative-performance" style="height: 450px; width: 850px"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+          </div>
         </div>
-
     </div>
 </div>
 
@@ -159,6 +200,30 @@ $(function() {
         },
         defaultTheme: false
       }
+    });
+
+
+    $('.expander').on('click', function(e) {
+        e.preventDefault();
+        if ($(this).data('hidden-content') == 1) {
+            $(this).find('i').removeClass('glyphicon-zoom-in').addClass('glyphicon-zoom-out');
+            var userId = $(this).data('user-id');
+            $('#datalist-'+userId).removeClass('hidden');
+            $(this).data('hidden-content', 0);
+        } else {
+            $(this).find('i').removeClass('glyphicon-zoom-out').addClass('glyphicon-zoom-in');
+            var userId = $(this).data('user-id');
+            $('#datalist-'+userId).addClass('hidden');
+            $(this).data('hidden-content', 1);
+        }
+    });
+
+    var shifted = false;
+    $('.nav.nav-tabs li').on('click', function(e){
+        if (shifted === false) {
+            $('#charts').removeClass('big-shift');
+            $('#charts').addClass('tab-pane fade in');
+        }
     });
 
     // Area Chart

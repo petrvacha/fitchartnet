@@ -55,7 +55,7 @@ class ChallengePresenter extends LoginBasePresenter
     {
         $users = $this->challengeModel->getChallengeUsers($id);
         $this->template->usersColors = $this->challengeModel->getChallengeUsersColors($id);
-        $this->template->challenge = $this->challengeModel->findRow($id);
+        $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
         $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
 
@@ -65,11 +65,24 @@ class ChallengePresenter extends LoginBasePresenter
 
         $userPieData = [];
         $this->template->activeUsers = [];
-        foreach ($this->template->currentUserPerformances as $p) {
+
+        $daysRemaining = $this->challengeModel->getDaysLeft($challenge['end_at']);
+        $this->template->daysRemaining = $daysRemaining;
+
+        foreach ($this->template->currentUserPerformances as $i => $p) {
             $userPieData[] = ['label' => $p['username'], 'data' => $p['current_performance'], 'color' => $p['color']];
             if ($p['current_performance']) {
                 $this->template->activeUsers[] = $p['username'];
             }
+
+            $diff = $challenge['final_value'] - $p['current_performance'];
+
+            if ($diff > 0 && $daysRemaining) {
+                $this->template->currentUserPerformances[$i]['average_minimum'] = ceil($diff / $daysRemaining);
+            } else {
+                $this->template->currentUserPerformances[$i]['average_minimum'] = '-';
+            }
+            $this->template->currentUserPerformances[$i]['percentage'] = ceil($p['current_performance']*100/$challenge['final_value']);
         }
 
         $this->template->users = $users;
@@ -77,6 +90,9 @@ class ChallengePresenter extends LoginBasePresenter
 
         $tomorrow = new \DateTime('tomorrow');
         $this->template->tomorrow = $tomorrow->format('Y-m-d H:i:s');
+        $this->template->challengeStatus = $this->challengeModel->getChallengeStatus($challenge['start_at'], $challenge['end_at']);
+
+        $this->template->challengeDays = $this->template->challengeStatus !== Challenge::TEXT_STATUS_GONE ? $challenge['start_at']->diff($challenge['end_at'])->days + 1 : 0;
     }
 
     /**

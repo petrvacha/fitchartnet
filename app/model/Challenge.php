@@ -24,6 +24,15 @@ class Challenge extends BaseModel
     /** @const STATE_INACTIVE int */
     const STATE_INACTIVE = 4;
 
+    /** @const TEXT_STATUS_PREPARED string */
+    const TEXT_STATUS_PREPARED = 'Prepared';
+
+    /** @const TEXT_STATUS_ACTIVE string */
+    const TEXT_STATUS_ACTIVE = 'Active';
+
+    /** @const TEXT_STATUS_GONE string */
+    const TEXT_STATUS_GONE = 'Gone';
+
 
     /** @var \Nette\Security\User */
     protected $user;
@@ -293,5 +302,38 @@ class Challenge extends BaseModel
         $returnData['cumulative'] = array_values($cumulative);
 
         return $returnData;
+    }
+
+    /**
+     * @param \DateTime $endAt
+     * @return int
+     */
+    public function getDaysLeft($endAt)
+    {
+        $today = new \DateTime();
+
+        $dayLeft = $endAt->diff($today)->days;
+
+        return $endAt > $today ? ++$dayLeft : 0;
+    }
+
+    /**
+     * @param string $startAt
+     * @param string $endAt
+     * @return string
+     */
+    public function getChallengeStatus($startAt, $endAt )
+    {
+        $now = new \DateTime();
+
+        if ($now < $endAt) {
+            if ($startAt < $now) {
+                return self::TEXT_STATUS_ACTIVE;
+            } else {
+                return self::TEXT_STATUS_PREPARED;
+            }
+        } else {
+            return self::TEXT_STATUS_GONE;
+        }
     }
 }

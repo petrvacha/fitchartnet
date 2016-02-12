@@ -12,7 +12,7 @@ class ActivityForm extends \Fitchart\Application\Control
 {
     /** @var int */
     protected $userId;
-    
+
     /** @var \App\Model\User */
     protected $userModel;
 
@@ -21,7 +21,7 @@ class ActivityForm extends \Fitchart\Application\Control
 
     /** @var \App\Model\ActivityLog */
     protected $activityLogModel;
-    
+
 
     /**
      * @param int $userId
@@ -66,7 +66,7 @@ class ActivityForm extends \Fitchart\Application\Control
         $form->addSubmit('submit', 'Add');
 
         $form->onSuccess[] = array($this, 'formSent');
-        
+
         $this->addBootstrapStyling($form);
         return $form;
     }
@@ -96,5 +96,5 @@ class ActivityForm extends \Fitchart\Application\Control
             $this->activityLogModel->update($values);
         }
     }
-    
+
 }
