@@ -72,11 +72,14 @@ class Challenge extends BaseModel
         $data['created_at'] = $data['updated_at'] = $this->getDateTime();
 
         if (empty($data['start_at'])) {
-            $data['start_at'] = $this->getDateTime();
+            $data['start_at'] = $this->getDateTime('Y-m-d 00:00:00');
         }
 
         if (empty($data['end_at'])) {
-            $data['end_at'] = date('Y/m/t 23:59');
+            $data['end_at'] = date('Y-m-t 23:59:59');
+        } else {
+            $d = DateTime::createFromFormat("Y/m/d", $data['end_at']);
+            $data['end_at'] = $d->format('Y-m-t 23:59:59');
         }
 
         $users = $data['users'];
