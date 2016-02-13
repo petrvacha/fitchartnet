@@ -20,7 +20,7 @@ class FriendsPresenter extends LoginBasePresenter
     /** @var \App\Model\FriendshipRequest */
     protected $friendshipRequestModel;
 
-    
+
     /**
      * @param \App\Model\ActivityLog $activityLog
      * @param \App\Model\User $userModel
@@ -41,7 +41,7 @@ class FriendsPresenter extends LoginBasePresenter
     public function renderDefault()
     {
         $this->template->title = 'Friends';
-        $this->template->userList = $this->userModel->getUserList();
+        $this->template->userList = $this->userModel->getFreeUsers();
         $this->template->friendList = $this->userModel->getFriendList();
         $this->template->friendshipRequestList = $this->userModel->getFriendshipRequestList();
         $this->template->friendshipOfferList = $this->userModel->getFriendshipOfferList();

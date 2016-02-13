@@ -23,7 +23,7 @@ class User extends BaseModel
     /** @const API_TOKEN_LENGTH int */
     const API_TOKEN_LENGTH = 6;
 
-    
+
     /** @var \App\Model\Privacy */
     protected $privacyModel;
 
@@ -35,7 +35,7 @@ class User extends BaseModel
 
     /** @var \App\Model\FriendshipRequest */
     protected $friendshipRequest;
-    
+
     /** @var \App\Model\Role $roleModel */
     protected $user;
 
@@ -143,7 +143,7 @@ class User extends BaseModel
         return $this
                 ->getTable()
                 ->where('user.id = ?', $userId)
-                ->select('user.id, 
+                ->select('user.id,
                           user.firstname,
                           user.surname,
                           user.email,
@@ -242,7 +242,7 @@ class User extends BaseModel
 
             $existingUser->update($update);
             return $existingUserData;
-            
+
         } else {
             $insert = [
                 'facebook_id' => $data['id'],
@@ -290,7 +290,7 @@ class User extends BaseModel
                 $number++;
             } while ($user);
             return $firstname.$surname.$number--;
-            
+
         } else {
             return $firstname.$surname;
         }
@@ -342,8 +342,48 @@ class User extends BaseModel
             $query .= " AND (firstname LIKE ? OR surname LIKE ? OR username LIKE ? OR CONCAT(firstname, ' ', surname) LIKE ?)";
             return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM, $userId, $subject, $subject, $subject, $subject)->fetchAll();
         }
-        
+
         return $this->getTable()->where($query, $privacyModel::PUBLIC_IN_SYSTEM, $userId)->fetchAll();
+    }
+
+    /**
+     * @return ArrayHash
+     */
+    public function getFreeUsers()
+    {
+        $privacyModel = $this->privacyModel;
+        $userId = $this->user->getIdentity()->id;
+        return $this->context->query("
+            SELECT
+                U.id,
+                U.username,
+                U.firstname,
+                U.surname,
+                U.email,
+                U.gender_id,
+                U.last_action,
+                U.bio,
+                U.profile_photo
+            FROM
+                user U
+            LEFT JOIN friend F ON
+                U.id = F.user_id AND F.user_id2 = ? OR U.id = F.user_id2 AND F.user_id = ?
+            LEFT JOIN friendship_request FR ON
+                (U.id = FR.to_user_id AND FR.from_user_id = ? OR U.id = FR.from_user_id AND FR.to_user_id = ?) AND (FR.approved IS NULL OR FR.approved = 1)
+            WHERE
+                U.privacy_id <= ? AND
+                U.active = 1 AND
+                U.id <> ? AND
+                F.id is NULL AND
+                FR.id is NULL",
+            $userId,
+            $userId,
+            $userId,
+            $userId,
+            $privacyModel::PUBLIC_IN_SYSTEM,
+            $userId
+        )->fetchAll();
+
     }
 
     /**
