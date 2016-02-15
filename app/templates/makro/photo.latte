@@ -1,1 +1,1 @@
-<img class="img-thumbnail" style="margin: 10px; max-width: {$photoWidth}px" src="{$basePath}/images/user/profilePhoto/{if isset($photo) && !empty($photo)}{$photo}?t={$t}{{else}no-photo-available.png{/if}">
+<img class="img-thumbnail" style="margin: 10px; max-width: {$photoWidth}px" src="{plink Static:getProfilePicture, $photo}">

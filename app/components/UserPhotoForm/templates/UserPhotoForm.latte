@@ -10,7 +10,7 @@
 		{label photo /}{input photo}
 	    </div>
 	    <div style="padding-top: 24px;">
-                <img style="max-width: 250px" src="{$basePath}/images/user/profilePhoto/{if $user['profile_photo']}{$user->profile_photo}{else}no-photo-available.png{/if}">
+                <img style="max-width: 250px" src="{plink Static:getProfilePicture, $user['profile_photo']}">
 		{input upload}
 	    </div>
 	</div>

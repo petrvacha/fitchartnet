@@ -27,7 +27,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li id="fat-menu" class="dropdown" aria-expanded="true">
                   <a id="drop3" href="#" style="padding: 5px 40px 5px 5px;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    <img class="img-thumbnail" style="padding: 1px; max-width: 40px; max-height: 40px;" src="{$basePath}/images/user/profilePhoto/{if isset($userData['profile_photo']) && !empty($userData['profile_photo'])}{$userData['profile_photo']}?t={$t}{else}no-photo-available.png{/if}">
+                    <img class="img-thumbnail" style="padding: 1px; max-width: 40px; max-height: 40px;" src="{plink Static:getProfilePicture, $userData['profile_photo']}">
                     {$userData['username']}
                     <span class="caret"></span>
                   </a>
