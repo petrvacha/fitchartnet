@@ -38,6 +38,7 @@ class FriendsPresenter extends LoginBasePresenter
         $this->friendModel = $friendModel;
     }
 
+
     public function renderDefault()
     {
         $this->template->title = 'Friends';
@@ -62,6 +63,8 @@ class FriendsPresenter extends LoginBasePresenter
     public function actionRemoveFriend($id)
     {
         $friend = $this->friendModel->removeFriend($id);
+        $this->friendshipRequestModel->removeFriendshipRequest($id);
+        $this->friendshipRequestModel->removeFriendshipRequest($this->user->id);
         if ($friend) {
             $this->flashMessage("$friend and you are no longer friends :(", 'info');
         }

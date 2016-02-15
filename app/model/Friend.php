@@ -26,13 +26,13 @@ class Friend extends BaseModel
      */
     public function addFriend($userId)
     {
-            $userId2 = $this->user->getIdentity()->id;
+        $userId2 = $this->user->getIdentity()->id;
 
-            $user = $this->context->table('user')->where(['id' => $userId])->fetch();
-            if ($user) {
-                $this->getTable()->insert(['user_id' => $userId, 'user_id2' => $userId2]);
-                $this->getTable()->insert(['user_id' => $userId2, 'user_id2' => $userId]);
-            }
+        $user = $this->context->table('user')->where(['id' => $userId])->fetch();
+        if ($user) {
+            $this->getTable()->insert(['user_id' => $userId, 'user_id2' => $userId2]);
+            $this->getTable()->insert(['user_id' => $userId2, 'user_id2' => $userId]);
+        }
         return $user;
     }
 
@@ -59,5 +59,5 @@ class Friend extends BaseModel
 
         return $this->findBy(['user_id' => $userId, 'user_id2' => $userId2])->fetch();
     }
-    
+
 }

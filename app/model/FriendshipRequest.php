@@ -33,7 +33,16 @@ class FriendshipRequest extends BaseModel
     {
         $fromUserId = $this->user->getIdentity()->id;
 
-        $sameRequest = $this->findBy(['approved' => NULL, 'from_user_id' => $fromUserId, 'to_user_id' => $toUserId])->fetch();
+        $sameRequest = $this->getTable()->where("from_user_id = ? AND to_user_id = ? OR from_user_id = ? AND to_user_id = ?", $fromUserId, $toUserId, $toUserId, $fromUserId)->fetch();
+
+        if ($sameRequest && empty($sameRequest['approved'])) {
+            if ($sameRequest['from_user_id'] === $fromUserId) {
+                $sameRequest->update(['approved' => NULL, 'updated_at' => $this->getDateTime()]); //@todo frozen branch
+            } else {
+                $this->acceptFriendshipRequest($toUserId);
+            }
+            return TRUE;
+        }
 
         if (!$sameRequest) {
             $insertData = [
@@ -57,9 +66,9 @@ class FriendshipRequest extends BaseModel
     {
         $toUserId = $this->user->getIdentity()->id;
         $updateData = ['approved' => $approve, 'updated_at' => $this->getDateTime()];
-        $updated = $this->findBy(['approved' => NULL, 'from_user_id' => $userId, 'to_user_id' => $toUserId])->update($updateData);
+        $updated = $this->findBy(['from_user_id' => $userId, 'to_user_id' => $toUserId])->update($updateData);
 
-        if ($updated && $approve) {
+        if ($updated && empty($updated['approved']) && $approve) {
             return $this->friendModel->addFriend($userId);
         }
         return FALSE;
@@ -72,6 +81,6 @@ class FriendshipRequest extends BaseModel
     public function removeFriendshipRequest($toUserId)
     {
         $fromUserId = $this->user->getIdentity()->id;
-        return $this->findBy(['approved' => NULL, 'from_user_id' => $fromUserId, 'to_user_id' => $toUserId])->delete();
+        return $this->getTable()->where("from_user_id = ? AND to_user_id = ? OR from_user_id = ? AND to_user_id = ?", $fromUserId, $toUserId, $toUserId, $fromUserId)->delete();
     }
 }
