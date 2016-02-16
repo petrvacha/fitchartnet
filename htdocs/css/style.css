@@ -132,3 +132,7 @@ nav .container-fluent {
     position: absolute;
     top: -5000px;
 }
+
+.img-container > img {
+  max-width: 100%;
+}
