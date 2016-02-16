@@ -5,6 +5,7 @@ namespace App\Model;
 use Nette\Security\Passwords;
 use Fitchart\Application\Utilities;
 use \Nette\Utils\ArrayHash;
+use Nette\Utils\Image;
 
 class User extends BaseModel
 {
@@ -22,6 +23,12 @@ class User extends BaseModel
 
     /** @const API_TOKEN_LENGTH int */
     const API_TOKEN_LENGTH = 6;
+
+    /** @const AVATAR_SIZE_WIDTH int */
+    const AVATAR_SIZE_WIDTH = 250;
+
+    /** @const AVATAR_SIZE_HEIGHT int */
+    const AVATAR_SIZE_HEIGHT = 250;
 
 
     /** @var \App\Model\Privacy */
@@ -192,13 +199,32 @@ class User extends BaseModel
         if ($data['photo']->isOk()) {
             $extension = Utilities::getFileExtension($data['photo']->getName());
             $fileName = $data['userId'] . '.' . $extension;
-            $data['photo']->move(USER_AVATAR_DIR . '/' . $fileName);
+            $data['photo']->move(USER_ORIGIN_AVATAR_DIR . '/' . $fileName);
+            $image = $data['photo']->toImage();
+            $image->resize(self::AVATAR_SIZE_WIDTH, self::AVATAR_SIZE_HEIGHT, $image::SHRINK_ONLY);
 
+            $image->save(USER_AVATAR_DIR . '/' . $fileName);
             $this->findRow($data['userId'])->update(['profile_photo' => $fileName]);
             $this->user->getIdentity()->profile_photo = $fileName;
+
         } else {
             throw new \Fitchart\Application\DataException('An error occurred in the upload.');
        }
+    }
+
+    /**
+     * @param int $left
+     * @param int $top
+     * @param int $width
+     * @param int $height
+     */
+    public function cropPhoto($left, $top, $width, $height)
+    {
+        $profilePhoto = $this->user->getIdentity()->profile_photo;
+        $image = Image::fromFile(USER_ORIGIN_AVATAR_DIR . '/' . $profilePhoto);
+        $image->crop($left, $top, $width, $height);
+        $image->save(USER_AVATAR_DIR . '/' . $profilePhoto);
+        $this->user->getIdentity()->profile_photo = $profilePhoto;
     }
 
     /**

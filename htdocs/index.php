@@ -7,8 +7,8 @@ define('APP_DIR', __DIR__ . '/../app');
 
 define('HTDOCS_DIR', __DIR__ . '/../htdocs');
 
-define('USER_AVATAR_DIR', __DIR__ . '/../private/images/user/profilePhoto');
-
+define('USER_ORIGIN_AVATAR_DIR', __DIR__ . '/../private/images/user-origin/avatar');
+define('USER_AVATAR_DIR', __DIR__ . '/../private/images/user/avatar');
 
 $container = require __DIR__ . '/../app/bootstrap.php';
 

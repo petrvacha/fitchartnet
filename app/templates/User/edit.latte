@@ -5,7 +5,43 @@
     {control userProfileForm}
     <br /><br /><br />
     <br /><br /><br />
-    {control userPhotoForm}
+    <div id="user-photo-form-div">
+        {control userPhotoForm}
+    </div>
+    {if $newAvatar}
+        <div class="row">
+            <div class="col-lg-4">
+                <img id="image" src="{plink Static:getOriginProfilePicture, $user['profile_photo']}">
+            </div>
+            <button class="btn btn-primary" id="crop-button">Crop it!</button>
+        </div>
+    {/if}
 </div>
 
+<script type="text/javascript">
+$(function(){
+    var newAvatar = {$newAvatar};
+
+    if (newAvatar) {
+        $('#user-photo-form-div').hide();
+
+        var x,y,w,h;
+        $('#image').cropper({
+            aspectRatio: 1,
+            viewMode: 3,
+            crop: function(e) {
+                x = e.x;
+                y = e.y;
+                w = e.width;
+                h = e.height;
+            }
+        });
+
+        $('#crop-button').on('click', function (e) {
+            e.preventDefault();
+            window.location.href = {plink User:crop}+'?left=' + x + '&top=' + y + '&width=' + w + '&height=' + h;
+        });
+    }
+});
+</script>
 {/block}

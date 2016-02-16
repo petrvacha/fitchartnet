@@ -13,6 +13,7 @@ module.exports = function(grunt) {
                         './htdocs/css/libs/token-input-facebook.css',
                         './htdocs/css/libs/sb-admin.css',
                         './htdocs/css/libs/morris.css',
+                        './htdocs/css/libs/cropper.css',
                         './htdocs/css/style.css',
                     ]
                 }
@@ -33,6 +34,7 @@ module.exports = function(grunt) {
                     './htdocs/js/libs/netteForms.js',
                     './htdocs/js/libs/jquery.datetimepicker.js',
                     './htdocs/js/libs/bootstrap.min.js',
+                    './htdocs/js/libs/cropper.min.js',
                     './htdocs/js/common.js',
                 ],
                 dest: './htdocs/js/script.min.js'

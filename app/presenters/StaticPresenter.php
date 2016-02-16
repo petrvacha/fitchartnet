@@ -32,12 +32,7 @@ class StaticPresenter extends BasePresenter
             $path = USER_AVATAR_DIR . '/no-photo-available.png';
         }
 
-        $fp = fopen($path, 'rb');
-        $size = getimagesize($path);
-        $this->httpResponse->setContentType('Content-Type', $size['mime']);
-        $this->httpResponse->setContentType('Content-Length', filesize($path));
-        fpassthru($fp);
-        fclose($fp);
+        $this->setPictureResponse($path);
 
         $this->terminate();
     }
@@ -50,17 +45,41 @@ class StaticPresenter extends BasePresenter
         $path = USER_AVATAR_DIR . '/' . $picture;
 
         if (file_exists($path) && $picture && $this->getUser()->isLoggedIn()) {
-            $fp = fopen($path, 'rb');
-            $size = getimagesize($path);
-            $this->httpResponse->setContentType('Content-Type', $size['mime']);
-            $this->httpResponse->setContentType('Content-Length', filesize($path));
-            fpassthru($fp);
-            fclose($fp);
+            $this->setPictureResponse($path);
 
         } else {
             $this->httpResponse->setCode(\Nette\Http\Response::S404_NOT_FOUND);
         }
 
         $this->terminate();
+    }
+
+    /**
+     * @param string $picture
+     */
+    public function actionGetOriginProfilePicture($picture)
+    {
+        $path = USER_ORIGIN_AVATAR_DIR . '/' . $picture;
+
+        if (file_exists($path) && $picture && $this->getUser()->isLoggedIn()) {
+            $this->setPictureResponse($path);
+        } else {
+            $this->httpResponse->setCode(\Nette\Http\Response::S404_NOT_FOUND);
+        }
+
+        $this->terminate();
+    }
+
+    /**
+     * @param string $path
+     */
+    private function setPictureResponse($path)
+    {
+        $fp = fopen($path, 'rb');
+        $size = getimagesize($path);
+        $this->httpResponse->setContentType('Content-Type', $size['mime']);
+        $this->httpResponse->setContentType('Content-Length', filesize($path));
+        fpassthru($fp);
+        fclose($fp);
     }
 }
