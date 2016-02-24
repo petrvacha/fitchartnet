@@ -76,7 +76,9 @@
                                     <td style="width: 8em;">
                                         {$userPerformance['percentage']} %
                                     </td>
-                                    <td class="text-center">{$userPerformance['average_minimum']}</td>
+                                    <td class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
+                                        {$usersToday[$userPerformance['username']]}/{$userPerformance['average_minimum']}
+                                    </td>
                                     <td><a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="glyphicon glyphicon-zoom-in"></i></a>
                                 </tr>
                                 <tr id="datalist-{$userPerformance['id']}" class="hidden">
@@ -234,7 +236,7 @@ $(function() {
         ykeys: {$users},
         labels: {$users},
         lineColors: {$usersColors},
-        pointSize: 2,
+        pointSize: 0,
         hideHover: 'auto',
         behaveLikeLine: true
     });
@@ -246,7 +248,7 @@ $(function() {
         ykeys: {$users},
         labels: {$users},
         lineColors: {$usersColors},
-        pointSize: 2,
+        pointSize: 0,
         hideHover: 'auto',
         smooth: false,
         goals: [{$challenge->final_value}]

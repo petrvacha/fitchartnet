@@ -57,7 +57,31 @@ class ChallengePresenter extends LoginBasePresenter
         $this->template->usersColors = $this->challengeModel->getChallengeUsersColors($id);
         $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
         $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
+
+
+
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
+
+
+        $users = [];
+        $usersToday = [];
+        foreach ($this->template->currentUserPerformances as $user) {
+            $users[] = $user['username'];
+            $usersToday[$user['username']] = 0;
+        }
+
+        $today = new \DateTime;
+        $todayStartString = $today->format("Y-m-d 00:00:00");
+        $todayEndString = $today->format("Y-m-d 23:59:59");
+
+        foreach($this->template->usersPerformances['normal'] as $record) {
+            if ($todayStartString <= $record['time'] && $todayEndString > $record['time']) {
+                foreach ($users as $user) {
+                    $usersToday[$user] += $record[$user];
+                }
+            }
+        }
+        $this->template->usersToday = $usersToday;
 
         $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {
             return $i += $obj->current_performance;
@@ -75,7 +99,8 @@ class ChallengePresenter extends LoginBasePresenter
                 $this->template->activeUsers[] = $p['username'];
             }
 
-            $diff = $challenge['final_value'] - $p['current_performance'];
+
+            $diff = $challenge['final_value'] - $p['current_performance'] + $usersToday[$p['username']];
 
             if ($diff > 0 && $daysRemaining) {
                 $this->template->currentUserPerformances[$i]['average_minimum'] = ceil($diff / $daysRemaining);
