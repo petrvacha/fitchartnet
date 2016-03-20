@@ -190,21 +190,6 @@ class Challenge extends BaseModel
     }
 
     /**
-     * @todo rewrite
-     * @param int $challengeId
-     * @return array
-     */
-    public function getChallengeUsersColors($challengeId)
-    {
-        $challengeUsers = $this->challengeUserModel->findBy(['challenge_id' => $challengeId])->fetchAll();
-        $colors= [];
-        foreach ($challengeUsers as $challengeUser) {
-            $colors[] = $challengeUser->color;
-        }
-        return $colors;
-    }
-
-    /**
      * Returns users' continuous and cumulative data
      * @param int $challengeId
      * @param array $users

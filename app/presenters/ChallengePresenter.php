@@ -54,11 +54,8 @@ class ChallengePresenter extends LoginBasePresenter
     public function renderDetail($id)
     {
         $users = $this->challengeModel->getChallengeUsers($id);
-        $this->template->usersColors = $this->challengeModel->getChallengeUsersColors($id);
         $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
         $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
-
-
 
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
 
@@ -93,10 +90,12 @@ class ChallengePresenter extends LoginBasePresenter
         $daysRemaining = $this->challengeModel->getDaysLeft($challenge['end_at']);
         $this->template->daysRemaining = $daysRemaining;
 
+        $this->template->usersColors = [];
         foreach ($this->template->currentUserPerformances as $i => $p) {
             $userPieData[] = ['label' => $p['username'], 'data' => $p['current_performance'], 'color' => $p['color']];
             if ($p['current_performance']) {
                 $this->template->activeUsers[] = $p['username'];
+                $this->template->usersColors[] = $p['color'];
             }
 
 
@@ -112,7 +111,6 @@ class ChallengePresenter extends LoginBasePresenter
 
         $this->template->users = $users;
         $this->template->userPieData = $userPieData;
-
         $tomorrow = new \DateTime('tomorrow');
         $this->template->tomorrow = $tomorrow->format('Y-m-d H:i:s');
         $this->template->challengeStatus = $this->challengeModel->getChallengeStatus($challenge['start_at'], $challenge['end_at']);
