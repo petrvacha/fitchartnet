@@ -7,7 +7,8 @@ interface IActivityFormFactory
 {
     /**
      * @param int $userId
+     * @param int $challengeId
      * @return \App\Components\ActivityForm
      */
-    function create($userId);
+    function create($userId, $challengeId);
 }

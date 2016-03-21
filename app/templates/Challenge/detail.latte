@@ -175,10 +175,7 @@
 
 <script type="text/javascript">
 $(function() {
-    var challengeActivityId = {$challenge->activity_id};
-    $("#frm-activityForm-activityForm-activity_id option[value=" + challengeActivityId + "]").attr("selected", "selected");
-
-
+    
     var data = {$userPieData};
     var plotObj = $.plot($("#placeholder"), data, {
       series: {

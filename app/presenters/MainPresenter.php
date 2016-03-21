@@ -109,7 +109,7 @@ class MainPresenter extends LoginBasePresenter
      */
     protected function createComponentActivityForm()
     {
-        $control = $this->activityFormFactory->create($this->user->id);
+        $control = $this->activityFormFactory->create($this->user->id, NULL);
 
         $control->getComponent('activityForm')->onSuccess[] = function() {
             $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];

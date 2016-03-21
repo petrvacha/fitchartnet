@@ -155,8 +155,11 @@ class ChallengePresenter extends LoginBasePresenter
      */
     protected function createComponentActivityForm()
     {
-        $control = $this->activityFormFactory->create($this->user->id);
-
+        $challengeId = NULL;
+        if (isset($this->request->getParameters()['id'])) {
+            $challengeId = $this->request->getParameters()['id'];
+        }
+        $control = $this->activityFormFactory->create($this->user->id, $challengeId);
         $control->getComponent('activityForm')->onSuccess[] = function() {
             $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
             $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_SUCCESS);

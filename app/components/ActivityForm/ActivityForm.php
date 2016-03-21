@@ -19,26 +19,37 @@ class ActivityForm extends \Fitchart\Application\Control
     /** @var \App\Model\Activity */
     protected $activityModel;
 
+    /** @var \App\Model\Challenge */
+    protected $challengeModel;
+
     /** @var \App\Model\ActivityLog */
     protected $activityLogModel;
+
+    /** @var int */
+    protected $challengeId;
 
 
     /**
      * @param int $userId
+     * @param int $challengeId
      * @param \App\Model\User $userModel
      * @param \App\Model\Activity $activityModel
      * @param \App\Model\ActivityLog $activityLogModel
      */
     public function __construct($userId,
+                                $challengeId,
                                 \App\Model\User $userModel,
                                 \App\Model\Activity $activityModel,
+                                \App\Model\Challenge $challengeModel,
                                 \App\Model\ActivityLog $activityLogModel)
     {
         parent::__construct();
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;
+        $this->challengeModel = $challengeModel;
         $this->activityLogModel = $activityLogModel;
+        $this->challengeId = $challengeId; //$session->getSection('challenge')->showActivitySelect;
     }
 
     /**
@@ -59,8 +70,9 @@ class ActivityForm extends \Fitchart\Application\Control
             ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.');
         $form['value']->getLabelPrototype()->style = 'float: left; width: 60px;';
 
-        $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
-
+        if (empty($this->challengeId)) {
+            $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
+        }
         $form->setDefaults($this->data);
 
         $form->addSubmit('submit', 'Add');
@@ -74,6 +86,7 @@ class ActivityForm extends \Fitchart\Application\Control
     public function render()
     {
         $this->template->setFile($this->getTemplatePath());
+        $this->template->showActivitySelect = empty($this->challengeId);
         $this->template->time = date('Y/m/d H:00'); //@todo trunc minutes down
         $this->template->render();
     }
@@ -86,6 +99,10 @@ class ActivityForm extends \Fitchart\Application\Control
     {
         $values['user_id'] = $this->userId;
 
+        if (!empty($this->challengeId)) {
+            $challenge = $this->challengeModel->findRow($this->challengeId);
+            $values['activity_id'] = $challenge['activity_id'];
+        }
         if (empty($values['id'])) {
             if (empty($values['created_at'])) {
                 $values['created_at'] = new \DateTime;
