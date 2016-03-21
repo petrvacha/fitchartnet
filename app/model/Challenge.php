@@ -187,7 +187,7 @@ class Challenge extends BaseModel
         $challengeUsers = $this->challengeUserModel->findBy(['challenge_id' => $challengeId])->fetchAll();
         $users = [];
         foreach ($challengeUsers as $challengeUser) {
-            $users[] = $challengeUser->ref('user', 'user_id')->username;
+            $users[$challengeUser['user_id']] = $challengeUser->ref('user', 'user_id')->username;
         }
         return $users;
     }

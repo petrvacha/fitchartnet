@@ -54,6 +54,10 @@ class ChallengePresenter extends LoginBasePresenter
     public function renderDetail($id)
     {
         $users = $this->challengeModel->getChallengeUsers($id);
+        if (!array_key_exists($this->user->id, $users)) {
+            $this->flashMessage('Soooorry! But it looks like you do not have a permission to see this awesome challenge.', parent::MESSAGE_TYPE_INFO);
+            $this->redirect('Challenge:');
+        }
         $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
         $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
 
