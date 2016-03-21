@@ -126,14 +126,14 @@
           <div id="charts" class="big-shift">
             <h3>Charts</h3>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-8" style="width: 770px">
                     <div class="panel panel-success">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Pie Chart</h3>
                         </div>
                         <div class="panel-body">
-                            <div style="position: relative; width:300px;height:300px">
-                                <div id="placeholder" style="width:300px;height:300px"></div>
+                            <div style="position: relative; width:490px;height:300px">
+                                <div id="placeholder" style="width:490px;height:300px"></div>
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
 
 <script type="text/javascript">
 $(function() {
-    
+
     var data = {$userPieData};
     var plotObj = $.plot($("#placeholder"), data, {
       series: {
