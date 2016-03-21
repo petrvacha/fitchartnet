@@ -2,6 +2,8 @@
 
 namespace App\Presenters;
 
+use Nette\Utils\DateTime;
+
 
 /**
  * Base presenter for all application presenters.
@@ -22,5 +24,6 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
     {
         parent::beforeRender();
         $this->template->t = time();
+        $this->template->now = new DateTime();
     }
 }

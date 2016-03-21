@@ -138,7 +138,8 @@ class Challenge extends BaseModel
                 current_value,
                 C.final_value,
                 A.name activity_name,
-                CU.active
+                CU.active,
+                C.end_at
             FROM
                 challenge C
             JOIN challenge_user CU ON
@@ -153,7 +154,9 @@ class Challenge extends BaseModel
             WHERE
                 CU.user_id = ?
             GROUP BY
-                C.id", $this->user->getIdentity()->id
+                C.id
+            ORDER BY
+                C.end_at DESC", $this->user->getIdentity()->id
         )->fetchAll();
     }
 

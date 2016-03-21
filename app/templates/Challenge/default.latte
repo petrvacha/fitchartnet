@@ -34,10 +34,14 @@
                         <td>{$challenge->activity_name}</td>
                         <td>{$challenge->current_value}/{$challenge->final_value}</td>
                         <td>
-                            {if $challenge->active === 0}
-                                <a class="btn btn-info" n:href="Challenge:join $challenge->id" title="Yes, you want it!">join</a>
-                            {elseif $challenge->active ===1}
-                                <a class="btn btn-link" n:href="Challenge:leave $challenge->id" onclick="return confirm('Are you sure you want to leave this challenge?');" title="Lazy?">leave</a>
+                            {if $challenge->end_at > $now}
+                                {if $challenge->active === 0}
+                                    <a class="btn btn-info" n:href="Challenge:join $challenge->id" title="Yes, you want it!">join</a>
+                                {elseif $challenge->active === 1}
+                                    <a class="btn btn-link" n:href="Challenge:leave $challenge->id" onclick="return confirm('Are you sure you want to leave this challenge?');" title="Lazy?">leave</a>
+                                {/if}
+                            {else}
+                                -
                             {/if}
                         </td>
                     </tr>
