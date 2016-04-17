@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+use Fitchart\Application\SecurityException;
 use Nette\Utils\DateTime;
 
 
@@ -63,6 +64,24 @@ class Challenge extends BaseModel
     }
 
     /**
+     * @param int $id
+     * @return array
+     */
+    public function getChallengeData($id)
+    {
+        $data = $this->findOneBy(['id' => $id]);
+        if ($data) {
+            $data = $data->toArray();
+            $users = $this->challengeUserModel->findBy(['challenge_id' => $id])->fetchAll();
+            $data['users'] = [];
+            foreach ($users as $user) {
+                $data['users'][] = ['id' => $user->user_id, 'name' => $user->user->username];
+            }
+        }
+        return $data;
+    }
+
+    /**
      * @param array $data
      */
     public function createNewChallenge($data)
@@ -95,19 +114,27 @@ class Challenge extends BaseModel
      */
     public function updateChallenge($data)
     {
-        $data['updated_at'] = $this->getDateTime();
+        $id = $data['id'];
+        unset($data['id']);
 
-        if (empty($data['start_at'])) {
-            $data['start_at'] = $this->getDateTime();
+        $challenge = $this->findBy(['id' => $id]);
+        $challengeData = $challenge->select('created_by')->fetch();
+
+        if ($challengeData['created_by'] === $this->user->id || $this->user->getIdentity()->role <= Role::MODERATOR) {
+            $data['updated_at'] = $this->getDateTime();
+
+            if (empty($data['start_at'])) {
+                $data['start_at'] = $this->getDateTime();
+            }
+
+            if (empty($data['end_at'])) {
+                $data['end_at'] = date('Y/m/t 23:59');
+            }
+
+            $this->updateUsersInChallenge($id, $data['users']);
+            unset($data['users']);
+            $challenge->update($data);
         }
-
-        if (empty($data['end_at'])) {
-            $data['end_at'] = date('Y/m/t 23:59');
-        }
-
-        $this->challengeUserModel->where(['challenge_id' => $data['id']])->delete();
-
-        $this->addUsersToChallenge($data['id'], $data['users']);
     }
 
     /**
@@ -125,6 +152,35 @@ class Challenge extends BaseModel
     }
 
     /**
+     * @param $challengeId
+     * @param $users
+     */
+    private function updateUsersInChallenge($challengeId, $users)
+    {
+        $newUserIds = array_unique(explode(',', $users));
+        $oldUsers = $this->challengeUserModel
+            ->findBy(['challenge_id' => $challengeId])
+            ->select('user_id')
+            ->fetchAll();
+        $oldUserIds = [];
+        foreach ($oldUsers as $oldUser) {
+            $oldUserIds[] = $oldUser['user_id'];
+        };
+
+        foreach ($newUserIds as $userId) {
+            if (is_numeric($userId) && $this->userModel->hasPermissionForUser($userId) && !in_array($userId, $oldUserIds)) {
+                $this->challengeUserModel->addNewUser($challengeId, $userId);
+            }
+        }
+
+        foreach ($oldUserIds as $oldUserId) {
+            if (!in_array($oldUserId, $newUserIds)) {
+                $this->challengeUserModel->removeUser($challengeId, $oldUserId);
+            }
+        }
+    }
+
+    /**
      * @return array
      */
     public function getUserChallenges()
@@ -134,6 +190,7 @@ class Challenge extends BaseModel
                 C.id,
                 C.name,
                 C.description,
+                C.created_by,
                 IFNULL(SUM(AL.value),0)
                 current_value,
                 C.final_value,

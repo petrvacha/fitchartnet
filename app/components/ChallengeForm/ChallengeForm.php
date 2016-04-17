@@ -12,7 +12,7 @@ class ChallengeForm extends \Fitchart\Application\Control
 {
     /** @var int */
     protected $userId;
-    
+
     /** @var \App\Model\User */
     protected $userModel;
 
@@ -21,7 +21,7 @@ class ChallengeForm extends \Fitchart\Application\Control
 
     /** @var \App\Model\Challenge */
     protected $challengeModel;
-    
+
 
     /**
      * @param int $userId
@@ -75,12 +75,8 @@ class ChallengeForm extends \Fitchart\Application\Control
         $form->addTextArea('users', 'Invite your friends')
             ->addRule(Form::MAX_LENGTH, '%label is too long', 1000);
 
-        $form->setDefaults($this->data);
-
-        $form->addSubmit('submit', 'Create');
-
         $form->onSuccess[] = array($this, 'formSent');
-        
+
         $this->addBootstrapStyling($form);
         return $form;
     }
@@ -89,7 +85,14 @@ class ChallengeForm extends \Fitchart\Application\Control
     {
         $this->template->setFile($this->getTemplatePath());
         $this->template->availableUsers = $this->userModel->getAvailableUsers(TRUE);
+        $this->template->currentUsers = isset($this->data['users']) ? $this->data['users'] : [];
         $this->template->timeEndOfMonth = date('Y/m/t');
+
+        if (!$this['challengeForm']->offsetExists('submit')) {
+            $this['challengeForm']->addSubmit('submit', 'Create')
+                ->getControlPrototype()
+                ->addClass('btn btn-success');
+        }
         $this->template->render();
     }
 
@@ -99,11 +102,14 @@ class ChallengeForm extends \Fitchart\Application\Control
      */
     public function formSent(Form $form, ArrayHash $values)
     {
+        $presenter = $this->getPresenter();
         if (empty($values['id'])) {
             $this->challengeModel->createNewChallenge($values);
+            $presenter->flashMessage('New challenge has been created.', $presenter::MESSAGE_TYPE_SUCCESS);
         } else {
             $this->challengeModel->updateChallenge($values);
+            $presenter->flashMessage('The challenge has been updated.', $presenter::MESSAGE_TYPE_SUCCESS);
         }
     }
-    
+
 }

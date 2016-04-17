@@ -42,7 +42,7 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
 
         $row = $this->database->table(self::TABLE_NAME)
                 ->where(self::COLUMN_NAME . '= ? OR ' . self::COLUMN_EMAIL . '= ?', $login, $login)
-                ->select('user.*, role.name AS role')
+                ->select('user.*, role.id AS role')
                 ->fetch();
 
         if (!$row) {

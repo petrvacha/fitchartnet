@@ -339,7 +339,7 @@ class User extends BaseModel
     public function getUserLoginData($id)
     {
         $row = $this->findBy(['user.id' => $id])
-                ->select('user.*, role.name AS role')
+                ->select('user.*, role.id AS role')
                 ->fetch();
 
         if ($row) {
@@ -444,7 +444,7 @@ class User extends BaseModel
      */
     public function getAvailableUsers($transform = FALSE)
     {
-        if ($this->user->getIdentity()->role == Role::ADMIN || $this->user->getIdentity()->role == Role::SUPERADMIN) {
+        if ($this->user->getIdentity()->role <= Role::ADMIN) {
             $users = $this->getTable()->where('id <> ?', $this->user->getIdentity()->id)->fetchPairs('id', 'username');
         } else {
             $users = $this->getTable()->where(':friend.user_id2 = ?', $this->user->getIdentity()->id)->fetchPairs('id', 'username');

@@ -4,13 +4,14 @@ namespace App\Presenters;
 use App\Model\Challenge;
 use App\Model\ActivityLog;
 use App\Model\ChallengeUser;
-
+use App\Model\Role;
 
 /**
  * Challenge presenter
  */
 class ChallengePresenter extends LoginBasePresenter
 {
+
     /** @var ActivityLog */
     protected $activityLog;
 
@@ -46,6 +47,11 @@ class ChallengePresenter extends LoginBasePresenter
     {
         $this->template->title = 'Stats';
         $this->template->challenges = $this->challengeModel->getUserChallenges();
+        $this->template->editPermission = ($this->user->getIdentity()->role <= Role::MODERATOR);
+        $this['challengeForm']['challengeForm']
+            ->addSubmit('submit', 'Create')
+            ->getControlPrototype()
+            ->addClass('btn btn-success');
     }
 
     /**
@@ -76,7 +82,7 @@ class ChallengePresenter extends LoginBasePresenter
         $todayEndString = $today->format("Y-m-d 23:59:59");
 
         foreach($this->template->usersPerformances['normal'] as $record) {
-            if ($todayStartString <= $record['time'] && $todayEndString > $record['time']) {
+            if (isset($record['time']) && $todayStartString <= $record['time'] && $todayEndString > $record['time']) {
                 foreach ($users as $user) {
                     $usersToday[$user] += $record[$user];
                 }
@@ -140,15 +146,34 @@ class ChallengePresenter extends LoginBasePresenter
         $this->redirect('Challenge:');
     }
 
+
+    /**
+     * @param int $id
+     */
+    public function renderEdit($id)
+    {
+        $data = $this->challengeModel->getChallengeData($id);
+        if ($data['created_by'] !== $this->user->getIdentity()->id && $this->user->getIdentity()->role > Role::MODERATOR) {
+            $this->flashMessage('Soooorry! But it looks like you do not have a permission to edit this awesome challenge.', parent::MESSAGE_TYPE_INFO);
+            $this->redirect('Challenge:');
+        }
+
+        $this['challengeForm']->setData($data);
+        unset($data['users']);
+        $this['challengeForm']['challengeForm']->setDefaults($data);
+        $this['challengeForm']['challengeForm']
+            ->addSubmit('submit', 'Edit')
+            ->getControlPrototype()
+            ->addClass('btn btn-success');
+    }
+
     /**
      * @return \App\Components\ChallengeForm
      */
     protected function createComponentChallengeForm()
     {
         $control = $this->challengeFormFactory->create($this->user->id);
-
         $control->getComponent('challengeForm')->onSuccess[] = function() {
-            $this->flashMessage('New challenge has been created.', parent::MESSAGE_TYPE_SUCCESS);
             $this->redirect('Challenge:');
         };
         return $control;

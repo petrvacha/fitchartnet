@@ -36,7 +36,7 @@ class Control extends \Nette\Application\UI\Control
     /** @var mixed */
     protected $data = [];
 
-    
+
     public $onSuccess = [];
 
 

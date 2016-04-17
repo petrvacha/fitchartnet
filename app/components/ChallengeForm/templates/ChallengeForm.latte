@@ -50,6 +50,6 @@
             format:'Y/m/d'
         });
 
-        $("#frm-challengeForm-challengeForm-users").tokenInput({$availableUsers}, { theme: "facebook" });
+        $("#frm-challengeForm-challengeForm-users").tokenInput({$availableUsers}, { theme: "facebook", prePopulate: {$currentUsers} });
     });
 </script>
