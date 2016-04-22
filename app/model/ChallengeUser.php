@@ -55,32 +55,50 @@ class ChallengeUser extends BaseModel
      * @param int $challengeId
      * @return string
      */
-    private function generateColor($challengeId)
+    public function generateColor($challengeId)
     {
-        $hexArray = ['00', '33', '66', '99', 'CC', 'FF'];
+        $colors = [
+            '0000FF',
+            'A52A2A',
+            '6495ED',
+            '008000',
+            '4B0082',
+            'FF8C00',
+            '00FFFF',
+            'FF7F50',
+            '8A2BE2',
+            '008000',
+            'FF69B4',
+            'FFD700',
+            'FF00FF',
+            '191970',
+            'FFA500',
+            'FF4500',
+            'FF0000',
+            'FFFF00',
+            '9ACD32',
+            '3CB371',
+            '000080'
+        ];
+
         $users = $this->findBy(['challenge_id' => $challengeId])->fetchAll();
 
         $find = FALSE;
         while ($find === FALSE) {
-            $r = array_rand($hexArray, 3);
-            $generatedColor = '#' . $hexArray[$r[0]] . $hexArray[$r[1]] . $hexArray[$r[2]];
+            $r = array_rand($colors);
+            $generatedColor = '#' . $colors[$r];
 
             if (!empty($users)) {
+                $find = TRUE;
                 foreach ($users as $user) {
-                    if ($user['color'] !== $generatedColor &&
-                        $generatedColor !== self::COLOR_BLACK &&
-                        $generatedColor !== self::COLOR_WHITE) {
-
-                        $find = TRUE;
+                    if ($user['color'] === $generatedColor) {
+                        $find = FALSE;
+                        break;
                     }
                 }
 
             } else {
-                if ($generatedColor !== self::COLOR_BLACK &&
-                    $generatedColor !== self::COLOR_WHITE) {
-
-                    $find = TRUE;
-                }
+                $find = TRUE;
             }
         }
 
