@@ -1,16 +1,22 @@
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluent">
+    <div class="container">
         <div class="navbar-header{if $presenter->isLinkCurrent('Main:')} active{/if}">
-            <a class="navbar-brand" n:href='Main:default'>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" n:href='Challenge:default'>
                 <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                 Fitchart.net
             </a>
         </div>
-        <div class="collapse navbar-collapse">
+        <div  id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li n:class="$presenter->isLinkCurrent('Stats:') ? active">
-                    <a n:href='Stats:default'>
-                        <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> Stats
+                <li n:class="$presenter->isLinkCurrent('Main:addWorkout') ? active">
+                    <a n:href='Main:addWorkout'>
+                        <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> Add workout
                     </a>
                 </li>
                 <li n:class="$presenter->isLinkCurrent('Challenge:') ? active">

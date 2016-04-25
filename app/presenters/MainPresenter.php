@@ -37,11 +37,6 @@ class MainPresenter extends LoginBasePresenter
         $this->weightModel = $weightModel;
     }
 
-    public function renderDefault()
-    {
-        $this->template->title = 'News Feed';
-    }
-
     public function renderAddWorkout()
     {
         $this->template->title = 'Add workout';

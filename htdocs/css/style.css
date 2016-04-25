@@ -1,13 +1,3 @@
-html, body {
-    margin:0;
-    height: 100%;
-}
-
-body {
-  margin: 0 auto;
-  padding-top: 50px;
-}
-
 .alert {
     padding: 8px;
 }
@@ -16,48 +6,16 @@ body {
     right: 0px;
 }
 
-#content-wrapper {
-    padding-left: 0px;
-    position: relative;
-    overflow: auto;
-    min-height: 100%;
-}
-
-.container-fluid .sidebar {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-
-    padding-left: 0px;
-    float: left;
-    width: 250px;
-    background: #394a59;
-    color: white;
-}
-
-#main-container {
-    position: relative;
-    left: 250px;
-    color: #000000;
-}
-
-.sidebar h3 {
-    color: white;
-}
-
 .sidebar .simple-link {
     color: lightcoral;
 }
 
-nav .container-fluent {
+.navbar.navbar-default.navbar-fixed-top .container{
     background-color: #394a59;
 }
 
 .navbar-default .navbar-brand {
     color: #FFFFFF;
-    padding-right: 122px;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -89,10 +47,6 @@ nav .container-fluent {
 
 #main-container .glyphicon.glyphicon-info-sign {
     top: 3px;
-}
-
-.page-header {
-    margin: 0px;
 }
 
 .flotTip {
@@ -135,4 +89,8 @@ nav .container-fluent {
 
 .img-container > img {
   max-width: 100%;
+}
+
+.page-header {
+    margin: 55px 0 20px;
 }

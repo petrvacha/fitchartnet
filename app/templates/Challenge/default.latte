@@ -1,59 +1,55 @@
 {block content}
 {include '../partial/navigation.latte'}
 
-<div id="content-wrapper" class="container-fluid">
-    {include '../partial/sidebar-profile-blok.latte'}
+<div class="container">
+    {include '../partial/flashMessages.latte'}
 
-    <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
-        {include '../partial/flashMessages.latte'}
+    <h2 class="page-header">Challenges</h2>
+        <a id="create-challenge-button" class="btn btn-success" href="#" style="margin: 10px 10px 0px 0px">Add Challenge</a>
+        <div id="create-challenge" class="hidden">
+            {control challengeForm}
+        </div>
 
-        <h2 class="page-header">Challenges</h2>
-            <a id="create-challenge-button" class="btn btn-success" href="#" style="margin: 10px 10px 0px 0px">Add Challenge</a>
-            <div id="create-challenge" class="hidden">
-                {control challengeForm}
-            </div>
-
-            <table class="table table-condensed" style="margin: 10px 10px 0px 0px">
+        <table class="table table-condensed" style="margin: 10px 10px 0px 0px">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Activity</th>
+                <th>Your performance</th>
+                <th colspan="2">Action</th>
+            </tr>
+            {foreach $challenges as $challenge}
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Activity</th>
-                    <th>Your performance</th>
-                    <th colspan="2">Action</th>
-                </tr>
-                {foreach $challenges as $challenge}
-                    <tr>
-                        <td>
+                    <td>
+                        {if $challenge->active === 0}
+                            {$challenge->name}
+                        {elseif $challenge->active === 1}
+                            <a n:href="Challenge:detail $challenge->id">{$challenge->name}</a>
+                        {/if}
+                    </td>
+                    <td>{$challenge->description}</td>
+                    <td>{$challenge->activity_name}</td>
+                    <td>{$challenge->current_value}/{$challenge->final_value}{$challenge->log_type_mark}</td>
+                    <td style="width: 65px;">
+                        {if $challenge->end_at > $now}
                             {if $challenge->active === 0}
-                                {$challenge->name}
+                                <a class="btn btn-primary" n:href="Challenge:join $challenge->id" title="Yes, you want it!">join</a>
                             {elseif $challenge->active === 1}
-                                <a n:href="Challenge:detail $challenge->id">{$challenge->name}</a>
+                                <a class="btn btn-info" n:href="Challenge:leave $challenge->id" onclick="return confirm('Are you sure you want to leave this challenge?');" title="Lazy?">leave</a>
                             {/if}
-                        </td>
-                        <td>{$challenge->description}</td>
-                        <td>{$challenge->activity_name}</td>
-                        <td>{$challenge->current_value}/{$challenge->final_value}</td>
-                        <td style="width: 65px;">
-                            {if $challenge->end_at > $now}
-                                {if $challenge->active === 0}
-                                    <a class="btn btn-primary" n:href="Challenge:join $challenge->id" title="Yes, you want it!">join</a>
-                                {elseif $challenge->active === 1}
-                                    <a class="btn btn-info" n:href="Challenge:leave $challenge->id" onclick="return confirm('Are you sure you want to leave this challenge?');" title="Lazy?">leave</a>
-                                {/if}
-                            {else}
-                                -
-                            {/if}
-                        </td>
-                        <td>
-                            {if $user->id === $challenge->created_by || $editPermission}
-                                <a class="btn btn-primary" n:href="Challenge:edit $challenge->id">edit</a>
-                            {/if}
-                        </td>
-                    </tr>
-                {/foreach}
-            </table>
-        <br />
-    </div>
+                        {else}
+                            -
+                        {/if}
+                    </td>
+                    <td>
+                        {if $user->id === $challenge->created_by || $editPermission}
+                            <a class="btn btn-primary" n:href="Challenge:edit $challenge->id">edit</a>
+                        {/if}
+                    </td>
+                </tr>
+            {/foreach}
+        </table>
+    <br />
 </div>
 
 <script type="text/javascript">

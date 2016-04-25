@@ -1,17 +1,13 @@
 {block content}
 {include '../partial/navigation.latte'}
 
-<div id="content-wrapper" class="container-fluid">
-    {include '../partial/sidebar-profile-blok.latte'}
+<div class="container">
+    {include '../partial/flashMessages.latte'}
 
-    <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
-        {include '../partial/flashMessages.latte'}
-
-        <h2 class="page-header">Challenge edit</h2>
-            <div id="edit-challenge">
-                {control challengeForm}
-            </div>
-        <br />
-    </div>
+    <h2 class="page-header">Challenge edit</h2>
+        <div id="edit-challenge">
+            {control challengeForm}
+        </div>
+    <br />
 </div>
 {/block}

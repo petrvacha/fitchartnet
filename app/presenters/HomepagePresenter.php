@@ -109,7 +109,7 @@ class HomepagePresenter extends BasePresenter
                 $this->flashMessage("Facebook authentication failed hard.");
             }
 
-            $this->redirect('Main:');
+            $this->redirect('Challenge:');
         };
 
         return $dialog;
@@ -128,7 +128,7 @@ class HomepagePresenter extends BasePresenter
 
     public function renderRegistred()
     {
-        
+
     }
 
 
@@ -141,7 +141,7 @@ class HomepagePresenter extends BasePresenter
         $control = $this->signFormFactory->create();
         $control->getComponent('signForm')->onSuccess[] = function() {
             $this->flashMessage('Welcome on board!', 'info');
-            $this->redirect('Main:');
+            $this->redirect('Challenge:');
         };
         return $control;
     }

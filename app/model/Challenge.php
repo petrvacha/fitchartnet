@@ -196,9 +196,12 @@ class Challenge extends BaseModel
                 C.final_value,
                 A.name activity_name,
                 CU.active,
-                C.end_at
+                C.end_at,
+                LT.mark log_type_mark
             FROM
                 challenge C
+            JOIN
+                activity A ON A.id = C.activity_id
             JOIN challenge_user CU ON
                 CU.challenge_id = C.id
             LEFT JOIN activity_log AL ON
@@ -206,8 +209,8 @@ class Challenge extends BaseModel
                 C.start_at < AL.created_at AND
                 C.end_at > AL.created_at AND
                 AL.user_id = CU.user_id
-            JOIN
-                activity A ON A.id = C.activity_id
+            LEFT JOIN log_type LT ON
+                LT.id = A.log_type_id
             WHERE
                 CU.user_id = ?
             GROUP BY

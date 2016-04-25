@@ -14,6 +14,7 @@ module.exports = function(grunt) {
                         './htdocs/css/libs/sb-admin.css',
                         './htdocs/css/libs/morris.css',
                         './htdocs/css/libs/cropper.css',
+                        './htdocs/css/libs/ie10-viewport-bug-workaround.css',
                         './htdocs/css/style.css',
                     ]
                 }

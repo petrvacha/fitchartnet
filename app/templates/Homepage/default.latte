@@ -1,15 +1,11 @@
 {block content}
-<div id="banner">
-    <h1 n:block=title>Fitchart</h1>
-</div>
-
-<div id="content">
+<div class="container">
+    <div id="banner">
+        <h1 n:block=title>Fitchart</h1>
+    </div>
     <div n:foreach="$flashes as $flash" class="alert, alert-{$flash->type}">{$flash->message}</div>
-    
-    <div class="container">
-        {control signInForm}
-        {control registrationForm}
-   </div>
+    {control signInForm}
+    {control registrationForm}
 </div>
 <script type="text/javascript">
     $(document).ready(function() {

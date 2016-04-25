@@ -1,23 +1,19 @@
 {block content}
 {include '../partial/navigation.latte'}
 
-<div id="content-wrapper" class="container-fluid">
-    {include '../partial/sidebar-profile-blok.latte'}
-    
-    <div id="main-container" class="col-xs-9" style="padding-top: 25px;">
-        {include '../partial/flashMessages.latte'}
+<div class="container">
+    {include '../partial/flashMessages.latte'}
 
-        <h2 class="page-header">Weight</h2>
-        {control weightForm}
-        <br />
-        <table class="table table-striped">
-            <tr><th>Date</th><th>weight [kg]</th><th>Action</th></tr>
-            <tr n:foreach="$weights as $weight">
-                <td>{$weight->datetime|date:'d.m.Y H:i'}</td>
-                <td>{$weight->value}</td>
-                <td><a n:href="Main:deleteWeight $weight->id" onclick="return confirm('Are you sure you want to delete this item?');"><span class="glyphicon glyphicon-remove" aria-hidden="true" title="remove weight"></span></a></td>
-            </tr>
-        </table>
-    </div>
+    <h2 class="page-header">Weight</h2>
+    {control weightForm}
+    <br />
+    <table class="table table-striped">
+        <tr><th>Date</th><th>weight [kg]</th><th>Action</th></tr>
+        <tr n:foreach="$weights as $weight">
+            <td>{$weight->datetime|date:'d.m.Y H:i'}</td>
+            <td>{$weight->value}</td>
+            <td><a n:href="Main:deleteWeight $weight->id" onclick="return confirm('Are you sure you want to delete this item?');"><span class="glyphicon glyphicon-remove" aria-hidden="true" title="remove weight"></span></a></td>
+        </tr>
+    </table>
 </div>
 {/block}
