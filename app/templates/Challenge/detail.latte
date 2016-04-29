@@ -18,8 +18,9 @@
         <div class="col-md-2"><h4>Challenge is</h4>{$challengeStatus}</div>
     </div>
     <br>
-
-    {control activityForm}
+    {if $challengeStatus->isActive()}
+        {control activityForm}
+    {/if}
 
     <br>
 

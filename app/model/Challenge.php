@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+use Fitchart\Application\ChallengeStatus;
 use Fitchart\Application\SecurityException;
 use Nette\Utils\DateTime;
 
@@ -371,7 +372,7 @@ class Challenge extends BaseModel
     /**
      * @param string $startAt
      * @param string $endAt
-     * @return string
+     * @return ChallengeStatus
      */
     public function getChallengeStatus($startAt, $endAt )
     {
@@ -379,12 +380,12 @@ class Challenge extends BaseModel
 
         if ($now < $endAt) {
             if ($startAt < $now) {
-                return self::TEXT_STATUS_ACTIVE;
+                return new ChallengeStatus(self::TEXT_STATUS_ACTIVE);
             } else {
-                return self::TEXT_STATUS_PREPARED;
+                return new ChallengeStatus(self::TEXT_STATUS_PREPARED);
             }
         } else {
-            return self::TEXT_STATUS_GONE;
+            return new ChallengeStatus(self::TEXT_STATUS_GONE);
         }
     }
 }
