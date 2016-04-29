@@ -45,9 +45,16 @@
                         <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Score</h3>
                     </div>
                     <table class="table">
-                        <tr><th>name</th><th colspan="3">current performance</th><th class="text-center">today's status</th><th></th></tr>
+                        <tr>
+                            <th n:if="$challengeStatus->isGone()">#</th>
+                            <th>name</th>
+                            <th colspan="3">current performance</th>
+                            <th n:if="$challengeStatus->isActive()" class="text-center">today's status</th>
+                            <th></th>
+                        </tr>
                         {foreach $currentUserPerformances as $userPerformance}
-                            <tr>
+                            <tr {if $user->id === $userPerformance['id']}style="background-color: #fcf8e3"{/if}>
+                                <td n:if="$challengeStatus->isGone()">{$iterator->counter}.</td>
                                 <td>{$userPerformance['username']}</td>
                                 <td class="text-center" style="width: 10em;">
                                     <div class="progress">
@@ -62,10 +69,12 @@
                                 <td style="width: 8em;">
                                     {$userPerformance['percentage']} %
                                 </td>
-                                <td class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
+                                <td  n:if="$challengeStatus->isActive()"  class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
                                     {$usersToday[$userPerformance['username']]}/{$userPerformance['average_minimum']}{$challenge->activity->log_type->mark}
                                 </td>
-                                <td><a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="glyphicon glyphicon-zoom-in"></i></a>
+                                <td>
+                                    <a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="glyphicon glyphicon-zoom-in"></i></a>
+                                </td>
                             </tr>
                             <tr id="datalist-{$userPerformance['id']}" class="hidden">
                                 <td colspan="6">
@@ -98,9 +107,10 @@
                             </tr>
                         {/foreach}
                         <tr>
+                            <td n:if="$challengeStatus->isGone()"></td>
                             <td><strong>total</strong></td>
                             <td colspan="3" class="text-center"><strong>{$currentTotalPerformance}{$challenge->activity->log_type->mark}</strong></td>
-                            <td></td>
+                            <td n:if="$challengeStatus->isActive()"></td>
                             <td></td>
                         </tr>
                     </table>
