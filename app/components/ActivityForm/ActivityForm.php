@@ -64,15 +64,27 @@ class ActivityForm extends \Fitchart\Application\Control
 
         $form['created_at']->getLabelPrototype()->style = 'float: left; width: 60px;';
 
-        $form->addText('value', 'Count')
+
+
+        $countLabel = 'Count';
+        $challenge = $this->challengeModel->findRow($this->challengeId);
+        if ($challenge) {
+            if ($challenge->activity->log_type->mark) {
+
+                $countLabel .= ' [' . $challenge->activity->log_type->mark . ']';
+            }
+
+        } else {
+            $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
+        }
+
+
+        $form->addText('value', $countLabel)
             ->setAttribute('placeholder', '0')
             ->setRequired('You forget fill important number.')
             ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.');
-        $form['value']->getLabelPrototype()->style = 'float: left; width: 60px;';
+        $form['value']->getLabelPrototype()->style = 'float: left; width: 65px;';
 
-        if (empty($this->challengeId)) {
-            $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
-        }
         $form->setDefaults($this->data);
 
         $form->addSubmit('submit', 'Add');

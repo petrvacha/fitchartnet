@@ -29,7 +29,7 @@
                     </td>
                     <td>{$challenge->description}</td>
                     <td>{$challenge->activity_name}</td>
-                    <td>{$challenge->current_value}/{$challenge->final_value}{$challenge->log_type_mark}</td>
+                    <td>{$challenge->current_value}/{$challenge->final_value} {$challenge->log_type_mark}</td>
                     <td style="width: 65px;">
                         {if $challenge->end_at > $now}
                             {if $challenge->active === 0}
