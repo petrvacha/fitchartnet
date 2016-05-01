@@ -34,6 +34,7 @@ module.exports = function(grunt) {
                     './htdocs/js/libs/morris.min.js',
                     './htdocs/js/libs/netteForms.js',
                     './htdocs/js/libs/jquery.datetimepicker.js',
+                    './htdocs/js/libs/nette.ajax.js',
                     './htdocs/js/libs/bootstrap.min.js',
                     './htdocs/js/libs/cropper.min.js',
                     './htdocs/js/common.js',

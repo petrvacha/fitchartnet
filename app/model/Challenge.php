@@ -45,23 +45,28 @@ class Challenge extends BaseModel
     /** @var ChallengeUser */
     protected $challengeUserModel;
 
+    /** @var Notification */
+    protected $notificationModel;
+
 
     /**
-     * ChallengeUser constructor.
      * @param \Nette\Database\Context $context
      * @param \Nette\Security\User $user
      * @param User $userModel
      * @param ChallengeUser $challengeUserModel
+     * @param Notification $notificationModel
      */
     public function __construct(\Nette\Database\Context $context,
                                 \Nette\Security\User $user,
                                 User $userModel,
-                                ChallengeUser $challengeUserModel)
+                                ChallengeUser $challengeUserModel,
+                                Notification $notificationModel)
     {
         parent::__construct($context);
         $this->user = $user;
         $this->userModel = $userModel;
         $this->challengeUserModel = $challengeUserModel;
+        $this->notificationModel = $notificationModel;
     }
 
     /**
@@ -147,6 +152,7 @@ class Challenge extends BaseModel
         foreach (array_unique(explode(',', $users)) as $userId) {
             if (is_numeric($userId) && $this->userModel->hasPermissionForUser($userId)) {
                 $this->challengeUserModel->addNewUser($challengeId, $userId);
+                $this->notificationModel->insertNotification(Notification::MESSAGE_NEW_CHALLENGE, $userId);
             }
         }
         $this->challengeUserModel->addNewUser($challengeId, $this->user->getIdentity()->id, TRUE);

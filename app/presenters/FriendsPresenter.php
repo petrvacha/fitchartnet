@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Presenters;
+use App\Model\ActivityLog;
+use App\Model\Notification;
+use App\Model\User;
+use App\Model\FriendshipRequest;
+use App\Model\Friend;
 
 
 /**
@@ -8,30 +13,32 @@ namespace App\Presenters;
  */
 class FriendsPresenter extends LoginBasePresenter
 {
-    /** @var \App\Model\ActivityLog */
+    /** @var ActivityLog */
     protected $activityLog;
 
-    /** @var \App\Model\User */
+    /** @var User */
     protected $userModel;
 
-    /** @var \App\Model\Friend */
+    /** @var Friend */
     protected $friendModel;
 
-    /** @var \App\Model\FriendshipRequest */
+    /** @var FriendshipRequest */
     protected $friendshipRequestModel;
 
-
     /**
-     * @param \App\Model\ActivityLog $activityLog
-     * @param \App\Model\User $userModel
-     * @param \App\Model\FriendshipRequest $friendshipModel
-     * @param \App\Model\Friend $friendModel
+     * @param Notification $notificationModel
+     * @param ActivityLog $activityLog
+     * @param User $userModel
+     * @param FriendshipRequest $friendshipRequestModel
+     * @param Friend $friendModel
      */
-    public function __construct(\App\Model\ActivityLog $activityLog,
-                                \App\Model\User $userModel,
-                                \App\Model\FriendshipRequest $friendshipRequestModel,
-                                \App\Model\Friend $friendModel)
+    public function __construct(Notification $notificationModel,
+                                ActivityLog $activityLog,
+                                User $userModel,
+                                FriendshipRequest $friendshipRequestModel,
+                                Friend $friendModel)
     {
+        parent::__construct($notificationModel);
         $this->activityLog = $activityLog;
         $this->userModel = $userModel;
         $this->friendshipRequestModel = $friendshipRequestModel;

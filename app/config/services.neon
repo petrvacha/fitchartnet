@@ -20,6 +20,7 @@ services:
     - App\Model\FriendshipRequest
     - App\Model\Challenge
     - App\Model\ChallengeUser
+    - App\Model\Notification
 
     - App\Components\MailerManagerFactory(@App\Components\MailerFactory, @App\Components\MessageFactory , @Nette\Http\Request , @Nette\Application\UI\ITemplateFactory , %config%)
     - App\Components\MailerFactory(@App\Model\LoggerModel)

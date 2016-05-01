@@ -31,6 +31,24 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li n:snippet="notification" class="dropdown">
+                    {var $notificationCount = count($notifications)}
+                    <a href="#" {if $notificationCount}class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"{/if}>
+                        <i n:if="$notificationCount" class="glyphicon glyphicon-bell" style="color: #5cb85c">({$notificationCount})</i>
+                        <i n:if="!$notificationCount" class="glyphicon glyphicon-bell" style="color: black"></i>
+                    </a>
+                    <ul n:if="$notificationCount" class="dropdown-menu alert-dropdown">
+                        <li n:foreach="$notifications as $notification">
+                            <a n:href="seenNotification $notification->id">
+                                <span class="label label-success">{$notification->message}</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="ajax" n:href="seenAllNotifications!">Mark all as read</a>
+                        </li>
+                    </ul>
+                </li>
                 <li id="fat-menu" class="dropdown" aria-expanded="true">
                   <a id="drop3" href="#" style="padding: 5px 40px 5px 5px;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <img class="img-thumbnail" style="padding: 1px; max-width: 40px; max-height: 40px;" src="{plink Static:getProfilePicture, $userData['profile_photo']}">
@@ -47,3 +65,7 @@
         </div>
     </div>
 </nav>
+
+<script type="text/javascript">
+    $.nette.init();
+</script>

@@ -4,6 +4,7 @@ namespace App\Presenters;
 use App\Model\Challenge;
 use App\Model\ActivityLog;
 use App\Model\ChallengeUser;
+use App\Model\Notification;
 use App\Model\Role;
 
 /**
@@ -30,14 +31,17 @@ class ChallengePresenter extends LoginBasePresenter
 
 
     /**
+     * @param Notification $notificationModel
      * @param ActivityLog $activityLog
      * @param Challenge $challengeModel
      * @param ChallengeUser $challengeUserModel
      */
-    public function __construct(ActivityLog $activityLog,
+    public function __construct(Notification $notificationModel,
+                                ActivityLog $activityLog,
                                 Challenge $challengeModel,
                                 ChallengeUser $challengeUserModel)
     {
+        parent::__construct($notificationModel);
         $this->activityLog = $activityLog;
         $this->challengeUserModel = $challengeUserModel;
         $this->challengeModel = $challengeModel;

@@ -8,21 +8,28 @@ class FriendshipRequest extends BaseModel
     /** @var Nette\Security\User $user */
     protected $user;
 
-    /** @var Nette\Security\User $friendModel */
+    /** @var Friend $friendModel */
     protected $friendModel;
+
+    /** @var Notification $notificationModel */
+    protected $notificationModel;
 
 
     /**
-     * @param \Nette\Database\Context $context,
+     * @param \Nette\Database\Context $context
      * @param \Nette\Security\User $user
+     * @param Friend $friendModel
+     * @param Notification $notificationModel
      */
     public function __construct(\Nette\Database\Context $context,
                                 \Nette\Security\User $user,
-                                \App\Model\Friend $friendModel)
+                                Friend $friendModel,
+                                Notification $notificationModel)
     {
         parent::__construct($context);
         $this->user = $user;
         $this->friendModel = $friendModel;
+        $this->notificationModel = $notificationModel;
     }
 
     /**
@@ -51,6 +58,8 @@ class FriendshipRequest extends BaseModel
                 'created_at' => $this->getDateTime(),
                 'updated_at' => $this->getDateTime()
             ];
+
+            $this->notificationModel->insertNotification(Notification::MESSAGE_NEW_FRIEND_REQUEST, $toUserId);
             return $this->insert($insertData);
         }
         return FALSE;

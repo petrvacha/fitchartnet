@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Presenters;
+use App\Model\ActivityLog;
+use App\Model\Notification;
+use App\Model\Weight;
 
 
 /**
@@ -27,12 +30,15 @@ class MainPresenter extends LoginBasePresenter
 
 
     /**
-     * @param \App\Model\ActivityLog $activityLog
-     * @param \App\Model\Weight $weightModel
+     * @param Notification $notificationModel
+     * @param ActivityLog $activityLog
+     * @param Weight $weightModel
      */
-    public function __construct(\App\Model\ActivityLog $activityLog,
-                                \App\Model\Weight $weightModel)
+    public function __construct(Notification $notificationModel,
+                                ActivityLog $activityLog,
+                                Weight $weightModel)
     {
+        parent::__construct($notificationModel);
         $this->activityLog = $activityLog;
         $this->weightModel = $weightModel;
     }

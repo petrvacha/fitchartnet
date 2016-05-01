@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Presenters;
+use App\model\Notification;
+use Nette\Database\Context;
 
 
 /**
@@ -8,6 +10,18 @@ namespace App\Presenters;
  */
 abstract class LoginBasePresenter extends BasePresenter
 {
+
+    /** @var Notification */
+    protected $notificationModel;
+
+    /**
+     * @param Notification $notificationModel
+     */
+    public function __construct(Notification $notificationModel)
+    {
+        $this->notificationModel = $notificationModel;
+    }
+
     public function startup()
     {
         parent::startup();
@@ -21,7 +35,7 @@ abstract class LoginBasePresenter extends BasePresenter
 
     public function beforeRender() {
         parent::beforeRender();
-
+        $this->template->notifications = $this->notificationModel->getNewNotifications();
         $this->template->userData = $this->getUser()->identity->data;
     }
 
@@ -29,5 +43,23 @@ abstract class LoginBasePresenter extends BasePresenter
     {
         $this->user->logout();
         $this->redirect('Homepage:default');
+    }
+
+    public function handleSeenAllNotifications()
+    {
+        $this->notificationModel->setSeenAll();
+        $this->template->notifications = $this->notificationModel->getNewNotifications();
+        $this->redrawControl('wrapper');
+        $this->redrawControl('notification');
+    }
+
+    /**
+     * @param $id
+     */
+    public function actionSeenNotification($id)
+    {
+        $notification = $this->notificationModel->findRow($id);
+        $this->notificationModel->findBy(['link' => $notification->link])->update(['seen' => TRUE]);
+        $this->redirectUrl($notification->link);
     }
 }

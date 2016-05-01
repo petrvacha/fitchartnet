@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Presenters;
+use App\Model\Notification;
+use App\Model\User;
+use Nette\Http\Session;
 
 
 /**
@@ -8,10 +11,10 @@ namespace App\Presenters;
  */
 class UserPresenter extends LoginBasePresenter
 {
-    /** @var \App\Model\User */
+    /** @var User */
     protected $userModel;
 
-    /** @var \Nette\Http\Session */
+    /** @var Session */
     protected $session;
 
 
@@ -23,12 +26,15 @@ class UserPresenter extends LoginBasePresenter
 
 
     /**
-     * @param \App\Model\User $userModel
-     * @param \Nette\Http\Session $session
+     * @param Notification $notificationModel
+     * @param User $userModel
+     * @param Session $session
      */
-    public function __construct(\App\Model\User $userModel,
-                                \Nette\Http\Session $session)
+    public function __construct(Notification $notificationModel,
+                                User $userModel,
+                                Session $session)
     {
+        parent::__construct($notificationModel);
         $this->session = $session;
         $this->userModel = $userModel;
     }
