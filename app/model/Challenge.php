@@ -104,7 +104,7 @@ class Challenge extends BaseModel
             $data['end_at'] = date('Y-m-t 23:59:59');
         } else {
             $d = DateTime::createFromFormat("Y/m/d", $data['end_at']);
-            $data['end_at'] = $d->format('Y-m-t 23:59:59');
+            $data['end_at'] = $d->format('Y-m-d 23:59:59');
         }
 
         $users = $data['users'];
