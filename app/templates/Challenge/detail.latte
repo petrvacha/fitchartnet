@@ -14,7 +14,16 @@
     <div class="row">
         <div class="col-md-2"><h4>Task</h4>{$challenge->final_value} {$challenge->activity->log_type->mark} in {$challengeDays} days</div>
         <div class="col-md-2"><h4>Challengers</h4>{count($users)}</div>
-        <div class="col-md-2"><h4>Days remaining</h4>{$daysRemaining}</div>
+        <div class="col-md-2">
+            <h4>Days remaining</h4>
+            {if $daysRemaining > 1}
+                {$daysRemaining} days
+            {elseif $daysRemaining == 1}
+                today
+            {else}
+                already finished
+            {/if}
+        </div>
         <div class="col-md-2"><h4>Challenge is</h4>{$challengeStatus}</div>
     </div>
     <br>
