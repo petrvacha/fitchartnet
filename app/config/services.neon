@@ -27,7 +27,6 @@ services:
     - App\Components\MessageFactory
 
     - App\Components\ActivityForm\IActivityFormFactory
-    - App\Components\LaunchAlertForm\ILaunchAlertFormFactory
     - App\Components\UserProfileForm\IUserProfileFormFactory
     - App\Components\UserPhotoForm\IUserPhotoFormFactory
     - App\Components\SignForm\ISignFormFactory

@@ -60,11 +60,11 @@
 
     <h2 class="page-header">Users</h2>
     <table n:if="!empty($userList)">
-        <tr n:foreach="$userList as $user">
-            <td>{include '../makro/photo.latte', photoWidth => 75, photo => $user->profile_photo}<td>
-            <td>{include '../makro/username.latte', user => $user}</td>
+        <tr n:foreach="$userList as $usr">
+            <td>{include '../makro/photo.latte', photoWidth => 75, photo => $usr->profile_photo}<td>
+            <td>{include '../makro/username.latte', user => $usr}</td>
             <td>
-                <a n:href="Friends:friendshipRequest $user->id" onclick="return confirm('Are you sure you want to add this friend?');">
+                <a n:href="Friends:friendshipRequest $usr->id" onclick="return confirm('Are you sure you want to add this friend?');">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true" title="add new friend"></span>
                 </a>
             </td>

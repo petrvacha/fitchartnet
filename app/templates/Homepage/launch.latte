@@ -1,17 +1,13 @@
 {block content}
-    <header id="header">
-        <h1 n:block=title>Fitchart</h1>
-        <p>Challenge yourself! Challenge your friends! <br />
-        Simple and clear workout progress, tons of awesome graphs and buddy motivation.</p>
-        <p>Get notified at launch!</p>
-    </header>
+    <video id="bgvid" playsinline autoplay muted loop>
+        <source src="{$basePath}/launcher/videos/{$randomNumber}.mp4" type="video/mp4">
+    </video>
 
-
-    {control launchAlertForm}
-
-    <footer id="footer">
-        <ul class="copyright">
-            <li>&copy; Fitchart 2015.</li>
-        </ul>
-    </footer>
+    <div class="pattern"></div>
+    <div id="big-background-container">
+        <h1 class="big-background-title">Fitchart</h1>
+        <div class="divider"></div>
+        <h1 n:block="title" id="colorize">Challenge yourself! Challenge your friends!</h1>
+        <a n:href="Homepage:default" class="big-background-btn">Action!</a>
+    </div>
 {/block}

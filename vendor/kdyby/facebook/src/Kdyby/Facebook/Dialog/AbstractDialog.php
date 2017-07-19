@@ -30,7 +30,7 @@ abstract class AbstractDialog extends PresenterComponent implements Facebook\Dia
 	/**
 	 * @var array of function(AbstractDialog $dialog)
 	 */
-	public $onResponse = array();
+	public $onResponse = [];
 
 	/**
 	 * @var Facebook\Facebook
@@ -110,7 +110,7 @@ abstract class AbstractDialog extends PresenterComponent implements Facebook\Dia
 			$this->presenter->redirectUrl($this->config->canvasBaseUrl);
 		}
 
-		$this->presenter->redirect('this', array('state' => NULL, 'code' => NULL));
+		$this->presenter->redirect('this', ['state' => NULL, 'code' => NULL]);
 	}
 
 
@@ -120,11 +120,11 @@ abstract class AbstractDialog extends PresenterComponent implements Facebook\Dia
 	 */
 	public function getQueryParams()
 	{
-		$data = array(
+		$data = [
 			'client_id' => $this->facebook->config->appId,
 			'redirect_uri' => (string)$this->currentUrl,
 			'show_error' => $this->showError
-		);
+		];
 
 		if ($this->display !== NULL) {
 			$data['display'] = $this->display;

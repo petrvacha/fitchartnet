@@ -6,7 +6,7 @@ $configurator = new Nette\Configurator;
 
 $configurator->setDebugMode($configurator->detectDebugMode());
 $configurator->enableDebugger(__DIR__ . '/../log');
-
+error_reporting(~E_USER_DEPRECATED);
 $configurator->setTempDirectory(__DIR__ . '/../temp');
 
 $configurator->createRobotLoader()

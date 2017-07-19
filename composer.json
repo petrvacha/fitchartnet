@@ -9,7 +9,7 @@
 	],
 	"require": {
 		"php": ">= 5.3.7",
-		"nette/nette": "2.3.5",
+		"nette/nette": "2.4",
 		"kdyby/facebook": "~2.0"
 	},
 	"require-dev": {

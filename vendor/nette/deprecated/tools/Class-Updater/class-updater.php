@@ -5,14 +5,14 @@
  */
 
 if (@!include __DIR__ . '/vendor/autoload.php') {
-	echo('Install packages using `composer install`');
+	echo 'Install packages using `composer install`';
 	exit(1);
 }
 
 
 class ClassUpdater extends Nette\Object
 {
-	public $readOnly = FALSE;
+	public $readOnly = false;
 
 	/** @var array */
 	private $uses;
@@ -64,21 +64,20 @@ class ClassUpdater extends Nette\Object
 	/** @var array */
 	private $deprecated = [
 		// nette 2.1
-		'Nette\Diagnostics\Debugger::tryError' => FALSE,
-		'Nette\Diagnostics\Debugger::catchError' => FALSE,
-		'Nette\Diagnostics\Debugger::toStringException' => FALSE,
-		'Nette\Diagnostics\Helpers::clickableDump' => FALSE,
-		'Nette\Diagnostics\Helpers::htmlDump' => FALSE,
-		'Nette\Loaders\AutoLoader' => FALSE,
-		'Nette\Framework::$iAmUsingBadHost' => FALSE,
+		'Nette\Diagnostics\Debugger::tryError' => false,
+		'Nette\Diagnostics\Debugger::catchError' => false,
+		'Nette\Diagnostics\Debugger::toStringException' => false,
+		'Nette\Diagnostics\Helpers::clickableDump' => false,
+		'Nette\Diagnostics\Helpers::htmlDump' => false,
+		'Nette\Loaders\AutoLoader' => false,
+		'Nette\Framework::$iAmUsingBadHost' => false,
 
 		// nette 2.2
-		'Nette\Templating' => FALSE,
-		'Nette\Utils\LimitedScope' => FALSE,
-		'Nette\Caching\Storages\PhpFileStorage' => FALSE,
-		'Nette\Utils\MimeTypeDetector' => FALSE,
+		'Nette\Templating' => false,
+		'Nette\Utils\LimitedScope' => false,
+		'Nette\Caching\Storages\PhpFileStorage' => false,
+		'Nette\Utils\MimeTypeDetector' => false,
 	];
-
 
 
 	public function run($folder)
@@ -97,8 +96,7 @@ class ClassUpdater extends Nette\Object
 
 		$counter = 0;
 		foreach (Nette\Utils\Finder::findFiles('*.php')->from($folder)
-			->exclude(['.*', '*.tmp', 'tmp', 'temp', 'log']) as $file)
-		{
+			->exclude(['.*', '*.tmp', 'tmp', 'temp', 'log']) as $file) {
 			echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
 
 			$this->fileName = ltrim(str_replace($folder, '', $file), '/\\');
@@ -117,21 +115,19 @@ class ClassUpdater extends Nette\Object
 	}
 
 
-
 	public function report($level, $message = '')
 	{
 		echo "[$level] $this->fileName   $message\n";
 	}
 
 
-
 	public function processFile($input)
 	{
-		$this->namespace = $classLevel = $level = NULL;
+		$this->namespace = $classLevel = $level = null;
 		$this->uses = $this->newUses = $this->found = [];
 		$tokens = new PhpTokens($input);
 
-		while (($token = $tokens->nextValue()) !== NULL) {
+		while (($token = $tokens->nextValue()) !== null) {
 			if ($tokens->isCurrent(T_NAMESPACE)) {
 				$this->namespace = (string) $tokens->joinAll(T_STRING, T_NS_SEPARATOR);
 				$this->uses = $this->newUses = [];
@@ -145,7 +141,7 @@ class ClassUpdater extends Nette\Object
 
 					$pos = $tokens->position + 1;
 					$class = ltrim($tokens->joinAll(T_STRING, T_NS_SEPARATOR), '\\');
-					$tokens->replace($newClass = $this->rename($class, FALSE), $pos);
+					$tokens->replace($newClass = $this->rename($class, false), $pos);
 
 					if ($tokens->nextToken(T_AS)) {
 						$as = $newAs = $tokens->nextValue(T_STRING);
@@ -159,7 +155,6 @@ class ClassUpdater extends Nette\Object
 						$tokens->replace("$class as $newAs", $pos);
 					}
 					$this->newUses[strtolower($newAs)] = [$newClass, $newAs];
-
 				} while ($tokens->nextToken(','));
 
 			} elseif ($tokens->isCurrent(T_INSTANCEOF, T_EXTENDS, T_IMPLEMENTS, T_NEW)) {
@@ -187,8 +182,8 @@ class ClassUpdater extends Nette\Object
 				$tokens->replace(preg_replace_callback('#(@(?:var(?:\s+array of)?|returns?|param|throws|link|property[\w-]*)\s+)([\w\\\\|]+)#', function ($m) {
 					$parts = [];
 					foreach (explode('|', $m[2]) as $part) {
-						$newClass = $this->rename($part, TRUE, $renamed);
-						$parts[] = ($renamed || strpos($newClass, '\\') === FALSE) ? $newClass : $part;
+						$newClass = $this->rename($part, true, $renamed);
+						$parts[] = ($renamed || strpos($newClass, '\\') === false) ? $newClass : $part;
 					}
 					return $m[1] . implode('|', $parts);
 				}, $token));
@@ -196,7 +191,7 @@ class ClassUpdater extends Nette\Object
 			} elseif ($tokens->isCurrent(T_CONSTANT_ENCAPSED_STRING)) {
 				if (preg_match('#(^.\\\\?)(Nette(?:\\\\{1,2}[A-Z]\w+)*)(:.*|.\z)#', $token, $m)) { // 'Nette\Object'
 					$class = str_replace('\\\\', '\\', $m[2], $double);
-					$class = $this->rename($class, FALSE);
+					$class = $this->rename($class, false);
 					$tokens->replace($m[1] . str_replace('\\', $double ? '\\\\' : '\\', $class) . $m[3]);
 				}
 
@@ -217,7 +212,7 @@ class ClassUpdater extends Nette\Object
 
 			} elseif ($tokens->isCurrent('}')) {
 				if ($level === $classLevel) {
-					$classLevel = NULL;
+					$classLevel = null;
 				}
 				$level--;
 			}
@@ -227,11 +222,10 @@ class ClassUpdater extends Nette\Object
 	}
 
 
-
 	/**
 	 * @return string
 	 */
-	function rename($name, $useAliases = TRUE, & $renamed = FALSE)
+	public function rename($name, $useAliases = true, &$renamed = false)
 	{
 		@list($class, $member) = preg_split('#(?=::)#', $name);
 
@@ -251,7 +245,7 @@ class ClassUpdater extends Nette\Object
 
 		} elseif (isset($this->replaces[strtolower($class . $member)])) {
 			@list($class, $member) = preg_split('#(?=::)#', $this->replaces[strtolower($class . $member)]);
-			$renamed = TRUE;
+			$renamed = true;
 
 		} else {
 			$parts = explode('\\', $class);
@@ -260,9 +254,9 @@ class ClassUpdater extends Nette\Object
 				$begin = strtolower(implode('\\', $parts));
 				if (isset($this->replaces[$begin])) {
 					$newClass = $this->replaces[$begin] . $tail;
-					$this->found["$class -> $newClass"] = TRUE;
+					$this->found["$class -> $newClass"] = true;
 					$class = $newClass;
-					$renamed = TRUE;
+					$renamed = true;
 					break;
 				}
 				$tail = '\\' . array_pop($parts) . $tail;
@@ -277,13 +271,12 @@ class ClassUpdater extends Nette\Object
 	}
 
 
-
 	/**
 	 * Apply use statements.
 	 * @param  string
 	 * @return string
 	 */
-	function applyUse($class)
+	public function applyUse($class)
 	{
 		$best = strncasecmp($class, "$this->namespace\\", strlen("$this->namespace\\")) === 0
 			? substr($class, strlen($this->namespace) + 1)
@@ -303,13 +296,12 @@ class ClassUpdater extends Nette\Object
 	}
 
 
-
 	/**
 	 * Resolve use statements.
 	 * @param  string
-	 * @return string|NULL
+	 * @return string|null
 	 */
-	function resolveClass($class)
+	public function resolveClass($class)
 	{
 		$segment = strtolower(substr($class, 0, strpos("$class\\", '\\')));
 		if ($segment === '') {
@@ -321,7 +313,6 @@ class ClassUpdater extends Nette\Object
 		}
 		return ltrim($full, '\\');
 	}
-
 }
 
 
@@ -331,8 +322,7 @@ class ClassUpdater extends Nette\Object
  */
 class PhpTokens extends Nette\Utils\TokenIterator
 {
-
-	function __construct($code)
+	public function __construct($code)
 	{
 		$this->ignored = [T_COMMENT, T_DOC_COMMENT, T_WHITESPACE];
 		foreach (token_get_all($code) as $token) {
@@ -341,20 +331,18 @@ class PhpTokens extends Nette\Utils\TokenIterator
 	}
 
 
-
-	function replace($s, $start = NULL)
+	public function replace($s, $start = null)
 	{
-		for ($i = ($start === NULL ? $this->position : $start); $i < $this->position; $i++) {
+		for ($i = ($start === null ? $this->position : $start); $i < $this->position; $i++) {
 			$this->tokens[$i] = [''];
 		}
 		$this->tokens[$this->position] = [$s];
 	}
-
 }
 
 
 
-$cmd = new Nette\CommandLine\Parser(<<<XX
+$cmd = new Nette\CommandLine\Parser(<<<'XX'
 Usage:
     php class-updater.php [options] [<path>]
 
@@ -364,7 +352,7 @@ Options:
 
 XX
 , [
-	'path' => [Nette\CommandLine\Parser::REALPATH => TRUE, Nette\CommandLine\Parser::VALUE => getcwd()],
+	'path' => [Nette\CommandLine\Parser::REALPATH => true, Nette\CommandLine\Parser::VALUE => getcwd()],
 ]);
 
 $options = $cmd->parse();

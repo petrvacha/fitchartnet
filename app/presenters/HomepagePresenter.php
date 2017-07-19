@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use App\Model\Challenge;
 use Nette;
 
 /**
@@ -15,15 +16,15 @@ class HomepagePresenter extends BasePresenter
     /** @var \App\Components\RegistrationForm\IRegistrationFormFactory @inject */
     public $registrationFormFactory;
 
-    /** @var \App\Components\LaunchAlertForm\ILaunchAlertFormFactory @inject */
-    public $launchAlertFormFactory;
-
 
     /** @var \Kdyby\Facebook\Facebook */
     private $facebook;
 
     /** @var \App\Model\User */
     private $userModel;
+
+    /** @var Challenge */
+    private $challengeModel;
 
     /**
      * You can use whatever way to inject the instance from DI Container,
@@ -32,11 +33,12 @@ class HomepagePresenter extends BasePresenter
      * Class UsersModel is here only to show you how the process should work,
      * you have to implement it yourself.
      */
-    public function __construct(\Kdyby\Facebook\Facebook $facebook, \App\Model\User $userModel)
+    public function __construct(\Kdyby\Facebook\Facebook $facebook, \App\Model\User $userModel, Challenge $challengeModel)
     {
         parent::__construct();
         $this->facebook = $facebook;
         $this->userModel = $userModel;
+        $this->challengeModel = $challengeModel;
     }
 
 
@@ -115,14 +117,29 @@ class HomepagePresenter extends BasePresenter
         return $dialog;
     }
 
+    public function renderLast()
+    {
+        if ($this->getUser()->isLoggedIn()) {
+            $challengeId = $this->challengeModel->getLastUserChallenge();
+            if ($challengeId) {
+                $this->redirect('Challenge:detail', $challengeId->id);
+            }
+        }
+        $this->redirect('Homepage:default');
+    }
+
     public function renderDefault()
     {
-        $this->template->title = 'Gamma version';
+        $this->template->title = 'login';
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Challenge:default');
+        }
     }
 
     public function renderLaunch()
     {
         $this->template->title = 'Fitchart.net';
+        $this->template->randomNumber = rand(1,3);
         $this->setLayout('launch');
     }
 

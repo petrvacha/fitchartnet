@@ -52,17 +52,21 @@ class UserProfileForm extends \Fitchart\Application\Control
     {
         $form = new Form;
         $form->addText('firstname', 'Firstname')
+            ->setRequired()
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50);
 
         $form->addText('surname', 'Surname')
+            ->setRequired()
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50);
 
         $form->addText('email', 'Email')
+            ->setRequired()
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
             ->addRule(Form::EMAIL, '%label is not a valid email')
             ->addRule(callback($this, 'isEmailAvailable'), 'This email is already taken!');
 
         $form->addText('username', 'Username')
+            ->setRequired()
             ->addRule(Form::FILLED, '%label must be filled')
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
             ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!');
@@ -73,16 +77,19 @@ class UserProfileForm extends \Fitchart\Application\Control
         $form->addSelect('privacy_id', 'Who can see my stats', $this->privacyModel->getList());
 
         $form->addTextArea('bio', 'Something about you')
+            ->setRequired()
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 1000);
 
         
         $form->addPassword('old_password', 'Old password');
         
         $form->addPassword('password', 'New password')
+            ->setRequired()
             ->addCondition(Form::FILLED)
                 ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6);
 
         $form->addPassword('confirm_password', 'Confirm new password')
+            ->setRequired()
             ->addConditionOn($form['password'], Form::FILLED)
                 ->addRule(Form::EQUAL, "Passwords don't match", $form['password']);
 

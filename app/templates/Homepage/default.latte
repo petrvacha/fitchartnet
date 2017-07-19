@@ -1,8 +1,5 @@
 {block content}
 <div class="container">
-    <div id="banner">
-        <h1 n:block=title>Fitchart</h1>
-    </div>
     <div n:foreach="$flashes as $flash" class="alert, alert-{$flash->type}">{$flash->message}</div>
     {control signInForm}
     {control registrationForm}

@@ -34,6 +34,7 @@ class UserPhotoForm extends \Fitchart\Application\Control
     {
         $form = new Form;
         $form->addUpload('photo', 'Photo:')
+            ->setRequired()
             ->addRule(Form::IMAGE, 'File has to be JPEG, PNG or GIF.');
 
         $form->addSubmit('upload', 'Upload');

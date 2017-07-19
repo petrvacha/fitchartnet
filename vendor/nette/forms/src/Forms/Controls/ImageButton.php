@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Nette Framework (http://nette.org)
- * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
+ * This file is part of the Nette Framework (https://nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
 namespace Nette\Forms\Controls;
@@ -18,7 +18,7 @@ class ImageButton extends SubmitButton
 	 * @param  string  URI of the image
 	 * @param  string  alternate text for the image
 	 */
-	public function __construct($src = NULL, $alt = NULL)
+	public function __construct($src = null, $alt = null)
 	{
 		parent::__construct();
 		$this->control->type = 'image';
@@ -35,8 +35,8 @@ class ImageButton extends SubmitButton
 	{
 		parent::loadHttpData();
 		$this->value = $this->value
-			? array((int) array_shift($this->value), (int) array_shift($this->value))
-			: NULL;
+			? [(int) array_shift($this->value), (int) array_shift($this->value)]
+			: null;
 	}
 
 
@@ -48,5 +48,4 @@ class ImageButton extends SubmitButton
 	{
 		return parent::getHtmlName() . '[]';
 	}
-
 }

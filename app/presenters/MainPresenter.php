@@ -102,7 +102,7 @@ class MainPresenter extends LoginBasePresenter
     public function actionLogout()
     {
         $this->user->logout();
-        $this->redirect('Homepage:default');
+        $this->redirect('Homepage:launch');
     }
 
     /**
