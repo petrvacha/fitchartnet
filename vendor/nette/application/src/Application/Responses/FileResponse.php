@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Nette Framework (http://nette.org)
- * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
+ * This file is part of the Nette Framework (https://nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
 namespace Nette\Application\Responses;
@@ -12,13 +12,14 @@ use Nette;
 
 /**
  * File download response.
- *
- * @property-read string $file
- * @property-read string $name
- * @property-read string $contentType
  */
-class FileResponse extends Nette\Object implements Nette\Application\IResponse
+class FileResponse implements Nette\Application\IResponse
 {
+	use Nette\SmartObject;
+
+	/** @var bool */
+	public $resuming = true;
+
 	/** @var string */
 	private $file;
 
@@ -29,9 +30,6 @@ class FileResponse extends Nette\Object implements Nette\Application\IResponse
 	private $name;
 
 	/** @var bool */
-	public $resuming = TRUE;
-
-	/** @var bool */
 	private $forceDownload;
 
 
@@ -40,7 +38,7 @@ class FileResponse extends Nette\Object implements Nette\Application\IResponse
 	 * @param  string  imposed file name
 	 * @param  string  MIME content type
 	 */
-	public function __construct($file, $name = NULL, $contentType = NULL, $forceDownload = TRUE)
+	public function __construct($file, $name = null, $contentType = null, $forceDownload = true)
 	{
 		if (!is_file($file)) {
 			throw new Nette\Application\BadRequestException("File '$file' doesn't exist.");
@@ -131,5 +129,4 @@ class FileResponse extends Nette\Object implements Nette\Application\IResponse
 		}
 		fclose($handle);
 	}
-
 }

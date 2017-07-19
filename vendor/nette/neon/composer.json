@@ -6,22 +6,29 @@
 	"authors": [
 		{
 			"name": "David Grudl",
-			"homepage": "http://davidgrudl.com"
+			"homepage": "https://davidgrudl.com"
 		},
 		{
 			"name": "Nette Community",
-			"homepage": "http://nette.org/contributors"
+			"homepage": "https://nette.org/contributors"
 		}
 	],
 	"require": {
-		"php": ">=5.3.1",
-		"ext-iconv": "*"
+		"php": ">=5.6.0",
+		"ext-iconv": "*",
+		"ext-json": "*"
 	},
 	"require-dev": {
-		"nette/tester": "~1.4"
+		"nette/tester": "~2.0",
+		"tracy/tracy": "^2.3"
 	},
 	"autoload": {
 		"classmap": ["src/"]
 	},
-	"minimum-stability": "dev"
+	"minimum-stability": "dev",
+	"extra": {
+		"branch-alias": {
+			"dev-master": "2.4-dev"
+		}
+	}
 }

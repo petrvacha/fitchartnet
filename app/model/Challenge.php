@@ -190,6 +190,25 @@ class Challenge extends BaseModel
     /**
      * @return array
      */
+    public function getLastUserChallenge()
+    {
+        return $this->context->query("
+            SELECT
+                C.id
+            FROM
+                challenge C
+            JOIN challenge_user CU ON
+                CU.challenge_id = C.id
+            WHERE
+                CU.user_id = ?
+            ORDER BY
+                C.end_at DESC", $this->user->getIdentity()->id
+        )->fetch();
+    }
+
+    /**
+     * @return array
+     */
     public function getUserChallenges()
     {
         return $this->context->query("

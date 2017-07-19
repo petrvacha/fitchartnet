@@ -51,10 +51,12 @@ class ChallengeForm extends \Fitchart\Application\Control
         $form->addHidden('id');
 
         $form->addText('name', 'Name')
+            ->setRequired()
             ->addRule(Form::FILLED, '%label must be filled.')
             ->addRule(Form::MAX_LENGTH, '%label is too long', 50);
 
         $form->addTextArea('description', 'Description')
+            ->setRequired(FALSE)
             ->addRule(Form::MAX_LENGTH, '%label is too long', 1000);
 
         $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
@@ -69,10 +71,12 @@ class ChallengeForm extends \Fitchart\Application\Control
 
         $form->addText('final_value', 'Final value')
             ->setAttribute('placeholder', '0')
+            ->setRequired()
             ->addRule(Form::FILLED, '%label must be filled.')
             ->addRule(Form::INTEGER, '%label must be an integer.');
 
         $form->addTextArea('users', 'Invite your friends')
+            ->setRequired(FALSE)
             ->addRule(Form::MAX_LENGTH, '%label is too long', 1000);
 
         $form->onSuccess[] = array($this, 'formSent');

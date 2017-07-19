@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Nette Framework (http://nette.org)
- * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
+ * This file is part of the Nette Framework (https://nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
 namespace Nette\Application;
@@ -20,7 +20,7 @@ interface IPresenterFactory
 	 * @return string  class name
 	 * @throws InvalidPresenterException
 	 */
-	function getPresenterClass(& $name);
+	function getPresenterClass(&$name);
 
 	/**
 	 * Creates new presenter instance.
@@ -28,5 +28,4 @@ interface IPresenterFactory
 	 * @return IPresenter
 	 */
 	function createPresenter($name);
-
 }
