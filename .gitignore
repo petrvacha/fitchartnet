@@ -6,9 +6,11 @@
 /htdocs/js/script.min.js
 /node_modules/
 /app/config/config.local.neon
-
+/vendor/
 /private/images/user/avatar/*
 /private/images/user-origin/avatar/*
 !/private/images/user/avatar/no-photo-available.png
 !/private/images/user/avatar/.gitkeep
 !/private/images/user-origin/avatar/.gitkeep
+ftp-deploy.ini
+ftp-deploy.log
