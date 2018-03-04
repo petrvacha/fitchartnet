@@ -123,6 +123,8 @@ class HomepagePresenter extends BasePresenter
             $challengeId = $this->challengeModel->getLastUserChallenge();
             if ($challengeId) {
                 $this->redirect('Challenge:detail', $challengeId->id);
+            } else {
+                $this->redirect('Challenge:default');
             }
         }
         $this->redirect('Homepage:default');
@@ -138,6 +140,9 @@ class HomepagePresenter extends BasePresenter
 
     public function renderLaunch()
     {
+        if ($this->getUser()->isLoggedIn()) {
+                $this->redirect('Challenge:default');
+        }
         $this->template->title = 'Fitchart.net';
         $this->template->randomNumber = rand(1,3);
         $this->setLayout('launch');
