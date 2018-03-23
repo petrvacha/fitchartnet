@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Components;
+
+use Fitchart\Application\InvalidArgumentException;
+use Nette;
+use Nette\Utils\ArrayHash;
+use Nette\Application\UI\Form;
+
+
+class ResetPasswordForm extends \Fitchart\Application\Control
+{
+    /** @var MailerManagerFactory */
+    public $mailerManagerFactory;
+
+
+    /** @var \App\Model\User */
+    protected $userModel;
+
+
+    /**
+     * @param \App\Model\User $userModel
+     * @param MailerManagerFactory $mailerManagerFactory
+     */
+    public function __construct(\App\Model\User $userModel, MailerManagerFactory $mailerManagerFactory)
+    {
+        $this->userModel = $userModel;
+        $this->mailerManagerFactory = $mailerManagerFactory;
+    }
+
+
+    /**
+     * @return Form
+     */
+    public function createComponentResetPasswordForm()
+    {
+        $form = new Form;
+
+        $form->addText('email', 'Username or email')
+            ->setRequired('Please enter your email.')
+            ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email.');
+
+        $form->addSubmit('submit', 'Reset');
+
+        $form->onSuccess[] = array($this, 'formSent');
+
+        $this->addBootstrapStyling($form);
+        return $form;
+    }
+
+    public function render()
+    {
+        $this->template->setFile($this->getTemplatePath());
+        $this->template->render();
+    }
+
+    /**
+     * @param Form $form
+     * @param ArrayHash $values
+     */
+    public function formSent(Form $form, ArrayHash $values)
+    {
+        try {
+            $userData = $this->userModel->prepareResetToken($values);
+            $mailerManager = $this->mailerManagerFactory->init();
+            $mailerManager->action(MailerManager::RESET_PASSWORD, $userData);
+
+        } catch (Nette\Database\UniqueConstraintViolationException $e) {
+            $form->addError($e->getMessage());
+        } catch (InvalidArgumentException $e) {
+            $form->addError($e->getMessage());
+        }
+    }
+
+}

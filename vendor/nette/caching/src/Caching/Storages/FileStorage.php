@@ -30,8 +30,8 @@ class FileStorage implements Nette\Caching\IStorage
 	 */
 
 	/** @internal cache file structure */
-	const META_HEADER_LEN = 28, // 22b signature + 6b meta-struct size + serialized meta-struct + data
-	// meta structure: array of
+	const
+		META_HEADER_LEN = 28, // 22b signature + 6b meta-struct size + serialized meta-struct + data
 		META_TIME = 'time', // timestamp
 		META_SERIALIZED = 'serialized', // is content serialized?
 		META_EXPIRE = 'expire', // expiration timestamp
@@ -42,7 +42,6 @@ class FileStorage implements Nette\Caching\IStorage
 	/** additional cache structure */
 	const FILE = 'file',
 		HANDLE = 'handle';
-
 
 	/** @var float  probability that the clean() routine is started */
 	public static $gcProbability = 0.001;
@@ -79,11 +78,6 @@ class FileStorage implements Nette\Caching\IStorage
 	}
 
 
-	/**
-	 * Read from cache.
-	 * @param  string
-	 * @return mixed
-	 */
 	public function read($key)
 	{
 		$meta = $this->readMetaAndLock($this->getCacheFile($key), LOCK_SH);
@@ -98,10 +92,9 @@ class FileStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Verifies dependencies.
-	 * @param  array
 	 * @return bool
 	 */
-	private function verify($meta)
+	private function verify(array $meta)
 	{
 		do {
 			if (!empty($meta[self::META_DELTA])) {
@@ -136,11 +129,6 @@ class FileStorage implements Nette\Caching\IStorage
 	}
 
 
-	/**
-	 * Prevents item reading and writing. Lock is released by write() or remove().
-	 * @param  string
-	 * @return void
-	 */
 	public function lock($key)
 	{
 		$cacheFile = $this->getCacheFile($key);
@@ -155,12 +143,6 @@ class FileStorage implements Nette\Caching\IStorage
 	}
 
 
-	/**
-	 * Writes item into the cache.
-	 * @param  string
-	 * @param  mixed
-	 * @return void
-	 */
 	public function write($key, $data, array $dp)
 	{
 		$meta = [
@@ -240,11 +222,6 @@ class FileStorage implements Nette\Caching\IStorage
 	}
 
 
-	/**
-	 * Removes item from the cache.
-	 * @param  string
-	 * @return void
-	 */
 	public function remove($key)
 	{
 		unset($this->locks[$key]);
@@ -252,15 +229,11 @@ class FileStorage implements Nette\Caching\IStorage
 	}
 
 
-	/**
-	 * Removes items from the cache by conditions & garbage collector.
-	 * @param  array  conditions
-	 * @return void
-	 */
 	public function clean(array $conditions)
 	{
 		$all = !empty($conditions[Cache::ALL]);
 		$collector = empty($conditions);
+		$namespaces = isset($conditions[Cache::NAMESPACES]) ? $conditions[Cache::NAMESPACES] : null;
 
 		// cleaning using file iterator
 		if ($all || $collector) {
@@ -296,6 +269,17 @@ class FileStorage implements Nette\Caching\IStorage
 				$this->journal->clean($conditions);
 			}
 			return;
+
+		} elseif ($namespaces) {
+			foreach ($namespaces as $namespace) {
+				$dir = $this->dir . '/_' . urlencode($namespace);
+				if (is_dir($dir)) {
+					foreach (Nette\Utils\Finder::findFiles('_*')->in($dir) as $entry) {
+						$this->delete((string) $entry);
+					}
+					@rmdir($dir); // may already contain new files
+				}
+			}
 		}
 
 		// cleaning using journal
@@ -309,8 +293,8 @@ class FileStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Reads cache data from disk.
-	 * @param  string  file path
-	 * @param  int     lock mode
+	 * @param  string  $file
+	 * @param  int  $lock
 	 * @return array|null
 	 */
 	protected function readMetaAndLock($file, $lock)
@@ -340,7 +324,7 @@ class FileStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Reads cache data from disk and closes cache file handle.
-	 * @param  array
+	 * @param  array  $meta
 	 * @return mixed
 	 */
 	protected function readData($meta)
@@ -359,7 +343,7 @@ class FileStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Returns file name.
-	 * @param  string
+	 * @param  string  $key
 	 * @return string
 	 */
 	protected function getCacheFile($key)
@@ -374,8 +358,8 @@ class FileStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Deletes and closes file.
-	 * @param  string
-	 * @param  resource
+	 * @param  string  $file
+	 * @param  resource  $handle
 	 * @return void
 	 */
 	private static function delete($file, $handle = null)

@@ -2,6 +2,8 @@
 
 namespace App\Model;
 
+use Fitchart\Application\InvalidArgumentException;
+use Fitchart\Application\SecurityException;
 use Nette\Security\Passwords;
 use Fitchart\Application\Utilities;
 use \Nette\Utils\ArrayHash;
@@ -239,66 +241,6 @@ class User extends BaseModel
     }
 
     /**
-     * @param int $id
-     * @return ActiveRow
-     */
-    public function findByFacebookId($id)
-    {
-        return $this->findBy(['facebook_id' => $id])->fetch();
-    }
-
-    /**
-     * @param ArrayHash $data
-     * @return ArrayHash
-     */
-    public function registerFromFacebook(ArrayHash $data)
-    {
-        $roleModel = $this->roleModel;
-        $privacyModel = $this->privacyModel;
-
-        $existingUser = $this->findBy(['email' => $data['email']]);
-        $existingUserData = $existingUser->fetch();
-        if ($existingUserData) {
-            $update = ['facebook_id' => $data['id'], 'updated_at' => $this->getDateTime()];
-            if (!empty($existingUserData['profile_photo'])) {
-                $fileName = $existingUserData['id'] . '.jpg';
-                Utilities::storeFile($data['picture']['data']['url'], USER_AVATAR_DIR . '/' . $fileName);
-                $update['profile_photo'] = $fileName;
-            }
-
-            $existingUser->update($update);
-            return $existingUserData;
-
-        } else {
-            $insert = [
-                'facebook_id' => $data['id'],
-                'email' => $data['email'],
-                'firstname' => $data['first_name'],
-                'surname' => $data['last_name'],
-                'username' => $this->findFreeUsername($data['first_name'], $data['last_name']),
-                'api_token' => $this->getFreeApiToken($data['last_name']),
-                'privacy_id' => $privacyModel::FRIENDS_AND_GROUPS,
-                'role_id' => $roleModel::USER,
-                'state' => self::USER_STATE_NEW,
-                'active' => TRUE,
-                'created_at' => $this->getDateTime(),
-                'updated_at' => $this->getDateTime()
-            ];
-
-            $this->insert($insert);
-
-            $user = $this->findBy(['facebook_id' => $data['id']]);
-            $userData = $user->fetch();
-            $fileName = $userData['id'] . '.jpg';
-            Utilities::storeFile($data['picture']['data']['url'], USER_AVATAR_DIR . '/' . $fileName);
-            $update['profile_photo'] = $fileName;
-            $user->update($update);
-
-            return $this->findBy(['facebook_id' => $data['id']])->fetch();
-        }
-    }
-
-    /**
      * @param string $firstname
      * @param string $surname
      * @return string
@@ -320,16 +262,6 @@ class User extends BaseModel
         } else {
             return $firstname.$surname;
         }
-    }
-
-    /**
-     * @param int $id
-     * @param string $accessToken
-     */
-    public function updateFacebookAccessToken($id, $accessToken)
-    {
-        $user = $this->findByFacebookId($id);
-        $user->update(['facebook_access_token' => $accessToken]);
     }
 
     /**
@@ -458,5 +390,66 @@ class User extends BaseModel
             return $transformUsers;
         }
         return $users;
+    }
+
+    /**
+     * @param $values
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    public function prepareResetToken($values)
+    {
+        if (isset($values['email'])) {
+            $user = $this->getTable()
+                ->where('username  = ? OR email = ?', $values['email'], $values['email'])
+                ->select('*')
+                ->fetch();
+            if ($user) {
+                $data = [
+                    'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
+                ];
+                $this->findRow($user['id'])->update($data);
+                $data['email'] = $user['email'];
+                $data['username'] = $user['username'];
+                return $data;
+            }
+        }
+
+        if (strpos($values['email'], '@')) {
+            throw new InvalidArgumentException('Email was not found.');
+        } else {
+            throw new InvalidArgumentException('Username was not found.');
+        }
+    }
+
+    /**
+     * @param string $token
+     * @return bool
+     */
+    public function checkToken($token)
+    {
+        return $this->findOneBy(['token' => $token]);
+    }
+
+    /**
+     * @param $values
+     * @throws SecurityException
+     */
+    public function updateUserPassword($values)
+    {
+        $user = empty($values['token']) ? FALSE : $this->findOneBy(['token' => $values['token']]);
+
+        if ($user) {
+            if ($values['password'] === $values['confirm_password']) {
+                $user->update([
+                    'password' => Passwords::hash($values['password']),
+                    'token' => NULL
+                    ]);
+            } else {
+                throw new SecurityException('The passwords are not the same.');
+            }
+        } else {
+            throw new SecurityException('The token is invalid.');
+        }
     }
 }

@@ -14,7 +14,7 @@ body#tracy-debug { /* in popup window */
 	display: block;
 }
 
-body #tracy-debug {
+#tracy-debug:not(body) {
 	position: absolute;
 	bottom: 0;
 	right: 0;
@@ -50,6 +50,10 @@ body #tracy-debug {
 #tracy-debug b,
 #tracy-debug strong {
 	font-weight: bold;
+}
+
+#tracy-debug small {
+	font-size: smaller;
 }
 
 #tracy-debug i,
@@ -205,7 +209,6 @@ body #tracy-debug {
 	background: white;
 	color: #333;
 	text-align: left;
-	z-index: 20001;
 }
 
 body#tracy-debug .tracy-panel { /* in popup window */

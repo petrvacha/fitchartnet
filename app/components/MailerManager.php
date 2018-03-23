@@ -15,6 +15,9 @@ class MailerManager extends Nette\Object
     /** @const REGISTRATION_NEW_USER string */
     const REGISTRATION_NEW_USER = 'registration_new_user';
 
+    /** @const RESET_PASSWORD string */
+    const RESET_PASSWORD = 'reset_password';
+
 
     /** @var Nette\Application\UI\ITemplateFactory */
     private $templateFactory;
@@ -70,6 +73,11 @@ class MailerManager extends Nette\Object
                 $confirmationLink = $domainWithScheme . '/registration/confirm/' . $data['token'];
                 $data = array_merge($data, ['domain' => $domain, 'confirmationLink' => $confirmationLink]);
                 break;
+            case self::RESET_PASSWORD:
+                $subject = 'Fitchart - Reset password';
+                $resetLink = $domainWithScheme . '/new-password/' . $data['token'];
+                $data = array_merge($data, ['domain' => $domain, 'resetLink' => $resetLink]);
+                break;
 
             default:
                 throw new NotImplementedException('Error: Action ' . $actionName . ' is not implemented.');
@@ -95,12 +103,12 @@ class MailerManager extends Nette\Object
             reset($fromArray);
             $from = key($fromArray);
 
-            $message = "Odesílám email [{$time}]\n"
-                     . "From: {$from}"
-                     . "To: {$data['email']}"
-                     . "Subject: {$subject}"
-                     . "Body:\n{$template}"
-                     . "\n\n Konec -----------------------------------\n\n\n\n";
+            $message = "Odesílám email [{$time}]\n "
+                     . "From: {$from}\n "
+                     . "To: {$data['email']}\n "
+                     . "Subject: {$subject}\n "
+                     . "Body:\n {$template}\n\n "
+                     . "Konec -----------------------------------\n\n\n\n";
 
             \Tracy\Debugger::log($message);
         }

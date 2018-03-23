@@ -25,15 +25,6 @@ common:
             expiration: 14 days
             savePath: "%tempDir%/sessions"
 
-    facebook:
-        appId: "1593019784287489"
-        appSecret: "107bbf1e77ef8dac7e70e3c979d90b42"
-        permissions: [public_profile, email] # theese are the default read permissions, you might need to
-        graphVersion: v2.5
-
-    extensions:
-        facebook: Kdyby\Facebook\DI\FacebookExtension
-
 production < common:
     includes:
         - production/parameters.neon

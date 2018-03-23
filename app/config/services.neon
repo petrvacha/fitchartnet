@@ -31,5 +31,7 @@ services:
     - App\Components\UserPhotoForm\IUserPhotoFormFactory
     - App\Components\SignForm\ISignFormFactory
     - App\Components\RegistrationForm\IRegistrationFormFactory
+    - App\Components\ResetPasswordForm\IResetPasswordFormFactory
+    - App\Components\NewPasswordForm\INewPasswordFormFactory
     - App\Components\UserWeightForm\IUserWeightFormFactory
     - App\Components\ChallengeForm\IChallengeFormFactory
