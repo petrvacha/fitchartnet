@@ -8,7 +8,6 @@
 namespace Nette\Caching;
 
 use Nette;
-use Nette\Utils\Callback;
 
 
 /**
@@ -19,7 +18,8 @@ class Cache
 	use Nette\SmartObject;
 
 	/** dependency */
-	const PRIORITY = 'priority',
+	const
+		PRIORITY = 'priority',
 		EXPIRATION = 'expire',
 		EXPIRE = 'expire',
 		SLIDING = 'sliding',
@@ -28,6 +28,7 @@ class Cache
 		ITEMS = 'items',
 		CONSTS = 'consts',
 		CALLBACKS = 'callbacks',
+		NAMESPACES = 'namespaces',
 		ALL = 'all';
 
 	/** @internal */
@@ -69,7 +70,7 @@ class Cache
 
 	/**
 	 * Returns new nested cache object.
-	 * @param  string
+	 * @param  string  $namespace
 	 * @return static
 	 */
 	public function derive($namespace)
@@ -81,8 +82,8 @@ class Cache
 
 	/**
 	 * Reads the specified item from the cache or generate it.
-	 * @param  mixed
-	 * @param  callable
+	 * @param  mixed  $key
+	 * @param  callable  $fallback
 	 * @return mixed
 	 */
 	public function load($key, $fallback = null)
@@ -99,8 +100,7 @@ class Cache
 
 	/**
 	 * Reads multiple items from the cache.
-	 * @param  array
-	 * @param  callable
+	 * @param  callable  $fallback
 	 * @return array
 	 */
 	public function bulkLoad(array $keys, $fallback = null)
@@ -157,10 +157,9 @@ class Cache
 	 * - Cache::ITEMS => (array|string) cache items
 	 * - Cache::CONSTS => (array|string) cache items
 	 *
-	 * @param  mixed
-	 * @param  mixed
+	 * @param  mixed  $key
+	 * @param  mixed  $data
 	 * @return mixed  value itself
-	 * @throws Nette\InvalidArgumentException
 	 */
 	public function save($key, $data, array $dependencies = null)
 	{
@@ -208,6 +207,11 @@ class Cache
 			$dp[self::TAGS] = array_values((array) $dp[self::TAGS]);
 		}
 
+		// make list from NAMESPACES
+		if (isset($dp[self::NAMESPACES])) {
+			$dp[self::NAMESPACES] = array_values((array) $dp[self::NAMESPACES]);
+		}
+
 		// convert FILES into CALLBACKS
 		if (isset($dp[self::FILES])) {
 			foreach (array_unique((array) $dp[self::FILES]) as $item) {
@@ -238,7 +242,7 @@ class Cache
 
 	/**
 	 * Removes item from the cache.
-	 * @param  mixed
+	 * @param  mixed  $key
 	 * @return void
 	 */
 	public function remove($key)
@@ -267,7 +271,7 @@ class Cache
 
 	/**
 	 * Caches results of function/method calls.
-	 * @param  mixed
+	 * @param  callable  $function
 	 * @return mixed
 	 */
 	public function call($function)
@@ -277,14 +281,14 @@ class Cache
 			$key[0][0] = get_class($function[0]);
 		}
 		return $this->load($key, function () use ($function, $key) {
-			return Callback::invokeArgs($function, array_slice($key, 1));
+			return call_user_func_array($function, array_slice($key, 1));
 		});
 	}
 
 
 	/**
 	 * Caches results of function/method calls.
-	 * @param  mixed
+	 * @param  callable  $function
 	 * @return \Closure
 	 */
 	public function wrap($function, array $dependencies = null)
@@ -296,7 +300,7 @@ class Cache
 			}
 			$data = $this->load($key);
 			if ($data === null) {
-				$data = $this->save($key, Callback::invokeArgs($function, $key[1]), $dependencies);
+				$data = $this->save($key, call_user_func_array($function, $key[1]), $dependencies);
 			}
 			return $data;
 		};
@@ -305,7 +309,7 @@ class Cache
 
 	/**
 	 * Starts the output cache.
-	 * @param  mixed
+	 * @param  mixed  $key
 	 * @return OutputHelper|null
 	 */
 	public function start($key)
@@ -320,7 +324,7 @@ class Cache
 
 	/**
 	 * Generates internal cache key.
-	 * @param  mixed
+	 * @param  mixed  $key
 	 * @return string
 	 */
 	protected function generateKey($key)
@@ -334,10 +338,9 @@ class Cache
 
 	/**
 	 * Checks CALLBACKS dependencies.
-	 * @param  array
 	 * @return bool
 	 */
-	public static function checkCallbacks($callbacks)
+	public static function checkCallbacks(array $callbacks)
 	{
 		foreach ($callbacks as $callback) {
 			if (!call_user_func_array(array_shift($callback), $callback)) {
@@ -350,8 +353,8 @@ class Cache
 
 	/**
 	 * Checks CONSTS dependency.
-	 * @param  string
-	 * @param  mixed
+	 * @param  string  $const
+	 * @param  mixed  $value
 	 * @return bool
 	 */
 	private static function checkConst($const, $value)
@@ -362,8 +365,8 @@ class Cache
 
 	/**
 	 * Checks FILES dependency.
-	 * @param  string
-	 * @param  int|null
+	 * @param  string  $file
+	 * @param  int|null  $time
 	 * @return bool
 	 */
 	private static function checkFile($file, $time)

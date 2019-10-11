@@ -44,8 +44,6 @@ class SignForm extends \Fitchart\Application\Control
 
         $form->addSubmit('submit', 'Login');
 
-        $form->addSubmit('fblogin', 'Login with Facebook');
-
         $form->onSuccess[] = array($this, 'formSent');
         
         $this->addBootstrapStyling($form);

@@ -8,6 +8,7 @@
 namespace Tracy\Bridges\Nette;
 
 use Nette;
+use Tracy;
 
 
 /**
@@ -25,6 +26,7 @@ class TracyExtension extends Nette\DI\CompilerExtension
 		'strictMode' => null,
 		'showBar' => null,
 		'maxLen' => null,
+		'maxLength' => null,
 		'maxDepth' => null,
 		'showLocation' => null,
 		'scream' => null,
@@ -115,6 +117,10 @@ class TracyExtension extends Nette\DI\CompilerExtension
 				'$this->getService(?)->addPanel(?);',
 				$class::filterArguments([$this->prefix('blueScreen'), $item])
 			));
+		}
+
+		if (($dir = Tracy\Debugger::$logDirectory) && !is_writable($dir)) {
+			throw new Nette\InvalidStateException("Make directory '$dir' writable.");
 		}
 	}
 }

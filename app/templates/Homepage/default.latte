@@ -3,6 +3,7 @@
     <div n:foreach="$flashes as $flash" class="alert, alert-{$flash->type}">{$flash->message}</div>
     {control signInForm}
     {control registrationForm}
+    {control resetPasswordForm}
 </div>
 <script type="text/javascript">
     $(document).ready(function() {

@@ -29,16 +29,20 @@ class CacheExtension extends Nette\DI\CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('journal'))
-			->setClass(Nette\Caching\Storages\IJournal::class)
-			->setFactory(Nette\Caching\Storages\SQLiteJournal::class, [$this->tempDir . '/cache/journal.s3db']);
+		if (extension_loaded('pdo_sqlite')) {
+			$builder->addDefinition($this->prefix('journal'))
+				->setClass(Nette\Caching\Storages\IJournal::class)
+				->setFactory(Nette\Caching\Storages\SQLiteJournal::class, [$this->tempDir . '/cache/journal.s3db']);
+		}
 
 		$builder->addDefinition($this->prefix('storage'))
 			->setClass(Nette\Caching\IStorage::class)
 			->setFactory(Nette\Caching\Storages\FileStorage::class, [$this->tempDir . '/cache']);
 
 		if ($this->name === 'cache') {
-			$builder->addAlias('nette.cacheJournal', $this->prefix('journal'));
+			if (extension_loaded('pdo_sqlite')) {
+				$builder->addAlias('nette.cacheJournal', $this->prefix('journal'));
+			}
 			$builder->addAlias('cacheStorage', $this->prefix('storage'));
 		}
 	}
@@ -54,7 +58,7 @@ class CacheExtension extends Nette\DI\CompilerExtension
 
 	private function checkTempDir($dir)
 	{
-		@mkdir($dir); // @ - directory may exists
+		Nette\Utils\FileSystem::createDir($dir);
 
 		// checks whether directory is writable
 		$uniq = uniqid('_', true);

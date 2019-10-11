@@ -53,8 +53,6 @@ class RegistrationForm extends \Fitchart\Application\Control
 
 
         $form->addSubmit('submit', 'Sign Up');
-        
-        $form->addSubmit('fbregistration', 'Sign Up with Facebook');
 
         $form->onSuccess[] = array($this, 'formSent');
 
