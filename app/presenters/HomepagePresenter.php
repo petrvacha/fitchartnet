@@ -39,6 +39,33 @@ class HomepagePresenter extends BasePresenter
         $this->challengeModel = $challengeModel;
     }
 
+    public function renderDefault()
+    {
+        $this->template->title = 'login';
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Challenge:default');
+        }
+        $this->setLayout('authLayout');
+    }
+
+    public function renderRegistration()
+    {
+        $this->template->title = 'registration';
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Challenge:default');
+        }
+        $this->setLayout('authLayout');
+    }
+
+    public function renderResetPassword()
+    {
+        $this->template->title = 'reset password';
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Challenge:default');
+        }
+        $this->setLayout('authLayout');
+    }
+
     public function renderLast()
     {
         if ($this->getUser()->isLoggedIn()) {
@@ -50,14 +77,6 @@ class HomepagePresenter extends BasePresenter
             }
         }
         $this->redirect('Homepage:default');
-    }
-
-    public function renderDefault()
-    {
-        $this->template->title = 'login';
-        if ($this->getUser()->isLoggedIn()) {
-            $this->redirect('Challenge:default');
-        }
     }
 
     public function renderLaunch()

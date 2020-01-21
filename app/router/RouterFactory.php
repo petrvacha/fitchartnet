@@ -26,9 +26,11 @@ class RouterFactory
             $router = new RouteList();
             $router[] = new Route('', 'Homepage:launch');
             $router[] = new Route('/login', 'Homepage:default');
-            $router[] = new Route('/last', 'Homepage:last');
+            $router[] = new Route('/registration', 'Homepage:registration');
             $router[] = new Route('/registration/confirm/<hash>', 'Registration:check');
+            $router[] = new Route('/reset-password', 'Homepage:resetPassword');
             $router[] = new Route('/new-password/<token>', 'Homepage:newPassword');
+            $router[] = new Route('/last', 'Homepage:last');
             $router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:launch');
             
             return $router;
