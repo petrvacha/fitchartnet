@@ -7,9 +7,9 @@ use App\Model\User;
 use Nette;
 
 /**
- * Homepage presenter
+ * Login presenter
  */
-class HomepagePresenter extends BasePresenter
+class LoginPresenter extends BasePresenter
 {
     /** @var \App\Components\SignForm\ISignFormFactory @inject */
     public $signFormFactory;
@@ -104,8 +104,8 @@ class HomepagePresenter extends BasePresenter
     {
         $control = $this->resetPasswordFormFactory->create();
         $control->getComponent('resetPasswordForm')->onSuccess[] = function() {
-            $this->flashMessage('Check your mail box and follow the instruction.', 'info');
-            $this->redirect('Homepage:');
+            $this->flashMessage('Check your mail box.', 'info');
+            $this->redirect('Login:resetPassword');
         };
         return $control;
     }

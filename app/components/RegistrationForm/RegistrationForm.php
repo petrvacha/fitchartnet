@@ -37,13 +37,13 @@ class RegistrationForm extends \Fitchart\Application\Control
         $form->addText('username', 'Username')
             ->setRequired('Please enter your username.')
             ->addRule(Form::MIN_LENGTH, '%label must be at least %s characters.', 4)
-            ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!')
+            ->addRule([$this, 'isUsernameAvailable'], 'This username is already taken!')
             ->setAttribute('placeholder', 'Username');
 
-        $form->addText('email', 'Username or email')
+        $form->addText('email', 'Email')
             ->setRequired('Please enter your email.')
             ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email.')
-            ->addRule(callback($this, 'isEmailAvailable'), 'This email is already taken!')
+            ->addRule([$this, 'isEmailAvailable'], 'This email is already taken!')
             ->setAttribute('placeholder', 'Email Address');
 
         $form->addPassword('password', 'Password')
@@ -78,6 +78,8 @@ class RegistrationForm extends \Fitchart\Application\Control
             $mailerManager->action(MailerManager::REGISTRATION_NEW_USER, $userData);
 
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
+            $form->addError($e->getMessage());
+        } catch (\Exception $e) {
             $form->addError($e->getMessage());
         }
     }

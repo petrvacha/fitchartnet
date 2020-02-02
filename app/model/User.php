@@ -82,7 +82,6 @@ class User extends BaseModel
         $roleModel = $this->roleModel;
         $privacyModel = $this->privacyModel;
 
-
         $insert = [
             'username' => $values->username,
             'password' => Passwords::hash($values->password),
@@ -92,6 +91,7 @@ class User extends BaseModel
             'privacy_id' => $privacyModel::FRIENDS_AND_GROUPS,
             'role_id' => $roleModel::USER,
             'state' => self::USER_STATE_NEW,
+            'active' => 0,
             'created_at' => $this->getDateTime(),
             'updated_at' => $this->getDateTime()
         ];
@@ -238,30 +238,6 @@ class User extends BaseModel
         return $this->user->getIdentity()->role == Role::ADMIN ||
                 $this->user->getIdentity()->role == Role::SUPERADMIN ||
                 $this->friendModel->areFriends($userId);
-    }
-
-    /**
-     * @param string $firstname
-     * @param string $surname
-     * @return string
-     */
-    protected function findFreeUsername($firstname, $surname)
-    {
-        $firstname = \Nette\Utils\Strings::webalize($firstname);
-        $surname = \Nette\Utils\Strings::webalize($surname);
-
-        $user = $this->findBy(['username' => $firstname.$surname])->fetch();
-        if ($user) {
-            $number = 1;
-            do {
-                $user = $this->findBy(['username' => $firstname.$surname.$number])->fetch();
-                $number++;
-            } while ($user);
-            return $firstname.$surname.$number--;
-
-        } else {
-            return $firstname.$surname;
-        }
     }
 
     /**
