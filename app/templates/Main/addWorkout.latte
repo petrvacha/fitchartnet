@@ -1,10 +1,12 @@
 {block content}
 {include '../partial/navigation.latte'}
-
-<div class="container">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">Dashboard</li>
+        <li class="breadcrumb-item active">Add Workout</li>
+    </ol>
+    <h1>Add workout</h1>
     {include '../partial/flashMessages.latte'}
 
-    <h2 class="page-header">Add workout</h2>
     <div class="row" style="margin-top: 10px; margin-left: 3px">
         {control activityForm}
     </div>

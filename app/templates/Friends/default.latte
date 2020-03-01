@@ -2,75 +2,79 @@
 {snippetArea wrapper}
 {include '../partial/navigation.latte'}
 {/snippetArea}
-<div class="container">
-    {include '../partial/flashMessages.latte'}
-    {if !empty($friendList)}
-    <h2 class="page-header">Friends</h2>
-    <table>
-        <tr n:foreach="$friendList as $friend">
-            <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
-            <td>{include '../makro/username.latte', user => $friend}</td>
-            <td>
-                <a n:href="Friends:removeFriend $friend->id" onclick="return confirm('Are you sure you want to remove this friend?');">
-                    <span class="glyphicon glyphicon-minus" aria-hidden="true" title="unfriend"></span>
-                </a>
-            </td>
-        </tr>
-    </table>
-    {/if}
 
-    {if !empty($friendshipOfferList)}
-    <h3 class="page-header">Friendship offer</h3>
-    <table>
-        <tr n:foreach="$friendshipOfferList as $friend">
-            <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
-            <td>{include '../makro/username.latte', user => $friend}</td>
-            <td>
-                <a n:href="Friends:acceptFriendship $friend->id">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true" title="accept friendship"></span>
-                </a>
-            </td>
-            <td>
-                <a n:href="Friends:acceptFriendship $friend->id, FALSE" onclick="return confirm('Are you sure you want to refuse this friendship?');">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true" title="refuse friendship"></span>
-                </a>
-            </td>
-        </tr>
-    </table>
-    {/if}
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item">Dashboard</li>
+    <li class="breadcrumb-item active">Friends</li>
+</ol>
+{include '../partial/flashMessages.latte'}
 
-    <br />
+{if !empty($friendList)}
+<h1>Friends</h1>
+<table>
+    <tr n:foreach="$friendList as $friend">
+        <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
+        <td>{include '../makro/username.latte', user => $friend}</td>
+        <td>
+            <a n:href="Friends:removeFriend $friend->id" onclick="return confirm('Are you sure you want to remove this friend?');">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true" title="unfriend"></span>
+            </a>
+        </td>
+    </tr>
+</table>
+{/if}
 
-    {if !empty($friendshipRequestList)}
-    <h3 class="page-header">Pending requests</h3>
-    <table>
-        <tr n:foreach="$friendshipRequestList as $friend">
-            <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
-            <td>{include '../makro/username.latte', user => $friend}</td>
-            <td>
-                <a n:href="Friends:removeFriendshipRequest $friend->id" onclick="return confirm('Are you sure you want to remove this friend?');">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true" title="cancel your request"></span>
-                </a>
-            </td>
-        </tr>
-    </table>
-    {/if}
+{if !empty($friendshipOfferList)}
+<h3 class="page-header">Friendship offer</h3>
+<table>
+    <tr n:foreach="$friendshipOfferList as $friend">
+        <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
+        <td>{include '../makro/username.latte', user => $friend}</td>
+        <td>
+            <a n:href="Friends:acceptFriendship $friend->id">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true" title="accept friendship"></span>
+            </a>
+        </td>
+        <td>
+            <a n:href="Friends:acceptFriendship $friend->id, FALSE" onclick="return confirm('Are you sure you want to refuse this friendship?');">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" title="refuse friendship"></span>
+            </a>
+        </td>
+    </tr>
+</table>
+{/if}
 
-    <br />
+<br />
 
-    <h2 class="page-header">Users</h2>
-    <table n:if="!empty($userList)">
-        <tr n:foreach="$userList as $usr">
-            <td>{include '../makro/photo.latte', photoWidth => 75, photo => $usr->profile_photo}<td>
-            <td>{include '../makro/username.latte', user => $usr}</td>
-            <td>
-                <a n:href="Friends:friendshipRequest $usr->id" onclick="return confirm('Are you sure you want to add this friend?');">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true" title="add new friend"></span>
-                </a>
-            </td>
-        </tr>
-    </table>
-</div>
+{if !empty($friendshipRequestList)}
+<h3 class="page-header">Pending requests</h3>
+<table>
+    <tr n:foreach="$friendshipRequestList as $friend">
+        <td>{include '../makro/photo.latte', photoWidth => 75, photo => $friend->profile_photo}<td>
+        <td>{include '../makro/username.latte', user => $friend}</td>
+        <td>
+            <a n:href="Friends:removeFriendshipRequest $friend->id" onclick="return confirm('Are you sure you want to remove this friend?');">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" title="cancel your request"></span>
+            </a>
+        </td>
+    </tr>
+</table>
+{/if}
+
+<br />
+
+<h2 class="page-header">Users</h2>
+<table n:if="!empty($userList)">
+    <tr n:foreach="$userList as $usr">
+        <td>{include '../makro/photo.latte', photoWidth => 75, photo => $usr->profile_photo}<td>
+        <td>{include '../makro/username.latte', user => $usr}</td>
+        <td>
+            <a n:href="Friends:friendshipRequest $usr->id" onclick="return confirm('Are you sure you want to add this friend?');">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true" title="add new friend"></span>
+            </a>
+        </td>
+    </tr>
+</table>
 
 <script type="text/javascript">
 $(function(){

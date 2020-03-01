@@ -1,177 +1,182 @@
 {block content}
 
 {include '../partial/navigation.latte'}
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item">Dashboard</li>
+    <li class="breadcrumb-item">Challenges</li>
+    <li class="breadcrumb-item active">Challenge</li>
+</ol>
+<h1>Challenge</h1>
+{include '../partial/flashMessages.latte'}
 
-<div class="container">
-    {include '../partial/flashMessages.latte'}
+<div class="row">
+    <div class="col-md-8"><h2>{$challenge->name}</h2></div>
+</div>
+<div class="row">
+    <div class="col-md-8"><p class="lead">{$challenge->description}</p></div>
+</div>
+<div class="row">
+    <div class="col-md-2"><h4>Task</h4>{$challenge->final_value} {$challenge->activity->log_type->mark} in {$challengeDays} days</div>
+    <div class="col-md-2"><h4>Challengers</h4>{count($users)}</div>
+    <div class="col-md-2">
+        <h4>Days remaining</h4>
+        {if $daysRemaining > 1}
+            {$daysRemaining} days
+        {elseif $daysRemaining == 1}
+            today
+        {else}
+            already finished
+        {/if}
+    </div>
+    <div class="col-md-2"><h4>Challenge is</h4>{$challengeStatus}</div>
+</div>
+<br>
+{if $challengeStatus->isActive()}
+    {control activityForm}
+{/if}
+
+<br>
+
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a data-toggle="tab" href="#overview">Overview</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#charts">Charts</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+  <div id="overview" class="tab-pane fade in active">
+    <h3>Overview</h3>
 
     <div class="row">
-        <div class="col-md-8"><h2>{$challenge->name}</h2></div>
-    </div>
-    <div class="row">
-        <div class="col-md-8"><p class="lead">{$challenge->description}</p></div>
-    </div>
-    <div class="row">
-        <div class="col-md-2"><h4>Task</h4>{$challenge->final_value} {$challenge->activity->log_type->mark} in {$challengeDays} days</div>
-        <div class="col-md-2"><h4>Challengers</h4>{count($users)}</div>
-        <div class="col-md-2">
-            <h4>Days remaining</h4>
-            {if $daysRemaining > 1}
-                {$daysRemaining} days
-            {elseif $daysRemaining == 1}
-                today
-            {else}
-                already finished
-            {/if}
-        </div>
-        <div class="col-md-2"><h4>Challenge is</h4>{$challengeStatus}</div>
-    </div>
-    <br>
-    {if $challengeStatus->isActive()}
-        {control activityForm}
-    {/if}
+        <div class="col-lg-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Score</h3>
+                </div>
+                <table class="table">
+                    <tr>
+                        <th n:if="$challengeStatus->isGone()">#</th>
+                        <th>name</th>
+                        <th colspan="2">current performance</th>
+                        <th n:if="$challengeStatus->isActive()" class="text-center">today's status</th>
+                        <th>details</th>
+                    </tr>
+                    {foreach $currentUserPerformances as $userPerformance}
+                        <tr {if $user->id === $userPerformance['id']}style="background-color: #fcf8e3"{/if}>
+                            <td n:if="$challengeStatus->isGone()">{$iterator->counter}.</td>
+                            <td>{$userPerformance['username']}</td>
+                            <td class="text-center" style="width: 10em;">
+                                <div class="progress">
+                                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$userPerformance['percentage']}" aria-valuemin="0" aria-valuemax="100" style="width: {$userPerformance['percentage']}%;">
 
-    <br>
-
-    <ul class="nav nav-tabs">
-        <li class="active">
-            <a data-toggle="tab" href="#overview">Overview</a>
-        </li>
-        <li>
-            <a data-toggle="tab" href="#charts">Charts</a>
-        </li>
-    </ul>
-
-    <div class="tab-content">
-
-      <div id="overview" class="tab-pane fade in active">
-        <h3>Overview</h3>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Score</h3>
-                    </div>
-                    <table class="table">
-                        <tr>
-                            <th n:if="$challengeStatus->isGone()">#</th>
-                            <th>name</th>
-                            <th colspan="2">current performance</th>
-                            <th n:if="$challengeStatus->isActive()" class="text-center">today's status</th>
-                            <th>details</th>
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                                {$userPerformance['current_performance']} {$challenge->activity->log_type->mark} ({$userPerformance['percentage']} %)
+                            </td>
+                            <td  n:if="$challengeStatus->isActive()"  class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
+                                {$usersToday[$userPerformance['username']]}/{$userPerformance['average_minimum']} {$challenge->activity->log_type->mark}
+                            </td>
+                            <td>
+                                <a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="glyphicon glyphicon-zoom-in"></i></a>
+                            </td>
                         </tr>
-                        {foreach $currentUserPerformances as $userPerformance}
-                            <tr {if $user->id === $userPerformance['id']}style="background-color: #fcf8e3"{/if}>
-                                <td n:if="$challengeStatus->isGone()">{$iterator->counter}.</td>
-                                <td>{$userPerformance['username']}</td>
-                                <td class="text-center" style="width: 10em;">
-                                    <div class="progress">
-                                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$userPerformance['percentage']}" aria-valuemin="0" aria-valuemax="100" style="width: {$userPerformance['percentage']}%;">
+                        <tr id="datalist-{$userPerformance['id']}" class="hidden">
+                            <td colspan="6">
+                                <table class="table small-table table-hover table-bordered">
+                                    <tr><th>Date</th><th>2:00-10:00</th><th>10:00-18:00</th><th>18:00-2:00</th><th>Sum per day</th><th>Cumulative sum</th></tr>
 
-                                      </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    {$userPerformance['current_performance']} {$challenge->activity->log_type->mark} ({$userPerformance['percentage']} %)
-                                </td>
-                                <td  n:if="$challengeStatus->isActive()"  class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
-                                    {$usersToday[$userPerformance['username']]}/{$userPerformance['average_minimum']} {$challenge->activity->log_type->mark}
-                                </td>
-                                <td>
-                                    <a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="glyphicon glyphicon-zoom-in"></i></a>
-                                </td>
-                            </tr>
-                            <tr id="datalist-{$userPerformance['id']}" class="hidden">
-                                <td colspan="6">
-                                    <table class="table small-table table-hover table-bordered">
-                                        <tr><th>Date</th><th>2:00-10:00</th><th>10:00-18:00</th><th>18:00-2:00</th><th>Sum per day</th><th>Cumulative sum</th></tr>
+                                    {var $day = 0}
+                                    {var $sum = 0}
+                                    {foreach $usersPerformances['normal'] as $i => $dayPart}
+                                        {if $dayPart['time'] > $tomorrow}
+                                            {? break}
+                                        {/if}
+                                        {if $i % 3 === 0}
+                                            <tr>
+                                            <td>{$dayPart['time']|date:'d.m.Y'}</td>
+                                        {/if}
+                                        <td>{$dayPart[$userPerformance['username']]} {$challenge->activity->log_type->mark}</td>
 
-                                        {var $day = 0}
-                                        {var $sum = 0}
-                                        {foreach $usersPerformances['normal'] as $i => $dayPart}
-                                            {if $dayPart['time'] > $tomorrow}
-                                                {? break}
-                                            {/if}
-                                            {if $i % 3 === 0}
-                                                <tr>
-                                                <td>{$dayPart['time']|date:'d.m.Y'}</td>
-                                            {/if}
-                                            <td>{$dayPart[$userPerformance['username']]} {$challenge->activity->log_type->mark}</td>
-
-                                            {var $sum += $dayPart[$userPerformance['username']]}
-                                            {var $day += $dayPart[$userPerformance['username']]}
-                                            {if $i % 3 === 2}
-                                                <td>{$day} {$challenge->activity->log_type->mark}</td>
-                                                <td>{$sum} {$challenge->activity->log_type->mark}</td>
-                                                </tr>
-                                                {var $day = 0}
-                                            {/if}
-                                        {/foreach}
-                                    </table>
-                                </td>
-                            </tr>
-                        {/foreach}
-                        <tr>
-                            <td n:if="$challengeStatus->isGone()"></td>
-                            <td><strong>total</strong></td>
-                            <td colspan="2"><strong>{$currentTotalPerformance} {$challenge->activity->log_type->mark}</strong></td>
-                            <td n:if="$challengeStatus->isActive()"></td>
-                            <td></td>
+                                        {var $sum += $dayPart[$userPerformance['username']]}
+                                        {var $day += $dayPart[$userPerformance['username']]}
+                                        {if $i % 3 === 2}
+                                            <td>{$day} {$challenge->activity->log_type->mark}</td>
+                                            <td>{$sum} {$challenge->activity->log_type->mark}</td>
+                                            </tr>
+                                            {var $day = 0}
+                                        {/if}
+                                    {/foreach}
+                                </table>
+                            </td>
                         </tr>
-                    </table>
-                </div>
+                    {/foreach}
+                    <tr>
+                        <td n:if="$challengeStatus->isGone()"></td>
+                        <td><strong>total</strong></td>
+                        <td colspan="2"><strong>{$currentTotalPerformance} {$challenge->activity->log_type->mark}</strong></td>
+                        <td n:if="$challengeStatus->isActive()"></td>
+                        <td></td>
+                    </tr>
+                </table>
             </div>
         </div>
+    </div>
 
-      </div>
-      <div id="charts" class="big-shift">
-        <h3>Charts</h3>
-        <div class="row">
-            <div class="col-lg-8" style="width: 770px">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Pie Chart</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div style="position: relative; width:490px;height:300px">
-                            <div id="placeholder" style="width:490px;height:300px"></div>
-                        </div>
+  </div>
+  <div id="charts" class="big-shift">
+    <h3>Charts</h3>
+    <div class="row">
+        <div class="col-lg-8" style="width: 770px">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Pie Chart</h3>
+                </div>
+                <div class="panel-body">
+                    <div style="position: relative; width:490px;height:300px">
+                        <div id="placeholder" style="width:490px;height:300px"></div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="row">
-            <div class="col-lg-8" style="width: 770px">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users performances</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div>
-                        <div id="users-performance" style="height: 450px; width: 700px"></div>
-                        </div>
+    <div class="row">
+        <div class="col-lg-8" style="width: 770px">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users performances</h3>
+                </div>
+                <div class="panel-body">
+                    <div>
+                    <div id="users-performance" style="height: 450px; width: 700px"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-8" style="width: 770px">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users cumulative performances</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div>
-                        <div id="users-cummulative-performance" style="height: 450px; width: 700px"></div>
-                        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8" style="width: 770px">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users cumulative performances</h3>
+                </div>
+                <div class="panel-body">
+                    <div>
+                    <div id="users-cummulative-performance" style="height: 450px; width: 700px"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+{include '../partial/bottom.latte'}
 
 <script type="text/javascript">
 $(function() {

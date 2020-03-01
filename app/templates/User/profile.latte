@@ -1,18 +1,22 @@
 {block content}
 {include '../partial/navigation.latte'}
 
-<div class="container">
-    <h1>Profile</h1>
-    <a n:href="User:edit">edit profile</a> <br />
-    <img style="max-width: 250px" src="{plink Static:getProfilePicture, $user['profile_photo']}"><br /><br />
-    Name: {$user->firstname} {$user->surname} <br />
-    Email: {$user->email} <br />
-    Username: {$user->username} <br />
-    Gender: {$user->gender} <br />
-    Privacy: <span title="{$user->privacy_description}">{$user->privacy_name}</span><br />
-    Info: {$user->bio}<br /><br />
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item">Dashboard</li>
+    <li class="breadcrumb-item">User</li>
+    <li class="breadcrumb-item active">Profile</li>
+</ol>
+<h1>Profile</h1>
+<a n:href="User:edit">edit profile</a> <br />
+<img style="max-width: 250px" src="{plink Static:getProfilePicture, $user['profile_photo']}"><br /><br />
+Name: {$user->firstname} {$user->surname} <br />
+Email: {$user->email} <br />
+Username: {$user->username} <br />
+Gender: {$user->gender} <br />
+Privacy: <span title="{$user->privacy_description}">{$user->privacy_name}</span><br />
+Info: {$user->bio}<br /><br />
 
-    API TOKEN: {$user->api_token}
-</div>
+API TOKEN: {$user->api_token}
+
 
 {/block}
