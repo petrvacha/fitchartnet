@@ -17,7 +17,7 @@
         <td>{include '../makro/username.latte', user => $friend}</td>
         <td>
             <a n:href="Friends:removeFriend $friend->id" onclick="return confirm('Are you sure you want to remove this friend?');">
-                <span class="glyphicon glyphicon-minus" aria-hidden="true" title="unfriend"></span>
+                <span class="fas fa-minus" aria-hidden="true" title="unfriend"></span>
             </a>
         </td>
     </tr>
@@ -32,12 +32,12 @@
         <td>{include '../makro/username.latte', user => $friend}</td>
         <td>
             <a n:href="Friends:acceptFriendship $friend->id">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true" title="accept friendship"></span>
+                <span class="fas fa-plus" aria-hidden="true" title="accept friendship"></span>
             </a>
         </td>
         <td>
             <a n:href="Friends:acceptFriendship $friend->id, FALSE" onclick="return confirm('Are you sure you want to refuse this friendship?');">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true" title="refuse friendship"></span>
+                <span class="fas fa-trash" aria-hidden="true" title="refuse friendship"></span>
             </a>
         </td>
     </tr>
@@ -54,7 +54,7 @@
         <td>{include '../makro/username.latte', user => $friend}</td>
         <td>
             <a n:href="Friends:removeFriendshipRequest $friend->id" onclick="return confirm('Are you sure you want to remove this friend?');">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true" title="cancel your request"></span>
+                <span class="fas fa-trash" aria-hidden="true" title="cancel your request"></span>
             </a>
         </td>
     </tr>
@@ -70,14 +70,9 @@
         <td>{include '../makro/username.latte', user => $usr}</td>
         <td>
             <a n:href="Friends:friendshipRequest $usr->id" onclick="return confirm('Are you sure you want to add this friend?');">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true" title="add new friend"></span>
+                <span class="fas fa-plus" aria-hidden="true" title="add new friend"></span>
             </a>
         </td>
     </tr>
 </table>
-
-<script type="text/javascript">
-$(function(){
-});
-</script>
 {/block}

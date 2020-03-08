@@ -1,0 +1,96 @@
+.alert {
+    padding: 8px;
+}
+
+.alert-dismissable .close, .alert-dismissible .close {
+    right: 0px;
+}
+
+.sidebar .simple-link {
+    color: lightcoral;
+}
+
+.navbar.navbar-default.navbar-fixed-top .container{
+    background-color: #394a59;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #FFFFFF;
+}
+
+.navbar-default .navbar-nav > li > a:hower {
+    color: #5cb85c !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: #5cb85c !important;
+}
+
+.navbar-default .navbar-nav > .active > a {
+    color: darkgreen;
+}
+
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #5cb85c !important;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #5cb85c !important;
+}
+
+#main-container .glyphicon.glyphicon-info-sign {
+    top: 3px;
+}
+
+.flotTip {
+    padding: 3px 5px;
+    background-color: #000;
+    z-index: 100;
+    color: #fff;
+    box-shadow: 0 0 10px #555;
+    opacity: .7;
+    filter: alpha(opacity=70);
+    border: 2px solid #fff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.small-table.table > tbody > tr > td:not(:first-child) {
+    padding: 4px;
+    line-height: 1;
+    text-align: center;
+    vertical-align:middle;
+}
+
+.small-table.table > tbody > tr > th:not(:first-child){
+    padding: 4px;
+    line-height: 1;
+    text-align: center;
+    vertical-align:middle;
+}
+
+
+.hidden {
+    display: none;
+}
+
+.big-shift {
+    position: absolute;
+    top: -5000px;
+}
+
+.img-container > img {
+    max-width: 100%;
+}
+
+.page-header {
+    margin: 55px 0 20px;
+}
