@@ -6,7 +6,7 @@ module.exports = function(grunt) {
         './node_modules/startbootstrap-sb-admin/css/sb-admin.css',
         './node_modules/startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css',
         './htdocs/css/libs/token-input-facebook.css',
-        './htdocs/css/libs/bootstrap.css',
+        './node_modules/bootstrap/dist/css/bootstrap.css',
         './htdocs/css/style-new.css'
     ];
 
@@ -19,7 +19,8 @@ module.exports = function(grunt) {
         './htdocs/js/libs/jquery.tokeninput.js',
         './node_modules/startbootstrap-sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js',
         './node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js',
-        './node_modules/startbootstrap-sb-admin/vendor/chart.js/Chart.min.js',
+        './node_modules/startbootstrap-sb-admin/vendor/chart.js/Chart.bundle.min.js',
+        './node_modules/chartjs-plugin-annotation/chartjs-plugin-annotation.min.js',
         './node_modules/startbootstrap-sb-admin/vendor/datatables/jquery.dataTables.js',
         './htdocs/js/libs/raphael-min.js',
         './htdocs/js/libs/netteForms.js',

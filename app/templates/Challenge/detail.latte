@@ -37,20 +37,19 @@
 
 <br>
 
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a data-toggle="tab" href="#overview">Overview</a>
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item active">
+        <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
     </li>
-    <li>
-        <a data-toggle="tab" href="#charts">Charts</a>
+    <li class="nav-item">
+        <a class="nav-link" id="charts-tab" data-toggle="tab" href="#charts" role="tab" aria-controls="charts" aria-selected="false">Charts</a>
     </li>
 </ul>
 
 <div class="tab-content">
 
-  <div id="overview" class="tab-pane fade in active">
+  <div id="overview" class="tab-pane fade show active" role="tabpanel" aria-labelledby="overview-tab">
     <h3>Overview</h3>
-
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-success">
@@ -89,28 +88,12 @@
                         <tr id="datalist-{$userPerformance['id']}" class="hidden">
                             <td colspan="6">
                                 <table class="table small-table table-hover table-bordered">
-                                    <tr><th>Date</th><th>2:00-10:00</th><th>10:00-18:00</th><th>18:00-2:00</th><th>Sum per day</th><th>Cumulative sum</th></tr>
-
-                                    {var $day = 0}
-                                    {var $sum = 0}
-                                    {foreach $usersPerformances['normal'] as $i => $dayPart}
-                                        {if $dayPart['time'] > $tomorrow}
-                                            {? break}
-                                        {/if}
-                                        {if $i % 3 === 0}
-                                            <tr>
-                                            <td>{$dayPart['time']|date:'d.m.Y'}</td>
-                                        {/if}
-                                        <td>{$dayPart[$userPerformance['username']]} {$challenge->activity->log_type->mark}</td>
-
-                                        {var $sum += $dayPart[$userPerformance['username']]}
-                                        {var $day += $dayPart[$userPerformance['username']]}
-                                        {if $i % 3 === 2}
+                                    <tr><th>Date</th><th>Performance</th><th>Cumulative sum</th></tr>
+                                    {foreach $usersPerformances['normal'][$userPerformance['username']]['days'] as $day => $dayPart}
+                                        <tr>
                                             <td>{$day} {$challenge->activity->log_type->mark}</td>
-                                            <td>{$sum} {$challenge->activity->log_type->mark}</td>
-                                            </tr>
-                                            {var $day = 0}
-                                        {/if}
+                                            <td>{$usersPerformances['cumulative'][$userPerformance['username']]['days'][$day]} {$challenge->activity->log_type->mark}</td>
+                                        </tr>
                                     {/foreach}
                                 </table>
                             </td>
@@ -127,86 +110,58 @@
             </div>
         </div>
     </div>
-
   </div>
-  <div id="charts" class="big-shift">
+
+
+
+
+
+  <div id="charts" class="tab-pane fade" role="tabpanel" aria-labelledby="charts-tab">
     <h3>Charts</h3>
-    <div class="row">
-        <div class="col-lg-8" style="width: 770px">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i>Pie Chart</h3>
-                </div>
-                <div class="panel-body">
-                    <div style="position: relative; width:490px;height:300px">
-                        <div id="placeholder" style="width:490px;height:300px"></div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+            Users performances</div>
+            <div class="card-body">
+                <div class="chartjs-size-monitor">
+                    <div class="chartjs-size-monitor-expand">
+                        <div class=""></div>
+                    </div>
+                    <div class="chartjs-size-monitor-shrink">
+                        <div class=""></div>
                     </div>
                 </div>
+                <canvas id="js-users-performance"></canvas>
             </div>
-        </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-8" style="width: 770px">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users performances</h3>
-                </div>
-                <div class="panel-body">
-                    <div>
-                    <div id="users-performance" style="height: 450px; width: 700px"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-8" style="width: 770px">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Users cumulative performances</h3>
-                </div>
-                <div class="panel-body">
-                    <div>
-                    <div id="users-cummulative-performance" style="height: 450px; width: 700px"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+      <div class="card mb-3">
+          <div class="card-header">
+              <i class="fas fa-chart-area"></i>
+              Users cumulative performances</div>
+          <div class="card-body">
+              <div class="chartjs-size-monitor">
+                  <div class="chartjs-size-monitor-expand">
+                      <div class="">
+                      </div>
+                  </div>
+                  <div class="chartjs-size-monitor-shrink">
+                      <div class="">
+                      </div>
+                  </div>
+              </div>
+              <canvas id="js-users-cummulative-performance"></canvas>
+          </div>
+          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
 </div>
 
 {include '../partial/bottom.latte'}
 
 <script type="text/javascript">
 $(function() {
-
-    var data = {$userPieData};
-    var plotObj = $.plot($("#placeholder"), data, {
-      series: {
-        pie: {
-          show: true,
-          radius: 1,
-          label: {
-            show: false,
-            }
-        }
-      },
-      grid: {
-        hoverable: true
-      },
-      tooltip: {
-        show: true,
-        content: "%s %p.0% (%n)",
-        shifts: {
-          x: 20,
-          y: 0
-        },
-        defaultTheme: false
-      }
-    });
-
-
     $('.expander').on('click', function(e) {
         e.preventDefault();
         if ($(this).data('hidden-content') == 1) {
@@ -222,15 +177,79 @@ $(function() {
         }
     });
 
-    var shifted = false;
-    $('.nav.nav-tabs li').on('click', function(e){
-        if (shifted === false) {
-            $('#charts').removeClass('big-shift');
-            $('#charts').addClass('tab-pane fade in');
+    var ctx = document.getElementById("js-users-performance");
+    var normalChart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: {$usersPerformances['days']},
+            datasets: [
+                {foreach $usersPerformances['normal'] as $name => $data} {
+                    label: {$name},
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: {$data['daysNoIndex']},
+                }{last}{else},{/last}
+                {/foreach}
+            ]
+        },
+        options: {
+            annotation: {
+                annotations: [{
+                    drawTime: 'afterDraw', // overrides annotation.drawTime if set
+                    id: 'a-line-1', // optional
+                    type: 'line',
+                    mode: 'horizontal',
+                    scaleID: 'y-axis-0',
+                    value: '100',
+                    borderColor: 'black',
+                    borderWidth: 2,
+                }]
+            }
         }
     });
 
+    var ctx = document.getElementById("js-users-cummulative-performance");
+    var cumulativeChart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: {$usersPerformances['days']},
+            datasets: [
+                {foreach $usersPerformances['cumulative'] as $name => $data} {
+                    label: {$name},
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: {$data['daysNoIndex']},
+                }{last}{else},{/last}
+                {/foreach}
+            ]
+        },
+        options: {
+            annotation: {
+                annotations: [{
+                    drawTime: 'afterDraw', // overrides annotation.drawTime if set
+                    id: 'a-line-1', // optional
+                    type: 'line',
+                    mode: 'horizontal',
+                    scaleID: 'y-axis-0',
+                    value: '100',
+                    borderColor: 'black',
+                    borderWidth: 2,
+                }]
+            }
+        }
+    });
+
+
+
+
     // Area Chart
+    /*
     Morris.Area({
         element: 'users-performance',
         data: {$usersPerformances['normal']},
@@ -242,10 +261,9 @@ $(function() {
         hideHover: 'auto',
         behaveLikeLine: true
     });
-
-    Morris.Line({
-        element: 'users-cummulative-performance',
-        data: {$usersPerformances['cumulative']},
+        Morris.Line({
+            element: 'users-cummulative-performance',
+            data: {$usersPerformances['cumulative']},
         xkey: 'time',
         ykeys: {$users},
         labels: {$users},
@@ -255,6 +273,7 @@ $(function() {
         smooth: false,
         goals: [{$challenge->final_value}]
     });
+    */
 });
 </script>
 {/block}

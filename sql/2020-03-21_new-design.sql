@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS user_challenge_performance_view;
+
 CREATE VIEW
     user_challenge_performance_view AS
 SELECT
@@ -25,6 +27,6 @@ JOIN
 GROUP BY
     challenge_id,
     user_id,
-    (z(AL.created_at) + 7200) DIV 28800
+    DAY(AL.created_at)
 ORDER BY
     AL.created_at ASC

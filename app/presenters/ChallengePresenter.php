@@ -68,11 +68,12 @@ class ChallengePresenter extends LoginBasePresenter
             $this->flashMessage('Soooorry! But it looks like you do not have a permission to see this awesome challenge.', parent::MESSAGE_TYPE_INFO);
             $this->redirect('Challenge:');
         }
+
+        //dump($this->challengeModel->getUsersPerformances($id)['normal']);die;
         $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
-        $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
+        $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id);
 
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
-
 
         $users = [];
         $usersToday = [];
