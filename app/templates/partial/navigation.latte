@@ -2,23 +2,22 @@
 
     <a class="navbar-brand mr-1" href="/">Fitchart.net</a>
 
-    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Navbar -->
     <ul n:snippet="notification" class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
         <li class="nav-item {if $notificationCount}dropdown{/if} no-arrow mx-1">
             <a class="nav-link {if $notificationCount}dropdown-toggle{/if}" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
                 <span n:if="$notificationCount" class="badge badge-danger">{$notificationCount}</span>
+                <i class="fas fa-bell fa-fw"></i>
             </a>
             <div n:if="$notificationCount" class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
                 {foreach $notifications as $notification}
                 <a class="dropdown-item" n:href="seenNotification $notification->id">{$notification->message}</a>
                 {last}
                 <div class="dropdown-divider"></div>
-                <a class="ajax" n:href="seenAllNotifications!">Mark all as read</a>
+                <a class="ajax dropdown-item" n:href="seenAllNotifications!">Mark all as read</a>
                 {/last}
                 {/foreach}
             </div>

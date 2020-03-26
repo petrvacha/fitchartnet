@@ -281,7 +281,6 @@ class Challenge extends BaseModel
     /**
      * Returns users' continuous and cumulative data
      * @param int $challengeId
-     * @param array $users
      * @return array
      */
     public function getUsersPerformances($challengeId)
@@ -297,21 +296,16 @@ class Challenge extends BaseModel
                 user_challenge_performance_view
             WHERE
                 challenge_id = ?
-                ORDER BY created_at", $challengeId)->fetchAll();
-
+            ORDER BY created_at", $challengeId)->fetchAll();
 
         $challenge = $this->context->query("
                 SELECT
-                    C.*,
-                    U.username
+                    C.start_at,
+                    C.end_at
                 FROM
                     challenge C
-                JOIN
-                    challenge_user CU ON CU.challenge_id = C.id AND CU.active = 1
-                JOIN
-                    user U ON U.id = CU.user_id
                 WHERE
-                    CU.challenge_id = ?", $challengeId)->fetchAll();
+                    C.id = ?", $challengeId)->fetchAll();
 
         $startDateTime = new \DateTime($challenge[0]['start_at']);
         $startDateTime->setTime(0,0,0);
@@ -319,7 +313,7 @@ class Challenge extends BaseModel
         $endDateTime->setTime(23,59,59);
 
         for ($day = clone $startDateTime; $day <= $endDateTime; $day->add(new \DateInterval('P1D'))) {
-            $returnData['days'][] = $day->format('d-m-Y');
+            $returnData['days'][] = $day->format('d.m.Y');
         }
 
         foreach ($data as $record) {
@@ -327,15 +321,17 @@ class Challenge extends BaseModel
                 $returnData['normal'][$record['username']] = [];
                 $returnData['normal'][$record['username']]['days'] = [];
                 $returnData['normal'][$record['username']]['userId'] = $record['user_id'];
+                $returnData['normal'][$record['username']]['color'] = $record['color'];
                 $returnData['cumulative'][$record['username']] = [];
                 $returnData['cumulative'][$record['username']]['days'] = [];
                 $returnData['cumulative'][$record['username']]['userId'] = $record['user_id'];
+                $returnData['cumulative'][$record['username']]['color'] = $record['color'];
                 $returnData['cumulative'][$record['username']]['cumulativeSum'] = 0;
             }
-            $returnData['normal'][$record['username']]['days'][$record['created_at']->format('d-m-Y')] = $record['value'];
+            $returnData['normal'][$record['username']]['days'][$record['created_at']->format('d.m.Y')] = $record['value'];
 
             $newCumulativeValue = $returnData['cumulative'][$record['username']]['cumulativeSum'] + $record['value'];
-            $returnData['cumulative'][$record['username']]['days'][$record['created_at']->format('d-m-Y')] = $newCumulativeValue;
+            $returnData['cumulative'][$record['username']]['days'][$record['created_at']->format('d.m.Y')] = $newCumulativeValue;
             $returnData['cumulative'][$record['username']]['cumulativeSum'] = $newCumulativeValue;
         }
 

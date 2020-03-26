@@ -6,158 +6,178 @@
     <li class="breadcrumb-item">Challenges</li>
     <li class="breadcrumb-item active">Challenge</li>
 </ol>
-<h1>Challenge</h1>
+
 {include '../partial/flashMessages.latte'}
 
 <div class="row">
-    <div class="col-md-8"><h2>{$challenge->name}</h2></div>
-</div>
-<div class="row">
-    <div class="col-md-8"><p class="lead">{$challenge->description}</p></div>
-</div>
-<div class="row">
-    <div class="col-md-2"><h4>Task</h4>{$challenge->final_value} {$challenge->activity->log_type->mark} in {$challengeDays} days</div>
-    <div class="col-md-2"><h4>Challengers</h4>{count($users)}</div>
-    <div class="col-md-2">
-        <h4>Days remaining</h4>
-        {if $daysRemaining > 1}
-            {$daysRemaining} days
-        {elseif $daysRemaining == 1}
-            today
-        {else}
-            already finished
-        {/if}
-    </div>
-    <div class="col-md-2"><h4>Challenge is</h4>{$challengeStatus}</div>
-</div>
-<br>
-{if $challengeStatus->isActive()}
-    {control activityForm}
-{/if}
-
-<br>
-
-<ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item active">
-        <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="charts-tab" data-toggle="tab" href="#charts" role="tab" aria-controls="charts" aria-selected="false">Charts</a>
-    </li>
-</ul>
-
-<div class="tab-content">
-
-  <div id="overview" class="tab-pane fade show active" role="tabpanel" aria-labelledby="overview-tab">
-    <h3>Overview</h3>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-scale"></i> Score</h3>
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card-body">
+                <div class="card-body-icon">
+                    <i class="fas fa-fw fa-heartbeat"></i>
                 </div>
-                <table class="table">
-                    <tr>
-                        <th n:if="$challengeStatus->isGone()">#</th>
-                        <th>name</th>
-                        <th colspan="2">current performance</th>
-                        <th n:if="$challengeStatus->isActive()" class="text-center">today's status</th>
-                        <th>details</th>
-                    </tr>
-                    {foreach $currentUserPerformances as $userPerformance}
-                        <tr {if $user->id === $userPerformance['id']}style="background-color: #fcf8e3"{/if}>
-                            <td n:if="$challengeStatus->isGone()">{$iterator->counter}.</td>
-                            <td>{$userPerformance['username']}</td>
-                            <td class="text-center" style="width: 10em;">
-                                <div class="progress">
-                                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$userPerformance['percentage']}" aria-valuemin="0" aria-valuemax="100" style="width: {$userPerformance['percentage']}%;">
-
-                                  </div>
-                                </div>
-                            </td>
-                            <td>
-                                {$userPerformance['current_performance']} {$challenge->activity->log_type->mark} ({$userPerformance['percentage']} %)
-                            </td>
-                            <td  n:if="$challengeStatus->isActive()"  class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
-                                {$usersToday[$userPerformance['username']]}/{$userPerformance['average_minimum']} {$challenge->activity->log_type->mark}
-                            </td>
-                            <td>
-                                <a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="glyphicon glyphicon-zoom-in"></i></a>
-                            </td>
-                        </tr>
-                        <tr id="datalist-{$userPerformance['id']}" class="hidden">
-                            <td colspan="6">
-                                <table class="table small-table table-hover table-bordered">
-                                    <tr><th>Date</th><th>Performance</th><th>Cumulative sum</th></tr>
-                                    {foreach $usersPerformances['normal'][$userPerformance['username']]['days'] as $day => $dayPart}
-                                        <tr>
-                                            <td>{$day} {$challenge->activity->log_type->mark}</td>
-                                            <td>{$usersPerformances['cumulative'][$userPerformance['username']]['days'][$day]} {$challenge->activity->log_type->mark}</td>
-                                        </tr>
-                                    {/foreach}
-                                </table>
-                            </td>
-                        </tr>
-                    {/foreach}
-                    <tr>
-                        <td n:if="$challengeStatus->isGone()"></td>
-                        <td><strong>total</strong></td>
-                        <td colspan="2"><strong>{$currentTotalPerformance} {$challenge->activity->log_type->mark}</strong></td>
-                        <td n:if="$challengeStatus->isActive()"></td>
-                        <td></td>
-                    </tr>
-                </table>
+                <div class="mr-5 font-weight-bold">
+                    {$challenge->final_value} {$challenge->activity->log_type->mark} {$challenge->activity->name}s in {$challengeDays} days
+                </div>
+            </div>
+            <div class="card-footer text-white clearfix small z-1">
+                <span class="float-left">{$challenge->name}</span>
             </div>
         </div>
     </div>
-  </div>
 
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="card text-white bg-warning o-hidden h-100">
+            <div class="card-body">
+                <div class="card-body-icon">
+                    <i class="fas fa-fw fa-calendar"></i>
+                </div>
+                <div class="mr-5 font-weight-bold">
+                    Days remaining
+                </div>
+            </div>
+            <div class="card-footer text-white clearfix small z-1">
+                <span class="float-left">
+                {if $daysRemaining > 1}
+                    {$daysRemaining} days remaining
+                {elseif $daysRemaining == 1}
+                    Today is the last day!
+                {else}
+                    Already finished
+                {/if}
+                </span>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="card text-white bg-primary o-hidden h-100">
+            <div class="card-body">
+                <div class="card-body-icon">
+                    <i class="fas fa-fw fa-hourglass"></i>
+                </div>
+                <div class="mr-5 font-weight-bold">Challenge status</div>
+            </div>
+            <div class="card-footer text-white clearfix small z-1">
+                <span class="float-left">
+                    {$challengeStatus}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{if $challengeStatus->isActive()}
+    <br>
+    {control activityForm}
+{/if}
+<br>
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Score
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="dataTable" class="table table-bordered dataTable" role="grid" aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th n:if="$challengeStatus->isGone()">#</th>
+                                <th>name</th>
+                                <th colspan="2">current performance</th>
+                                <th n:if="$challengeStatus->isActive()" class="text-center">today's status</th>
+                                <th>details</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $currentUserPerformances as $userPerformance}
+                                <tr {if $user->id === $userPerformance['id']}style="background-color: #fcf8e3"{/if}>
+                                    <td n:if="$challengeStatus->isGone()">{$iterator->counter}.</td>
+                                    <td>{$userPerformance['username']}</td>
+                                    <td class="text-center" style="width: 10em;">
+                                        <div class="progress">
+                                          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$userPerformance['percentage']}" aria-valuemin="0" aria-valuemax="100" style="width: {$userPerformance['percentage']}%;">
 
-
-
-  <div id="charts" class="tab-pane fade" role="tabpanel" aria-labelledby="charts-tab">
-    <h3>Charts</h3>
-
-    <div class="card mb-3">
-        <div class="card-header">
-            <i class="fas fa-chart-area"></i>
-            Users performances</div>
+                                          </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {$userPerformance['current_performance']} {$challenge->activity->log_type->mark} ({$userPerformance['percentage']} %)
+                                    </td>
+                                    <td  n:if="$challengeStatus->isActive()"  class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
+                                        {$usersToday[$userPerformance['username']]}/{$userPerformance['average_minimum']} {$challenge->activity->log_type->mark}
+                                    </td>
+                                    <td>
+                                        <a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="fas fa-search"></i></a>
+                                    </td>
+                                </tr>
+                                <tr id="datalist-{$userPerformance['id']}" class="hidden">
+                                    <td colspan="6">
+                                        <table class="table small-table table-hover table-bordered">
+                                            <tr><th>Date</th><th>Performance</th><th>Cumulative sum</th></tr>
+                                            {foreach $usersPerformances['normal'][$userPerformance['username']]['days'] as $day => $dayPart}
+                                                <tr>
+                                                    <td>{$day} {$challenge->activity->log_type->mark}</td>
+                                                    <td>{$usersPerformances['normal'][$userPerformance['username']]['days'][$day]} {$challenge->activity->log_type->mark}</td>
+                                                    <td>{$usersPerformances['cumulative'][$userPerformance['username']]['days'][$day]} {$challenge->activity->log_type->mark}</td>
+                                                </tr>
+                                            {/foreach}
+                                        </table>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-chart-area"></i>
+                Users performances</div>
+                <div class="card-body">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <canvas id="js-users-performance"></canvas>
+                </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-chart-area"></i>
+                Users cumulative performances</div>
             <div class="card-body">
                 <div class="chartjs-size-monitor">
                     <div class="chartjs-size-monitor-expand">
-                        <div class=""></div>
+                          <div class="">
+                          </div>
                     </div>
                     <div class="chartjs-size-monitor-shrink">
-                        <div class=""></div>
+                          <div class="">
+                          </div>
                     </div>
                 </div>
-                <canvas id="js-users-performance"></canvas>
+                <canvas id="js-users-cumulative-performance"></canvas>
             </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
     </div>
-
-      <div class="card mb-3">
-          <div class="card-header">
-              <i class="fas fa-chart-area"></i>
-              Users cumulative performances</div>
-          <div class="card-body">
-              <div class="chartjs-size-monitor">
-                  <div class="chartjs-size-monitor-expand">
-                      <div class="">
-                      </div>
-                  </div>
-                  <div class="chartjs-size-monitor-shrink">
-                      <div class="">
-                      </div>
-                  </div>
-              </div>
-              <canvas id="js-users-cummulative-performance"></canvas>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-      </div>
 </div>
-
 {include '../partial/bottom.latte'}
 
 <script type="text/javascript">
@@ -177,41 +197,74 @@ $(function() {
         }
     });
 
+    var suggestedMax = {$challenge->final_value};
+    var suggestedMax = suggestedMax * 1.12;
+
+    var options = {
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: 'day'
+                }
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: {$challenge->activity->name}+'s'
+                },
+                ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: suggestedMax
+            }
+            }]
+        },
+        annotation: {
+            annotations: [{
+                drawTime: 'afterDraw',
+                id: 'a-line-1',
+                type: 'line',
+                mode: 'horizontal',
+                scaleID: 'y-axis-0',
+                value: {$challenge->final_value},
+                borderColor: 'black',
+                borderWidth: 2
+            }]
+        }
+    };
+
     var ctx = document.getElementById("js-users-performance");
     var normalChart = new Chart(ctx, {
-        // The type of chart we want to create
         type: 'line',
 
-        // The data for our dataset
         data: {
             labels: {$usersPerformances['days']},
             datasets: [
                 {foreach $usersPerformances['normal'] as $name => $data} {
                     label: {$name},
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: {$data['color']},
+                    borderColor: {$data['color']},
                     data: {$data['daysNoIndex']},
+                    fill: false
                 }{last}{else},{/last}
                 {/foreach}
             ]
         },
-        options: {
-            annotation: {
-                annotations: [{
-                    drawTime: 'afterDraw', // overrides annotation.drawTime if set
-                    id: 'a-line-1', // optional
-                    type: 'line',
-                    mode: 'horizontal',
-                    scaleID: 'y-axis-0',
-                    value: '100',
-                    borderColor: 'black',
-                    borderWidth: 2,
-                }]
-            }
-        }
+        options: options
     });
 
-    var ctx = document.getElementById("js-users-cummulative-performance");
+    var ctx = document.getElementById("js-users-cumulative-performance");
     var cumulativeChart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
@@ -222,58 +275,16 @@ $(function() {
             datasets: [
                 {foreach $usersPerformances['cumulative'] as $name => $data} {
                     label: {$name},
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: {$data['color']},
+                    borderColor: {$data['color']},
                     data: {$data['daysNoIndex']},
+                    fill: false
                 }{last}{else},{/last}
                 {/foreach}
             ]
         },
-        options: {
-            annotation: {
-                annotations: [{
-                    drawTime: 'afterDraw', // overrides annotation.drawTime if set
-                    id: 'a-line-1', // optional
-                    type: 'line',
-                    mode: 'horizontal',
-                    scaleID: 'y-axis-0',
-                    value: '100',
-                    borderColor: 'black',
-                    borderWidth: 2,
-                }]
-            }
-        }
+        options: options
     });
-
-
-
-
-    // Area Chart
-    /*
-    Morris.Area({
-        element: 'users-performance',
-        data: {$usersPerformances['normal']},
-        xkey: 'time',
-        ykeys: {$users},
-        labels: {$users},
-        lineColors: {$usersColors},
-        pointSize: 0,
-        hideHover: 'auto',
-        behaveLikeLine: true
-    });
-        Morris.Line({
-            element: 'users-cummulative-performance',
-            data: {$usersPerformances['cumulative']},
-        xkey: 'time',
-        ykeys: {$users},
-        labels: {$users},
-        lineColors: {$usersColors},
-        pointSize: 0,
-        hideHover: 'auto',
-        smooth: false,
-        goals: [{$challenge->final_value}]
-    });
-    */
 });
 </script>
 {/block}
