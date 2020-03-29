@@ -141,26 +141,27 @@
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fas fa-chart-area"></i>
-                Users performances</div>
-                <div class="card-body">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
-                        </div>
+                Users performances
+            </div>
+            <div class="card-body">
+                <div class="chartjs-size-monitor">
+                    <div class="chartjs-size-monitor-expand">
+                        <div class=""></div>
                     </div>
-                    <canvas id="js-users-performance"></canvas>
+                    <div class="chartjs-size-monitor-shrink">
+                        <div class=""></div>
+                    </div>
                 </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            <canvas id="js-users-performance"></canvas>
+            </div>
         </div>
     </div>
     <div class="col-6">
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fas fa-chart-area"></i>
-                Users cumulative performances</div>
+                Users cumulative performances
+            </div>
             <div class="card-body">
                 <div class="chartjs-size-monitor">
                     <div class="chartjs-size-monitor-expand">
@@ -174,7 +175,6 @@
                 </div>
                 <canvas id="js-users-cumulative-performance"></canvas>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
     </div>
 </div>
@@ -266,10 +266,8 @@ $(function() {
 
     var ctx = document.getElementById("js-users-cumulative-performance");
     var cumulativeChart = new Chart(ctx, {
-        // The type of chart we want to create
         type: 'line',
 
-        // The data for our dataset
         data: {
             labels: {$usersPerformances['days']},
             datasets: [

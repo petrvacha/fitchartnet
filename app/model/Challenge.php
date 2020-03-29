@@ -288,6 +288,7 @@ class Challenge extends BaseModel
         $returnData = [];
         $returnData['days'] = [];
         $returnData['normal'] = [];
+        $returnData['cumulative'] = [];
 
         $data = $this->context->query("
             SELECT

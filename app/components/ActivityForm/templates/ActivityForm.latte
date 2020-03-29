@@ -1,32 +1,37 @@
-{form activityForm}
-
-    <ul class="error" n:if="$form->hasErrors()">
-        <li n:foreach="$form->errors as $error">{$error}</li>
-    </ul>
-
-    <div>
-	<div class="left">
-	    <div style="float: left; padding-right: 50px;">
-		{label created_at /}{input created_at}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label value /}{input value}
-	    </div>
-	    <div n:if="!empty($showActivitySelect)" style="float: left; padding-right: 50px;">
-		{label activity_id /}{input activity_id}
-	    </div>
-	    <div style="padding-top: 24px;">
-		{input submit}
-	    </div>
-	</div>
+<div class="row">
+    <div class="col-xl-4 col-sm-6 mb-3">
+        {form activityForm}
+            <div n:if="$form->hasErrors()" class="error alert-danger px-2 py-1 mb-2">
+                <span n:foreach="$form->errors as $error">{$error}</span>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    {label created_at /}{input created_at}
+                </div>
+                <div class="col-md-6 mt-1 mt-md-0">
+                    {label value /}{input value}
+                </div>
+            </div>
+            <div n:if="!empty($showActivitySelect)"  class="row form-group">
+                <div class="col-12">
+                        {label activity_id /}{input activity_id}
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-12">
+                    {input submit}
+                </div>
+            </div>
+        {/form}
+        <script type="text/javascript">
+        $(function(){
+            $('.datetimepicker').datetimepicker({
+                dayOfWeekStart : 1,
+                lang: 'en',
+                startDate: '{!$time}',
+                timepicker: false,
+            });
+        });
+        </script>
     </div>
-{/form}
-<script type="text/javascript">
-$(function(){
-    $('.datetimepicker').datetimepicker({
-    dayOfWeekStart : 1,
-    lang: 'en',
-    startDate: '{!$time}'
-    });
-});
-</script>
+</div>

@@ -4,9 +4,8 @@
         <li class="breadcrumb-item">Dashboard</li>
         <li class="breadcrumb-item active">Challenges</li>
     </ol>
-    <h1>Challenges</h1>
     {include '../partial/flashMessages.latte'}
-    <a id="create-challenge-button" class="btn btn-success" href="#" style="margin: 10px 10px 0px 0px">Add Challenge</a>
+    <a id="create-challenge-button" class="btn btn-success mb-3" href="#">Add Challenge</a>
     <div id="create-challenge" class="hidden">
         {control challengeForm}
     </div>
@@ -14,7 +13,6 @@
     <table class="table table-condensed" style="margin: 10px 10px 0px 0px">
         <tr>
             <th>Name</th>
-            <th>Description</th>
             <th>Activity</th>
             <th>Your performance</th>
             <th colspan="2">Action</th>
@@ -28,7 +26,6 @@
                         <a n:href="Challenge:detail $challenge->id">{$challenge->name}</a>
                     {/if}
                 </td>
-                <td>{$challenge->description}</td>
                 <td>{$challenge->activity_name}</td>
                 <td>{$challenge->current_value}/{$challenge->final_value} {$challenge->log_type_mark}</td>
                 <td style="width: 65px;">

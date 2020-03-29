@@ -25,6 +25,7 @@
     "startbootstrap-sb-admin": "^5.1.1"
   },
   "dependencies": {
-    "chartjs-plugin-annotation": "^0.5.7"
+    "chartjs-plugin-annotation": "^0.5.7",
+    "jquery-datetimepicker": "^2.5.21"
   }
 }
