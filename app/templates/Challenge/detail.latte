@@ -200,7 +200,7 @@ $(function() {
     var suggestedMax = {$challenge->final_value};
     var suggestedMax = suggestedMax * 1.12;
 
-    var options = {
+    var CumulativeOptions = {
         responsive: true,
         tooltips: {
             mode: 'index',
@@ -227,7 +227,7 @@ $(function() {
                 ticks: {
                     suggestedMin: 0,
                     suggestedMax: suggestedMax
-            }
+                }
             }]
         },
         annotation: {
@@ -240,6 +240,34 @@ $(function() {
                 value: {$challenge->final_value},
                 borderColor: 'black',
                 borderWidth: 2
+            }]
+        }
+    };
+
+    var options = {
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: 'day'
+                }
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: {$challenge->activity->name}+'s'
+                }
             }]
         }
     };
@@ -281,7 +309,7 @@ $(function() {
                 {/foreach}
             ]
         },
-        options: options
+        options: CumulativeOptions
     });
 });
 </script>

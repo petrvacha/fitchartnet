@@ -45,7 +45,7 @@ class RegistrationPresenter extends BasePresenter
 
         if ($result) {
             $this->flashMessage('Congratulations, your account has been activated!', parent::MESSAGE_TYPE_INFO);
-            $this->redirect('Homepage:default');
+            $this->redirect('Login:default');
         } else {
             $this->flashMessage('We are sorry, your activated link is wrong.', parent::MESSAGE_TYPE_ERROR);
             $this->redirect('Registration:error');

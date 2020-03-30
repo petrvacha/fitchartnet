@@ -138,9 +138,14 @@ class User extends BaseModel
      */
     public function activeUserByToken($token)
     {
-        return $this
-                ->findOneBy(['token' => $token])
-                ->update(['token' => NULL, 'active' => TRUE, 'updated_at' => $this->getDateTime()]);
+        $user = $this->findOneBy(['token' => $token]);
+
+        if ($user) {
+            $user->update(['token' => NULL, 'active' => TRUE, 'updated_at' => $this->getDateTime()]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

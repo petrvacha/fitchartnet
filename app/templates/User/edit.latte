@@ -6,21 +6,18 @@
     <li class="breadcrumb-item">User</li>
     <li class="breadcrumb-item active">Edit</li>
 </ol>
-<h1>User edit</h1>
-{control userProfileForm}
-<br /><br /><br />
-<br /><br /><br />
-<div id="user-photo-form-div">
-    {control userPhotoForm}
-</div>
-{if $newAvatar}
-    <div class="row">
-        <div class="col-lg-4 img-container" style="">
-            <img id="image" src="{plink Static:getOriginProfilePicture, $user['profile_photo']}">
-        </div>
-        <button class="btn btn-primary" id="crop-button">Crop it!</button>
+
+<div class="row">
+    <div class="col-xl-4 col-sm-6 mb-3">
+        {control userProfileForm}
     </div>
-{/if}
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="col-6">
+            {control userPhotoForm}
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
 $(function(){
