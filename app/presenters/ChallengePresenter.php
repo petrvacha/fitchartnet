@@ -82,16 +82,16 @@ class ChallengePresenter extends LoginBasePresenter
         }
 
         $today = new \DateTime;
-        $todayStartString = $today->format("Y-m-d 00:00:00");
-        $todayEndString = $today->format("Y-m-d 23:59:59");
+        $todayString = $today->format("Y.m.d");
 
-        foreach($this->template->usersPerformances['normal'] as $record) {
-            if (isset($record['time']) && $todayStartString <= $record['time'] && $todayEndString > $record['time']) {
-                foreach ($users as $user) {
-                    $usersToday[$user] += $record[$user];
+        foreach($this->template->usersPerformances['normal'] as $username => $userValues) {
+            foreach ($userValues['days'] as $day => $value) {
+                if ($todayString == $day) {
+                    $usersToday[$username] += $value;
                 }
             }
         }
+
         $this->template->usersToday = $usersToday;
 
         $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {

@@ -36,7 +36,7 @@ class SignForm extends \Fitchart\Application\Control
         $form = new Form;
         $form->addText('username', 'Email')
             ->setRequired('Please enter your username.')
-            ->setAttribute('placeholder', 'Username');
+            ->setAttribute('placeholder', 'Email');
 
         $form->addPassword('password', 'Password')
             ->setRequired('Please enter your password.')

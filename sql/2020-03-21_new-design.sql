@@ -25,8 +25,8 @@ JOIN
     CU.challenge_id = C.id AND
     CU.active = 1
 GROUP BY
+    DATE_FORMAT(AL.created_at, '%Y-%m-%d'),
     challenge_id,
-    user_id,
-    DAY(AL.created_at)
+    user_id
 ORDER BY
     AL.created_at ASC
