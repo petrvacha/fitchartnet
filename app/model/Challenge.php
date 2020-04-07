@@ -312,9 +312,17 @@ class Challenge extends BaseModel
         $startDateTime->setTime(0,0,0);
         $endDateTime = $challenge[0]['end_at'];
         $endDateTime->setTime(23,59,59);
+        $today = new DateTime();
+        $dayFormat = "y/m/d";
+
+        if ($startDateTime->format('y') === $endDateTime->format('y') && $startDateTime->format('y') === $today->format('y')) {
+            $dayFormat = "m/d";
+            $returnData['daysFormat'] = $dayFormat;
+            $returnData['dayMaximum'] = 0;
+        }
 
         for ($day = clone $startDateTime; $day <= $endDateTime; $day->add(new \DateInterval('P1D'))) {
-            $returnData['days'][] = $day->format('Y.m.d');
+            $returnData['days'][] = $day->format($dayFormat);
         }
 
         $lastDay = [];
@@ -332,15 +340,17 @@ class Challenge extends BaseModel
                 $returnData['cumulative'][$record['username']]['cumulativeSum'] = 0;
                 $lastDay[$record['username']] = null;
             }
-            $returnData['normal'][$record['username']]['days'][$record['created_at']->format('Y.m.d')] = $record['value'];
+            $returnData['normal'][$record['username']]['days'][$record['created_at']->format($dayFormat)] = $record['value'];
             $newCumulativeValue = $returnData['cumulative'][$record['username']]['cumulativeSum'] + $record['value'];
-            $returnData['cumulative'][$record['username']]['days'][$record['created_at']->format('Y.m.d')] = $newCumulativeValue;
+            if ($returnData['dayMaximum'] < $record['value']) {
+                $returnData['dayMaximum'] = $record['value'];
+            }
+            $returnData['cumulative'][$record['username']]['days'][$record['created_at']->format($dayFormat)] = $newCumulativeValue;
             $returnData['cumulative'][$record['username']]['cumulativeSum'] = $newCumulativeValue;
         }
 
         foreach ($returnData['days'] as $day) {
             foreach ($returnData['normal'] as $username => $userData) {
-
                 if (!isset($returnData['cumulative'][$username]['days'][$day])) {
                     $returnData['normal'][$username]['days'][$day] = 0;
                     if ($lastDay[$username] && isset($returnData['cumulative'][$username]['days'][$lastDay[$username]])) {
@@ -350,6 +360,9 @@ class Challenge extends BaseModel
                     }
                 }
                 $lastDay[$username] = $day;
+            }
+            if ($day >= $today->format($dayFormat)) {
+                break;
             }
         }
 

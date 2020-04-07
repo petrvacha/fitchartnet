@@ -70,7 +70,7 @@ class ChallengePresenter extends LoginBasePresenter
         }
 
         $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
-        $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id);
+        $this->template->usersPerformances = $usersPerformances = $this->challengeModel->getUsersPerformances($id);
 
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
 
@@ -82,11 +82,9 @@ class ChallengePresenter extends LoginBasePresenter
         }
 
         $today = new \DateTime;
-        $todayString = $today->format("Y.m.d");
-
-        foreach($this->template->usersPerformances['normal'] as $username => $userValues) {
+        foreach($usersPerformances['normal'] as $username => $userValues) {
             foreach ($userValues['days'] as $day => $value) {
-                if ($todayString == $day) {
+                if ($today->format($usersPerformances['daysFormat']) == $day) {
                     $usersToday[$username] += $value;
                 }
             }

@@ -21,11 +21,10 @@ module.exports = function(grunt) {
         './htdocs/js/libs/netteForms.js',
         './htdocs/js/libs/nette.ajax.js',
         './htdocs/js/libs/cropper.min.js',
-        './node_modules/startbootstrap-sb-admin/vendor/datatables/dataTables.bootstrap4.js',
-        './node_modules/startbootstrap-sb-admin/js/sb-admin.js',
         './htdocs/js/libs/jquery.tokeninput.js',
         './node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.js',
-        './htdocs/js/common.js'
+        './htdocs/js/common.js',
+        './node_modules/startbootstrap-sb-admin/vendor/datatables/dataTables.bootstrap4.js'
     ];
 
     grunt.initConfig({

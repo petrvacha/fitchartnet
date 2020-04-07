@@ -19,8 +19,8 @@
     "grunt": "^1.1.0",
     "grunt-contrib-concat": "*",
     "grunt-contrib-cssmin": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-watch": "*",
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0",
     "matchdep": "*",
     "startbootstrap-sb-admin": "^5.1.1"
   },

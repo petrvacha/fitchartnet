@@ -50,7 +50,6 @@ class MainPresenter extends LoginBasePresenter
         $this->template->activityList = $this->activityLog->getUserActivityList($this->user->id);
         $this->template->chartData = $this->activityLog->getUserPreparedData($this->user->id);
         $this->template->firstActivityId = !empty($this->template->chartData['indexes']) ? key($this->template->chartData['indexes']) : null;
-        //  dump($this->template->chartData['values'][1]);die;
     }
 
     /**
@@ -101,7 +100,7 @@ class MainPresenter extends LoginBasePresenter
     }
 
     /**
-     * @return \App\Components\ActivityForm
+     * @return \App\Components\UserWeightForm
      */
     protected function createComponentWeightForm()
     {

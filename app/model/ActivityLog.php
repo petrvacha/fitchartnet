@@ -4,6 +4,7 @@
 namespace App\Model;
 
 use \DateTime;
+use \DateInterval;
 
 
 /**
@@ -68,25 +69,25 @@ class ActivityLog extends BaseModel
                     'year' => [],
                     'all' => []
                 ];
-                for ($day = clone $thisWeekStart; $day <= $thisWeekEnd; $day->add(new \DateInterval('P1D'))) {
+                for ($day = clone $thisWeekStart; $day <= $thisWeekEnd; $day->add(new DateInterval('P1D'))) {
                     $preparedData[$item->activity_id]['week'][$day->format('d.m.Y')] = 0;
                 }
-                for ($day = clone $thisMonthStart; $day <= $thisMonthEnd; $day->add(new \DateInterval('P1D'))) {
+                for ($day = clone $thisMonthStart; $day <= $thisMonthEnd; $day->add(new DateInterval('P1D'))) {
                     $preparedData[$item->activity_id]['month'][$day->format('d.m.Y')] = 0;
                 }
-                for ($month = clone $thisYearStart; $month <= $thisYearEnd; $month->add(new \DateInterval('P1M'))) {
+                for ($month = clone $thisYearStart; $month <= $thisYearEnd; $month->add(new DateInterval('P1M'))) {
                     $preparedData[$item->activity_id]['year'][$month->format('m.Y')] = 0;
                 }
-                for ($year = clone $firstActivity; $year <= $thisYearEnd; $year->add(new \DateInterval('P1Y'))) {
+                for ($year = clone $firstActivity; $year <= $thisYearEnd; $year->add(new DateInterval('P1Y'))) {
                     $preparedData[$item->activity_id]['all'][$year->format('Y')] = 0;
                 }
             }
 
-            $itemTime = $item->updated_at->format('Y-m-d H:i:s');
+            $itemTime = $item->updated_at;
             $keyItemTime = $item->updated_at->format('d.m.Y');
             $keyMonthItemTime = $item->updated_at->format('m.Y');
             $keyYearItemTime = (string) $item->updated_at->format('Y');
-            
+
             if ($itemTime >= $thisWeekStart) {
                 $this->addValue($preparedData[$item->activity_id]['week'], $keyItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
