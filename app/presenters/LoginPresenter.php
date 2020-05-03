@@ -40,7 +40,12 @@ class LoginPresenter extends BasePresenter
     {
         $this->template->title = 'login';
         if ($this->getUser()->isLoggedIn()) {
-            $this->redirect('Challenge:default');
+            $challengeId = $this->challengeModel->getLastActiveUserChallenge();
+            if ($challengeId) {
+                $this->redirect('Challenge:detail', $challengeId->id);
+            } else {
+                $this->redirect('Challenge:default');
+            }
         }
         $this->setLayout('authLayout');
     }
@@ -49,7 +54,12 @@ class LoginPresenter extends BasePresenter
     {
         $this->template->title = 'reset password';
         if ($this->getUser()->isLoggedIn()) {
-            $this->redirect('Challenge:default');
+            $challengeId = $this->challengeModel->getLastActiveUserChallenge();
+            if ($challengeId) {
+                $this->redirect('Challenge:detail', $challengeId->id);
+            } else {
+                $this->redirect('Challenge:default');
+            }
         }
         $this->setLayout('authLayout');
     }
@@ -57,7 +67,7 @@ class LoginPresenter extends BasePresenter
     public function renderLast()
     {
         if ($this->getUser()->isLoggedIn()) {
-            $challengeId = $this->challengeModel->getLastUserChallenge();
+            $challengeId = $this->challengeModel->getLastActiveUserChallenge();
             if ($challengeId) {
                 $this->redirect('Challenge:detail', $challengeId->id);
             } else {
@@ -70,7 +80,12 @@ class LoginPresenter extends BasePresenter
     public function renderLaunch()
     {
         if ($this->getUser()->isLoggedIn()) {
+            $challengeId = $this->challengeModel->getLastActiveUserChallenge();
+            if ($challengeId) {
+                $this->redirect('Challenge:detail', $challengeId->id);
+            } else {
                 $this->redirect('Challenge:default');
+            }
         }
         $this->template->title = 'Fitchart.net';
         $this->template->randomNumber = rand(1,3);
@@ -90,8 +105,14 @@ class LoginPresenter extends BasePresenter
     {
         $control = $this->signFormFactory->create();
         $control->getComponent('signForm')->onSuccess[] = function() {
-            $this->flashMessage('Welcome on board!', 'info');
-            $this->redirect('Challenge:');
+            $challengeId = $this->challengeModel->getLastActiveUserChallenge();
+            if ($challengeId) {
+                $this->flashMessage('This is your last challenge! Finish it!', 'info');
+                $this->redirect('Challenge:detail', $challengeId->id);
+            } else {
+                $this->flashMessage('Welcome on board!', 'info');
+                $this->redirect('Challenge:');
+            }
         };
         return $control;
     }

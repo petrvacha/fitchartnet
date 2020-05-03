@@ -53,9 +53,6 @@ abstract class LoginBasePresenter extends BasePresenter
         $this->redrawControl('notification');
     }
 
-    /**
-     * @param $id
-     */
     public function actionSeenNotification($id)
     {
         $notification = $this->notificationModel->findRow($id);

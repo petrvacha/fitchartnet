@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+use Cassandra\Date;
 use Fitchart\Application\ChallengeStatus;
 use Fitchart\Application\SecurityException;
 use Nette\Utils\DateTime;
@@ -187,12 +188,11 @@ class Challenge extends BaseModel
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getLastUserChallenge()
+    public function getLastActiveUserChallenge()
     {
-        return $this->context->query("
+        $now = new \DateTime();
+
+        $challenges = $this->context->query("
             SELECT
                 C.id
             FROM
@@ -200,10 +200,18 @@ class Challenge extends BaseModel
             JOIN challenge_user CU ON
                 CU.challenge_id = C.id
             WHERE
-                CU.user_id = ?
+                CU.user_id = ? AND               
+                C.end_at >= ?
             ORDER BY
-                C.end_at DESC", $this->user->getIdentity()->id
-        )->fetch();
+                C.end_at DESC", $this->user->getIdentity()->id, $now
+        )->fetchAll();
+
+        $countChallenges = count($challenges);
+        if ($countChallenges !== 1) {
+            return false;
+        } else {
+            return $challenges[0];
+        }
     }
 
     /**

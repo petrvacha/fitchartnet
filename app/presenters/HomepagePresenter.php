@@ -57,7 +57,7 @@ class HomepagePresenter extends BasePresenter
     public function renderLast()
     {
         if ($this->getUser()->isLoggedIn()) {
-            $challengeId = $this->challengeModel->getLastUserChallenge();
+            $challengeId = $this->challengeModel->getLastActiveUserChallenge();
             if ($challengeId) {
                 $this->redirect('Challenge:detail', $challengeId->id);
             } else {

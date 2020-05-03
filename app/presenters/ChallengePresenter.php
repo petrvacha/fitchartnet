@@ -47,6 +47,17 @@ class ChallengePresenter extends LoginBasePresenter
         $this->challengeModel = $challengeModel;
     }
 
+    public function renderAfterLogin()
+    {
+        $this->template->title = 'Stats';
+        $this->template->challenges = $this->challengeModel->getUserChallenges();
+        $this->template->editPermission = ($this->user->getIdentity()->role <= Role::MODERATOR);
+        $this['challengeForm']['challengeForm']
+            ->addSubmit('submit', 'Create')
+            ->getControlPrototype()
+            ->addClass('btn btn-success');
+    }
+
     public function renderDefault()
     {
         $this->template->title = 'Stats';
@@ -58,9 +69,6 @@ class ChallengePresenter extends LoginBasePresenter
             ->addClass('btn btn-success');
     }
 
-    /**
-     * @param $id
-     */
     public function renderDetail($id)
     {
         $users = $this->challengeModel->getChallengeUsers($id);
@@ -106,7 +114,6 @@ class ChallengePresenter extends LoginBasePresenter
                 $this->template->activeUsers[] = $p['username'];
             }
 
-
             $diff = $challenge['final_value'] - $p['current_performance'] + $usersToday[$p['username']];
 
             if ($diff > 0 && $daysRemaining) {
@@ -125,28 +132,18 @@ class ChallengePresenter extends LoginBasePresenter
         $this->template->challengeDays = $this->template->challengeStatus !== Challenge::TEXT_STATUS_GONE ? $challenge['start_at']->diff($challenge['end_at'])->days + 1 : 0;
     }
 
-    /**
-     * @param $challengeId
-     */
     public function actionJoin($challengeId)
     {
         $this->challengeUserModel->attend($challengeId);
         $this->redirect('Challenge:detail', $challengeId);
     }
 
-    /**
-     * @param $challengeId
-     */
     public function actionLeave($challengeId)
     {
         $this->challengeUserModel->attend($challengeId, FALSE);
         $this->redirect('Challenge:');
     }
 
-
-    /**
-     * @param int $id
-     */
     public function renderEdit($id)
     {
         $data = $this->challengeModel->getChallengeData($id);
@@ -164,9 +161,6 @@ class ChallengePresenter extends LoginBasePresenter
             ->addClass('btn btn-success');
     }
 
-    /**
-     * @return \App\Components\ChallengeForm
-     */
     protected function createComponentChallengeForm()
     {
         $control = $this->challengeFormFactory->create($this->user->id);
@@ -176,9 +170,6 @@ class ChallengePresenter extends LoginBasePresenter
         return $control;
     }
 
-    /**
-     * @return \App\Components\ActivityForm
-     */
     protected function createComponentActivityForm()
     {
         $challengeId = NULL;
