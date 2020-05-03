@@ -1,18 +1,18 @@
 {form userPhotoForm}
+    <div n:if="$form->hasErrors()" class="error alert-danger px-2 py-1 mb-2">
+        <span n:foreach="$form->errors as $error">{$error}</span>
+    </div>
 
-    <ul class="error" n:if="$form->hasErrors()">
-        <li n:foreach="$form->errors as $error">{$error}</li>
-    </ul>
-
-    <div>
-	<div class="left">
-	    <div style="float: left; padding-right: 50px;">
-		{label photo /}{input photo}
-	    </div>
-	    <div style="padding-top: 24px;">
-                <img style="max-width: 250px" src="{plink Static:getProfilePicture, $user['profile_photo']}">
-		{input upload}
-	    </div>
-	</div>
+    <div class="row form-group">
+        <div class="col-md-12">
+    {label photo /}{input photo}
+        </div>
+    <div class="col-md-12 mt-1 mt-md-0">
+        <img style="max-width: 100px" class="mb-2 mt-2" src="{plink Static:getProfilePicture, $user['profile_photo']}">
+    </div>
+    <div class="row form-group">
+        <div class="col-12 ml-3 mt-2">
+            {input upload}
+        </div>
     </div>
 {/form}

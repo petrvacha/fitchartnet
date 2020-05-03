@@ -1,44 +1,20 @@
-<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-    <div class="panel panel-info" >
-        <div class="panel-heading">
-            <div class="panel-title">Sign In</div>
-            <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#" onclick="$('#loginbox').hide(); $('#resetpasswordbox').show()" title=">:-/">Forgot password?</a></div>
-        </div>
+{form signForm}
+    <div n:foreach="$form->errors as $error" id="login-alert" class="alert alert-danger col-sm-12">{$error}</div>
 
-        <div style="padding-top:30px" class="panel-body">
-
-            {form signForm}
-            <div n:foreach="$form->errors as $error" id="login-alert" class="alert alert-danger col-sm-12">{$error}</div>
-
-
-                <div style="margin-bottom: 25px" class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    {input username}
-                </div>
-
-                <div style="margin-bottom: 25px" class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    {input password}
-                </div>
-
-
-                <div style="margin-top:10px" class="form-group">
-                    <div class="col-sm-12 controls">
-                      {input submit}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-12 control">
-                        <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
-                            Don't have an account!
-                        <a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
-                            Sign Up Here
-                        </a>
-                        </div>
-                    </div>
-                </div>
-            {/form}
+    <div class="form-group">
+        <div class="form-label-group">
+            {input username}
+            {label username /}
         </div>
     </div>
-</div>
+
+    <div class="form-group">
+        <div class="form-label-group">
+            {input password}
+            {label password /}
+        </div>
+    </div>
+
+    {input submit}
+
+{/form}

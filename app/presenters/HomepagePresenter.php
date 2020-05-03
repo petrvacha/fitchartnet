@@ -14,9 +14,6 @@ class HomepagePresenter extends BasePresenter
     /** @var \App\Components\SignForm\ISignFormFactory @inject */
     public $signFormFactory;
 
-    /** @var \App\Components\RegistrationForm\IRegistrationFormFactory @inject */
-    public $registrationFormFactory;
-
     /** @var \App\Components\ResetPasswordForm\IResetPasswordFormFactory @inject */
     public $resetPasswordFormFactory;
 
@@ -39,6 +36,24 @@ class HomepagePresenter extends BasePresenter
         $this->challengeModel = $challengeModel;
     }
 
+    public function renderDefault()
+    {
+        $this->template->title = 'login';
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Challenge:default');
+        }
+        $this->setLayout('authLayout');
+    }
+
+    public function renderResetPassword()
+    {
+        $this->template->title = 'reset password';
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Challenge:default');
+        }
+        $this->setLayout('authLayout');
+    }
+
     public function renderLast()
     {
         if ($this->getUser()->isLoggedIn()) {
@@ -50,14 +65,6 @@ class HomepagePresenter extends BasePresenter
             }
         }
         $this->redirect('Homepage:default');
-    }
-
-    public function renderDefault()
-    {
-        $this->template->title = 'login';
-        if ($this->getUser()->isLoggedIn()) {
-            $this->redirect('Challenge:default');
-        }
     }
 
     public function renderLaunch()
@@ -85,20 +92,6 @@ class HomepagePresenter extends BasePresenter
         $control->getComponent('signForm')->onSuccess[] = function() {
             $this->flashMessage('Welcome on board!', 'info');
             $this->redirect('Challenge:');
-        };
-        return $control;
-    }
-
-    /**
-     * Registration form factory.
-     * @return Nette\Application\UI\Form
-     */
-    protected function createComponentRegistrationForm()
-    {
-        $control = $this->registrationFormFactory->create();
-        $control->getComponent('registrationForm')->onSuccess[] = function() {
-            $this->flashMessage('Check your mail box and confirm the registration.', 'info');
-            $this->redirect('Homepage:');
         };
         return $control;
     }

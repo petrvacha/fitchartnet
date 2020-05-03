@@ -281,103 +281,97 @@ class Challenge extends BaseModel
     /**
      * Returns users' continuous and cumulative data
      * @param int $challengeId
-     * @param array $users
      * @return array
      */
-    public function getUsersPerformances($challengeId, array $users)
+    public function getUsersPerformances($challengeId)
     {
+        $returnData = [];
+        $returnData['days'] = [];
+        $returnData['normal'] = [];
+        $returnData['cumulative'] = [];
+
         $data = $this->context->query("
             SELECT
-                *
+                challenge_id, value, created_at, user_id, username, color, start_at, end_at
             FROM
                 user_challenge_performance_view
             WHERE
-                challenge_id = ?", $challengeId)->fetchAll();
+                challenge_id = ?
+            ORDER BY created_at", $challengeId)->fetchAll();
 
-        if (isset($data[0])) {
-            $currentDateTime = new \DateTime($data[0]['start_at']);
-            $currentDateTime->setTime(0,0,0);
-            $endDateTime = $data[0]['end_at'];
+        $challenge = $this->context->query("
+                SELECT
+                    C.start_at,
+                    C.end_at
+                FROM
+                    challenge C
+                WHERE
+                    C.id = ?", $challengeId)->fetchAll();
 
-        } else {
-            $metaData = $this->context->query("
-                    SELECT
-                        C.*,
-                        U.username
-                    FROM
-                        challenge C
-                    JOIN
-                        challenge_user CU ON CU.challenge_id = C.id AND CU.active = 1
-                    JOIN
-                        user U ON U.id = CU.user_id
-                    WHERE
-                        CU.challenge_id = ?", $challengeId)->fetchAll();
+        $startDateTime = new \DateTime($challenge[0]['start_at']);
+        $startDateTime->setTime(0,0,0);
+        $endDateTime = $challenge[0]['end_at'];
+        $endDateTime->setTime(23,59,59);
+        $today = new DateTime();
+        $dayFormat = "y/m/d";
 
-            $currentDateTime = new \DateTime($metaData[0]['start_at']);
-            $currentDateTime->setTime(0,0,0);
-            $endDateTime = $metaData[0]['end_at'];
+        if ($startDateTime->format('y') === $endDateTime->format('y') && $startDateTime->format('y') === $today->format('y')) {
+            $dayFormat = "m/d";
+            $returnData['daysFormat'] = $dayFormat;
+            $returnData['dayMaximum'] = 0;
         }
 
-        $preparedData = [];
-        $cumulative = [];
-
-        $currentDateTime->modify('- 14 hours'); // -8h (one more for iteration) -6h (for correct shift - it starts at 2 am)
-        $firstFakeDateTime = clone $currentDateTime;
-        for (;$currentDateTime < $endDateTime; $currentDateTime->modify('+ 8 hours')) {
-            $preparedData[$currentDateTime->format('Y-m-d H:i:s')] = [];
-            $cumulative[$currentDateTime->format('Y-m-d H:i:s')] = [];
-            foreach ($users as $user) {
-                $cumulative[$currentDateTime->format('Y-m-d H:i:s')][$user] = 0;
-                $preparedData[$currentDateTime->format('Y-m-d H:i:s')][$user] = 0;
-            }
-            $cumulative[$currentDateTime->format('Y-m-d H:i:s')]['time'] = $currentDateTime->format('Y-m-d H:i:s');
+        for ($day = clone $startDateTime; $day <= $endDateTime; $day->add(new \DateInterval('P1D'))) {
+            $returnData['days'][] = $day->format($dayFormat);
         }
 
-        unset($preparedData[$firstFakeDateTime->format('Y-m-d H:i:s')]);
-        unset($preparedData[$firstFakeDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s')]);
+        $lastDay = [];
 
-        $firstKey = key($preparedData);
-        if (!empty($data)) {
-            foreach ($data as $item) {
-                foreach ($preparedData as $dateTime => $arrayData) {
-                    $nextDateTime = new \DateTime($dateTime);
-
-                    if ($dateTime <= $item['created_at']->format('Y-m-d H:i:s') &&
-                        $nextDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s') > $item['created_at']->format('Y-m-d H:i:s') ||
-                        $firstKey === $dateTime && $dateTime > $item['created_at']->format('Y-m-d H:i:s')) {
-
-                        $preparedData[$dateTime][$item['username']] += $item['value'];
-                    }
-                    $preparedData[$dateTime]['time'] = $dateTime;
-                }
+        foreach ($data as $record) {
+            if (!isset($returnData['normal'][$record['username']])) {
+                $returnData['normal'][$record['username']] = [];
+                $returnData['normal'][$record['username']]['days'] = [];
+                $returnData['normal'][$record['username']]['userId'] = $record['user_id'];
+                $returnData['normal'][$record['username']]['color'] = $record['color'];
+                $returnData['cumulative'][$record['username']] = [];
+                $returnData['cumulative'][$record['username']]['days'] = [];
+                $returnData['cumulative'][$record['username']]['userId'] = $record['user_id'];
+                $returnData['cumulative'][$record['username']]['color'] = $record['color'];
+                $returnData['cumulative'][$record['username']]['cumulativeSum'] = 0;
+                $lastDay[$record['username']] = null;
             }
+            $returnData['normal'][$record['username']]['days'][$record['created_at']->format($dayFormat)] = $record['value'];
+            $newCumulativeValue = $returnData['cumulative'][$record['username']]['cumulativeSum'] + $record['value'];
+            if ($returnData['dayMaximum'] < $record['value']) {
+                $returnData['dayMaximum'] = $record['value'];
+            }
+            $returnData['cumulative'][$record['username']]['days'][$record['created_at']->format($dayFormat)] = $newCumulativeValue;
+            $returnData['cumulative'][$record['username']]['cumulativeSum'] = $newCumulativeValue;
+        }
 
-            foreach ($preparedData as $dateTime => $arrayData) {
-                $previousDateTime = new \DateTime($dateTime);
-                foreach($arrayData as $name => $value) {
-                    if ($name !== 'time') {
-                        $newValue = $value + $cumulative[$previousDateTime->format('Y-m-d H:i:s')][$name];
-
-                        $cumulative[$dateTime][$name] = $newValue;
-
-                        reset($cumulative);
-                        while (next($cumulative) !== FALSE) {
-                            if (key($cumulative) >= $dateTime) {
-                                $cumulative[key($cumulative)][$name] = $newValue;
-                            }
-                        }
-
+        foreach ($returnData['days'] as $day) {
+            foreach ($returnData['normal'] as $username => $userData) {
+                if (!isset($returnData['cumulative'][$username]['days'][$day])) {
+                    $returnData['normal'][$username]['days'][$day] = 0;
+                    if ($lastDay[$username] && isset($returnData['cumulative'][$username]['days'][$lastDay[$username]])) {
+                        $returnData['cumulative'][$username]['days'][$day] = $returnData['cumulative'][$username]['days'][$lastDay[$username]];
+                    } else {
+                        $returnData['cumulative'][$username]['days'][$day] = 0;
                     }
                 }
+                $lastDay[$username] = $day;
+            }
+            if ($day >= $today->format($dayFormat)) {
+                break;
             }
         }
 
-        unset($cumulative[$firstFakeDateTime->modify('- 8 hours')->format('Y-m-d H:i:s')]);
-        unset($cumulative[$firstFakeDateTime->modify('+ 8 hours')->format('Y-m-d H:i:s')]);
-        $returnData = [];
-        $returnData['normal'] = array_values($preparedData);
-        $returnData['cumulative'] = array_values($cumulative);
-
+        foreach ($returnData['normal'] as $username => $userData) {
+            ksort($returnData['normal'][$username]['days']);
+            ksort($returnData['cumulative'][$username]['days']);
+            $returnData['normal'][$username]['daysNoIndex'] = array_values($returnData['normal'][$username]['days']);
+            $returnData['cumulative'][$username]['daysNoIndex'] = array_values($returnData['cumulative'][$username]['days']);
+        }
         return $returnData;
     }
 

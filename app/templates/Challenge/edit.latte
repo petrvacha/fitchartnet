@@ -1,13 +1,13 @@
 {block content}
 {include '../partial/navigation.latte'}
 
-<div class="container">
-    {include '../partial/flashMessages.latte'}
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item">Dashboard</li>
+    <li class="breadcrumb-item active">Challenges</li>
+    <li class="breadcrumb-item active">Edit challenge</li>
+</ol>
 
-    <h2 class="page-header">Challenge edit</h2>
-        <div id="edit-challenge">
-            {control challengeForm}
-        </div>
-    <br />
-</div>
+{include '../partial/flashMessages.latte'}
+
+{control challengeForm}
 {/block}

@@ -1,45 +1,36 @@
 {form userProfileForm}
-    <ul class="error" n:if="$form->hasErrors()">
-        <li n:foreach="$form->errors as $error">{$error}</li>
-    </ul>
-
-    <div>
-	<div class="left">
-	    <div style="float: left; padding-right: 50px;">
-		{label firstname /}{input firstname}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label surname /}{input surname}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label email /}{input email}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label username /}{input username}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label gender_id /}{input gender_id}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label privacy_id /}{input privacy_id}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label bio /}{input bio}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label old_password /}{input old_password}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label password /}{input password}
-	    </div>
-	    <div style="float: left; padding-right: 50px;">
-		{label confirm_password /}{input confirm_password}
-	    </div>
-	    <div style="padding-top: 24px;">
-		{input submit}
-	    </div>
+	<div n:if="$form->hasErrors()" class="error alert-danger px-2 py-1 mb-2">
+		<span n:foreach="$form->errors as $error">{$error}</span>
 	</div>
-    </div>
+
+	<div class="row form-group">
+		<div class="col-md-12">
+			{label firstname /}{input firstname}
+		</div>
+		<div class="col-md-12 mt-2">
+			{label surname /}{input surname}
+		</div>
+		<div class="col-md-6 mt-2">
+			{label email /}{input email}
+		</div>
+		<div class="col-md-6 mt-2">
+			{label username /}{input username}
+		</div>
+	</div>
+	<div class="row form-group mt-2">
+		<div class="col-md-6">
+			{label old_password /}{input old_password}
+		</div>
+		<div class="col-md-6 mt-2">
+			{label password /}{input password}
+		</div>
+		<div class="col-md-6">
+			{label confirm_password /}{input confirm_password}
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-12">
+			{input submit}
+		</div>
+	</div>
 {/form}
-<script type="text/javascript">
-</script>

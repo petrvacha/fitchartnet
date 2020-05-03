@@ -62,7 +62,7 @@ class ActivityForm extends \Fitchart\Application\Control
             ->setAttribute('placeholder', 'now')
             ->getControlPrototype()->addClass('datetimepicker');
 
-        $form['created_at']->getLabelPrototype()->style = 'float: left; width: 60px;';
+       // $form['created_at']->getLabelPrototype()->style = 'float: left; width: 60px;';
 
 
 
@@ -83,7 +83,7 @@ class ActivityForm extends \Fitchart\Application\Control
             ->setAttribute('placeholder', '0')
             ->setRequired('You forget fill important number.')
             ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.');
-        $form['value']->getLabelPrototype()->style = 'float: left; width: 65px;';
+        //$form['value']->getLabelPrototype()->style = 'float: left; width: 65px;';
 
         $form->setDefaults($this->data);
 

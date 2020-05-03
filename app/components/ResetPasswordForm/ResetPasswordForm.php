@@ -36,11 +36,12 @@ class ResetPasswordForm extends \Fitchart\Application\Control
     {
         $form = new Form;
 
-        $form->addText('email', 'Username or email')
+        $form->addText('email', 'Email')
             ->setRequired('Please enter your email.')
+            ->setAttribute('placeholder', 'Email')
             ->addRule(Form::EMAIL, 'Doesn\'t look like a valid email.');
 
-        $form->addSubmit('submit', 'Reset');
+        $form->addSubmit('submit', 'Reset Password');
 
         $form->onSuccess[] = array($this, 'formSent');
 

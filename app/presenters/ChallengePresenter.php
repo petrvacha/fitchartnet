@@ -68,11 +68,11 @@ class ChallengePresenter extends LoginBasePresenter
             $this->flashMessage('Soooorry! But it looks like you do not have a permission to see this awesome challenge.', parent::MESSAGE_TYPE_INFO);
             $this->redirect('Challenge:');
         }
+
         $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
-        $this->template->usersPerformances = $this->challengeModel->getUsersPerformances($id, $users);
+        $this->template->usersPerformances = $usersPerformances = $this->challengeModel->getUsersPerformances($id);
 
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
-
 
         $users = [];
         $usersToday = [];
@@ -82,34 +82,28 @@ class ChallengePresenter extends LoginBasePresenter
         }
 
         $today = new \DateTime;
-        $todayStartString = $today->format("Y-m-d 00:00:00");
-        $todayEndString = $today->format("Y-m-d 23:59:59");
-
-        foreach($this->template->usersPerformances['normal'] as $record) {
-            if (isset($record['time']) && $todayStartString <= $record['time'] && $todayEndString > $record['time']) {
-                foreach ($users as $user) {
-                    $usersToday[$user] += $record[$user];
+        foreach($usersPerformances['normal'] as $username => $userValues) {
+            foreach ($userValues['days'] as $day => $value) {
+                if ($today->format($usersPerformances['daysFormat']) == $day) {
+                    $usersToday[$username] += $value;
                 }
             }
         }
+
         $this->template->usersToday = $usersToday;
 
         $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {
             return $i += $obj->current_performance;
         });
 
-        $userPieData = [];
         $this->template->activeUsers = [];
 
         $daysRemaining = $this->challengeModel->getDaysLeft($challenge['end_at']);
         $this->template->daysRemaining = $daysRemaining;
 
-        $this->template->usersColors = [];
         foreach ($this->template->currentUserPerformances as $i => $p) {
-            $userPieData[] = ['label' => $p['username'], 'data' => $p['current_performance'], 'color' => $p['color']];
             if ($p['current_performance']) {
                 $this->template->activeUsers[] = $p['username'];
-                $this->template->usersColors[] = $p['color'];
             }
 
 
@@ -124,7 +118,6 @@ class ChallengePresenter extends LoginBasePresenter
         }
 
         $this->template->users = $users;
-        $this->template->userPieData = $userPieData;
         $tomorrow = new \DateTime('tomorrow');
         $this->template->tomorrow = $tomorrow->format('Y-m-d H:i:s');
         $this->template->challengeStatus = $this->challengeModel->getChallengeStatus($challenge['start_at'], $challenge['end_at']);

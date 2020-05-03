@@ -25,6 +25,6 @@ JOIN
 GROUP BY
     challenge_id,
     user_id,
-    (UNIX_TIMESTAMP(AL.created_at) + 7200) DIV 28800
+    (z(AL.created_at) + 7200) DIV 28800
 ORDER BY
     AL.created_at ASC

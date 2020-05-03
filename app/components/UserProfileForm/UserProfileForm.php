@@ -71,25 +71,15 @@ class UserProfileForm extends \Fitchart\Application\Control
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
             ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!');
 
-        $form->addSelect('gender_id', 'Gender', $this->genderModel->getList())
-            ->setPrompt('None');
-
-        $form->addSelect('privacy_id', 'Who can see my stats', $this->privacyModel->getList());
-
-        $form->addTextArea('bio', 'Something about you')
-            ->setRequired()
-            ->addRule(Form::MAX_LENGTH, '%label is way too long', 1000);
-
-        
         $form->addPassword('old_password', 'Old password');
         
         $form->addPassword('password', 'New password')
-            ->setRequired()
+            ->setRequired(false)
             ->addCondition(Form::FILLED)
                 ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6);
 
         $form->addPassword('confirm_password', 'Confirm new password')
-            ->setRequired()
+            ->setRequired(false)
             ->addConditionOn($form['password'], Form::FILLED)
                 ->addRule(Form::EQUAL, "Passwords don't match", $form['password']);
 

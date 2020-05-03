@@ -35,6 +35,7 @@ abstract class LoginBasePresenter extends BasePresenter
     public function beforeRender() {
         parent::beforeRender();
         $this->template->notifications = $this->notificationModel->getNewNotifications();
+        $this->template->notificationCount = count($this->template->notifications);
         $this->template->userData = $this->getUser()->identity->data;
     }
 

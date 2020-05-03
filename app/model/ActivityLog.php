@@ -1,6 +1,10 @@
 <?php
 
+
 namespace App\Model;
+
+use \DateTime;
+use \DateInterval;
 
 
 /**
@@ -39,62 +43,87 @@ class ActivityLog extends BaseModel
                     ->order('updated_at ASC')
                     ->fetchAll();
 
-
-        $thisWeekStart = date('Y-m-d 00:00:00', strtotime('monday this week'));
-        
-        $thisMonthStart = date('Y-m-01 00:00:00');
-        $thisYearStart = date('Y-01-01 00:00:00');
+        $now = new DateTime();
+        $thisWeekStart = clone $now;
+        $thisWeekStart->modify('monday this week');
+        $thisWeekEnd = clone $now;
+        $thisWeekEnd->modify('sunday this week');
+        $thisMonthStart = clone $now;
+        $thisMonthStart->modify('first day of this month');
+        $thisMonthEnd = clone $now;
+        $thisMonthEnd->modify('last day of this month');
+        $thisYearStart = clone $now;
+        $thisYearStart->modify('first day of January this year');
+        $thisYearEnd = clone $now;
+        $thisYearEnd->modify('last day of December this year');
 
         $preparedData = [];
-        
+        $firstActivity = !empty($data) ? $data[key($data)] : null;
+
         foreach($data as $i => $item) {
             if (!isset($preparedData[$item->activity_id])) {
-                $preparedData[$item->activity_id] = ['week' => [], 'month' => [], 'year' => [], 'all' => []];
+                $preparedData[$item->activity_id] = [
+                    'name' => $item->activity->name,
+                    'week' => [],
+                    'month' => [],
+                    'year' => [],
+                    'all' => []
+                ];
+                for ($day = clone $thisWeekStart; $day <= $thisWeekEnd; $day->add(new DateInterval('P1D'))) {
+                    $preparedData[$item->activity_id]['week'][$day->format('d.m.Y')] = 0;
+                }
+                for ($day = clone $thisMonthStart; $day <= $thisMonthEnd; $day->add(new DateInterval('P1D'))) {
+                    $preparedData[$item->activity_id]['month'][$day->format('d.m.Y')] = 0;
+                }
+                for ($month = clone $thisYearStart; $month <= $thisYearEnd; $month->add(new DateInterval('P1M'))) {
+                    $preparedData[$item->activity_id]['year'][$month->format('m.Y')] = 0;
+                }
+                for ($year = clone $firstActivity; $year <= $thisYearEnd; $year->add(new DateInterval('P1Y'))) {
+                    $preparedData[$item->activity_id]['all'][$year->format('Y')] = 0;
+                }
             }
 
-            $itemTime = $item->updated_at->format('Y-m-d H:i:s');
-            
+            $itemTime = $item->updated_at;
+            $keyItemTime = $item->updated_at->format('d.m.Y');
+            $keyMonthItemTime = $item->updated_at->format('m.Y');
+            $keyYearItemTime = (string) $item->updated_at->format('Y');
+
             if ($itemTime >= $thisWeekStart) {
-                $keyItemTime = ($item->updated_at->modify('midnight')->getTimestamp() ) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['week'], $keyItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
-                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->getTimestamp()+ $item->updated_at->getOffset()) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
 
             } elseif ($item->updated_at >= $thisMonthStart) {
-                $keyItemTime = ($item->updated_at->modify('midnight')->getTimestamp()) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
-                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->getTimestamp() + $item->updated_at->getOffset()) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
 
             } elseif ($item->updated_at >= $thisYearStart) {
-                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->modify('midnight')->getTimestamp() + $item->updated_at->getOffset()) * 1000;
                 $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
 
             } else {
-                $keyMonthItemTime = ($item->updated_at->modify('first day of this month')->modify('midnight')->getTimestamp() + $item->updated_at->getOffset()) * 1000;
-                $this->addValue($preparedData[$item->activity_id]['all'], $keyMonthItemTime, $item->value);
+                $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
             }
         }
 
-        $preparedArray = $preparedData;
-        foreach ($preparedData as $activityId => $activity) {
-            foreach ($activity as $interval => $data) {
-                $first = TRUE;
-                foreach ($data as $x => $y) {
-                    if ($first) {
-                        $preparedArray[$activityId][$interval] = [];
-                        $first = FALSE;
+        $indexArray = $preparedData;
+        $valueArray = $preparedData;
+        foreach ($preparedData as $activityId => $data) {
+            foreach ($data as $interval => $values) {
+                if ($interval !== 'name') {
+                    unset($indexArray[$activityId][$interval]);
+                    unset($valueArray[$activityId][$interval]);
+                    foreach ($values as $index => $value) {
+                        $indexArray[$activityId][$interval][] = $index;
+                        $valueArray[$activityId][$interval][] = $value;
                     }
-                    $preparedArray[$activityId][$interval][] = [$x, $y];
                 }
             }
         }
 
-        return $preparedArray;
+        return ['indexes' => $indexArray, 'values' => $valueArray];
     }
 
     /**
@@ -105,10 +134,10 @@ class ActivityLog extends BaseModel
      */
     private function addValue(&$array, $key, $value)
     {
-        if (isset($array[(int) $key])) {
-            $array[(int) $key] += $value;
+        if (isset($array[$key])) {
+            $array[$key] += $value;
         } else {
-            $array[(int) $key] = $value;
+            $array[$key] = $value;
         }
     }
 

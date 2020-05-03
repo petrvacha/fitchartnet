@@ -2,109 +2,45 @@ body {
 	margin: 0;
 	background: #000;
 }
-video {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	min-width: 100%;
-	min-height: 100%;
-	width: auto;
-	height: auto;
-	z-index: -100;
-	transform: translateX(-50%) translateY(-50%);
-	background-color: #000000;
-	background-size: cover;
-	transition: 1s opacity;
-}
-.stopfade {
-	opacity: .5;
-}
 
-#big-background-container {
-	width:830px;
-	max-width:100%;
-	display:inline-block;
-	position:absolute;
-	top:50%;
-	left:50%;
-	-webkit-transform:translate(-50%,-50%);
-	-moz-transform:translate(-50%,-50%);
-	-ms-transform:translate(-50%,-50%);
-	-o-transform:translate(-50%,-50%);
-	transform:translate(-50%,-50%);
-	text-align: center;
-}
-
-.big-background-title {
-	font-family: 'Raleway',sans-serif;
-	font-size: 78px;
-	color: #fff;
-	font-weight: 300;
-	text-transform: uppercase;
-	text-align: center;
-	margin-bottom: 22px;
-	padding-top: 20px;
-	display: inline-block;
-	background-attachment: scroll;
-	background-repeat: repeat-x;
-	background-position: top center;
-}
-
-.divider {
-	background-image: url(../images/divider.png);
+#first-page-logo {
 	display: block;
-	width: 300px;
-	height: 35px;
-	margin: 10px auto;
+	margin: 100px auto 20px auto;
+	width: 2%;
 }
 
-.pattern {
-	background-image: url(../images/pattern.png);
-	background-repeat: repeat;
-	background-attachment: scroll;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
+#first-page-title {
+	display: block;
+	color: white;
+	text-align: center;
 }
 
-#colorize {
-	color: #f1c40f;
-	font-family: 'Lato',sans-serif;
-	font-size: 40px;
-}
-
-
-a.big-background-btn {
-	font-family:'Lato',sans-serif;
-	font-size:13px;
-	text-transform:uppercase;
+#first-page-button {
+	text-align: center;
+	font-size:30px;
 	text-decoration:none;
 	color:#fff;
 	background:transparent;
 	border:2px solid #fff;
-	padding:10px 14px;
+	padding:15px 40px;
 	cursor:pointer;
 	letter-spacing:2px;
-	text-align:center;
-	display:inline-block;
-	-webkit-transition:.4s background ease;
-	-moz-transition:.4s background ease;
-	-o-transition:.4s background ease;
-	transition:.4s background ease;
 }
 
-.big-background-btn:hover {
+#first-page-button:hover {
 	color:#fff;
 	background:rgba(255,255,255,0.20)
 }
 
+#first-page-button-wrapper {
+	display: flex;
+	justify-content: center;
+}
+
 h1 {
-	font-size: 3rem;
-	text-transform: uppercase;
-	margin-top: 0;
-	letter-spacing: .3rem;
+	display: block;
+	color: #ac2925;
+	text-align: center;
 }
 
 a {

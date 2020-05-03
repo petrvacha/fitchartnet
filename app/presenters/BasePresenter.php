@@ -23,7 +23,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
     protected function beforeRender()
     {
         parent::beforeRender();
-        $this->template->t = time();
+        $this->template->t = 35;//time();
         $this->template->now = new DateTime();
     }
 }

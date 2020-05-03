@@ -1,20 +1,23 @@
 /* Example tokeninput style #2: Facebook style */
 ul.token-input-list-facebook {
-    overflow: hidden; 
-    height: auto !important; 
-    height: 1%;
+    overflow: hidden;
+    height: calc(1.5em + .75rem + 2px);
     width: 400px;
     border: 1px solid #8496ba;
     cursor: text;
-    font-size: 12px;
-    font-family: Verdana;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
     min-height: 1px;
     z-index: 999;
     margin: 0;
-    padding: 0;
     background-color: #fff;
     list-style-type: none;
     clear: left;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    color: #495057;
 }
 
 ul.token-input-list-facebook li input {
