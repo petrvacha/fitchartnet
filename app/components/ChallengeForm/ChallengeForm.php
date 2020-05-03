@@ -90,7 +90,6 @@ class ChallengeForm extends \Fitchart\Application\Control
         $this->template->setFile($this->getTemplatePath());
         $this->template->availableUsers = $this->userModel->getAvailableUsers(TRUE);
         $this->template->currentUsers = isset($this->data['users']) ? $this->data['users'] : [];
-        $this->template->timeEndOfMonth = date('Y/m/t');
 
         if (!$this['challengeForm']->offsetExists('submit')) {
             $this['challengeForm']->addSubmit('submit', 'Create')

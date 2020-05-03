@@ -1,56 +1,57 @@
 <div class="row">
     <div class="col-xl-4 col-sm-6 mb-3">
-{form challengeForm}
-    <div class="row">
-        <div n:if="$form->hasErrors()" class="error alert-danger px-2 py-1 mb-2">
-            <span n:foreach="$form->errors as $error">{$error}</span>
-        </div>
+        {form challengeForm}
+            <div class="row">
+                <div n:if="$form->hasErrors()" class="error alert-danger px-2 py-1 mb-2">
+                    <span n:foreach="$form->errors as $error">{$error}</span>
+                </div>
 
-        <div class="form-group col-12">
-            {label name /}{input name}
-        </div>
-        <div class="form-group col-12">
-            {label activity_id /}{input activity_id}
-        </div>
-        <div class="form-group col-12">
-            {label final_value /}{input final_value}
-        </div>
-        <div class="form-group col-6">
-            {label start_at /}{input start_at}
-        </div>
-        <div class="form-group col-6">
-            {label end_at /}{input end_at}
-        </div>
-        <div class="token-input-list-facebook form-group col-6">
-            {label users /}{input users}
-        </div>
+                <div class="form-group col-12">
+                    {label name /}{input name}
+                </div>
+                <div class="form-group col-12">
+                    {label activity_id /}{input activity_id}
+                </div>
+                <div class="form-group col-12">
+                    {label final_value /}{input final_value}
+                </div>
+                <div class="form-group col-6">
+                    {label start_at /}{input start_at}
+                </div>
+                <div class="form-group col-6">
+                    {label end_at /}{input end_at}
+                </div>
+                <div class="token-input-list-facebook form-group col-6">
+                    {label users /}{input users}
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    {input submit}
+                </div>
+            </div>
+        {/form}
     </div>
-    <div class="row form-group">
-        <div class="col-md-12">
-            {input submit}
-        </div>
-    </div>
-{/form}
+</div>
+
 <script type="text/javascript">
     $(function(){
         $('.datetimepicker.start').datetimepicker({
-            dayOfWeekStart : 1,
+            dayOfWeekStart: 1,
             lang: 'en',
             showOnFocus: false,
-            timepicker:false,
-            format:'Y/m/d'
+            timepicker: false,
+            format: 'Y/m/d'
         });
 
         $('.datetimepicker.end').datetimepicker({
-            dayOfWeekStart : 1,
+            dayOfWeekStart: 1,
             lang: 'en',
-            startDate: '{!$timeEndOfMonth}',
-            timepicker:false,
+            startDate: false,
+            timepicker: false,
             format:'Y/m/d'
         });
 
         $("#frm-challengeForm-challengeForm-users").tokenInput({$availableUsers}, { theme: "facebook", prePopulate: {$currentUsers} });
     });
 </script>
-</div>
-</div>
