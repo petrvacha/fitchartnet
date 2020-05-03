@@ -1,13 +1,8 @@
 {block content}
-    <video id="bgvid" playsinline autoplay muted loop>
-        <source src="{$basePath}/launcher/videos/{$randomNumber}.mp4" type="video/mp4">
-    </video>
-
-    <div class="pattern"></div>
-    <div id="big-background-container">
-        <h1 class="big-background-title">Fitchart</h1>
-        <div class="divider"></div>
-        <h1 n:block="title" id="colorize">Challenge yourself! Challenge your friends!</h1>
-        <a n:href="Login:default" class="big-background-btn">Action!</a>
+    <img id="first-page-logo" src="{$basePath}/images/logo.png">
+    <h1 id="first-page-title">Fitchart</h1>
+    <h1 n:block="title" id="colorize">Challenge yourself! Challenge your friends!</h1>
+    <div id="first-page-button-wrapper">
+        <a n:href="Login:default" id="first-page-button">Action!</a>
     </div>
 {/block}
