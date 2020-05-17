@@ -200,7 +200,8 @@ class Challenge extends BaseModel
             JOIN challenge_user CU ON
                 CU.challenge_id = C.id
             WHERE
-                CU.user_id = ? AND               
+                CU.user_id = ? AND  
+                CU.active = true AND             
                 C.end_at >= ?
             ORDER BY
                 C.end_at DESC", $this->user->getIdentity()->id, $now

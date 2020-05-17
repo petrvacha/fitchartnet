@@ -59,7 +59,7 @@ class HomepagePresenter extends BasePresenter
         if ($this->getUser()->isLoggedIn()) {
             $challengeId = $this->challengeModel->getLastActiveUserChallenge();
             if ($challengeId) {
-                $this->redirect('Challenge:detail', $challengeId->id);
+                $this->redirect('Challenge:detail', ['id' => $challengeId->id]);
             } else {
                 $this->redirect('Challenge:default');
             }
@@ -143,8 +143,7 @@ class HomepagePresenter extends BasePresenter
     public function actionOut()
     {
         $this->getUser()->logout();
-        $this->flashMessage('You have been signed out.', 'info');
-        $this->redirect('in');
+        $this->redirect('Homepage:launch');
     }
 
     public function actionNewPassword($token)

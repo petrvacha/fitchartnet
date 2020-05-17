@@ -107,8 +107,8 @@ class LoginPresenter extends BasePresenter
         $control->getComponent('signForm')->onSuccess[] = function() {
             $challengeId = $this->challengeModel->getLastActiveUserChallenge();
             if ($challengeId) {
-                $this->flashMessage('This is your last challenge! Finish it!', 'info');
-                $this->redirect('Challenge:detail', $challengeId->id);
+                $this->flashMessage('This is your challenge! Finish it!', 'info');
+                $this->redirect('Challenge:detail', ['id' => $challengeId->id]);
             } else {
                 $this->flashMessage('Welcome on board!', 'info');
                 $this->redirect('Challenge:');

@@ -135,7 +135,7 @@ class ChallengePresenter extends LoginBasePresenter
     public function actionJoin($challengeId)
     {
         $this->challengeUserModel->attend($challengeId);
-        $this->redirect('Challenge:detail', $challengeId);
+        $this->redirect('Challenge:detail', ['id' => $challengeId]);
     }
 
     public function actionLeave($challengeId)
@@ -180,7 +180,7 @@ class ChallengePresenter extends LoginBasePresenter
         $control->getComponent('activityForm')->onSuccess[] = function() {
             $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
             $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_SUCCESS);
-            $this->redirect('Challenge:detail', $this->getParameter('id'));
+            $this->redirect('Challenge:detail', ['id' => $this->getParameter('id')]);
         };
         return $control;
     }
