@@ -120,3 +120,7 @@
         display: none;
     }
 }
+
+#invitation-link {
+    width: 100%;
+}

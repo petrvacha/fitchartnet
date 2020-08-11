@@ -69,12 +69,12 @@ class MailerManager extends Nette\Object
 
         switch($actionName) {
             case self::REGISTRATION_NEW_USER:
-                $subject = 'Fitchart - Registration';
+                $subject = 'Fitchart.net - Registration';
                 $confirmationLink = $domainWithScheme . '/registration/confirm/' . $data['token'];
                 $data = array_merge($data, ['domain' => $domain, 'confirmationLink' => $confirmationLink]);
                 break;
             case self::RESET_PASSWORD:
-                $subject = 'Fitchart - Reset password';
+                $subject = 'Fitchart.net - Reset password';
                 $resetLink = $domainWithScheme . '/new-password/' . $data['token'];
                 $data = array_merge($data, ['domain' => $domain, 'resetLink' => $resetLink]);
                 break;

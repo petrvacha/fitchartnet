@@ -17,7 +17,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
     const MESSAGE_TYPE_SUCCESS = 'success';
 
     /** @const MESSAGE_TYPE_ERROR string */
-    const MESSAGE_TYPE_ERROR = 'error';
+    const MESSAGE_TYPE_ERROR = 'danger';
 
 
     protected function beforeRender()

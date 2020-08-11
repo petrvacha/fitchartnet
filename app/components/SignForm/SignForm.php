@@ -62,7 +62,7 @@ class SignForm extends \Fitchart\Application\Control
      */
     public function formSent($form, $values)
     {
-        $this->user->setExpiration('14 days', FALSE);
+        $this->user->setExpiration('100 days', FALSE);
 
         try {
             $this->user->login($values->username, $values->password);

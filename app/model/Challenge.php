@@ -151,12 +151,24 @@ class Challenge extends BaseModel
     public function addUsersToChallenge($challengeId, $users)
     {
         foreach (array_unique(explode(',', $users)) as $userId) {
-            if (is_numeric($userId) && $this->userModel->hasPermissionForUser($userId)) {
-                $this->challengeUserModel->addNewUser($challengeId, $userId);
-                $this->notificationModel->insertNotification(Notification::MESSAGE_NEW_CHALLENGE, $userId);
+            if ($this->userModel->hasPermissionForUser($userId)) {
+                $this->addUserToChallenge($challengeId, $userId);
             }
         }
         $this->challengeUserModel->addNewUser($challengeId, $this->user->getIdentity()->id, TRUE);
+    }
+
+    /**
+     * @param $challengeId
+     * @param $userId
+     * @param null $invitedByUserId
+     */
+    public function addUserToChallenge($challengeId, $userId, $invitedByUserId = NULL)
+    {
+        if (is_numeric($userId)) {
+            $this->challengeUserModel->addNewUser($challengeId, $userId, FALSE, $invitedByUserId);
+            $this->notificationModel->insertNotification(Notification::MESSAGE_NEW_CHALLENGE, $userId);
+        }
     }
 
     /**

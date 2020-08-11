@@ -35,14 +35,18 @@ class ChallengeUser extends BaseModel
      * @param int $userId
      * @param bool $active
      */
-    public function addNewUser($challengeId, $userId, $active = FALSE)
+    public function addNewUser($challengeId, $userId, $active = FALSE, $invitedByUserId = NULL)
     {
+        if (!$invitedByUserId) {
+            $invitedByUserId = $this->user->getIdentity()->id;
+        }
+
         if (!$this->findBy(['challenge_id' => $challengeId, 'user_id' => $userId])->fetch()) {
             $this->insert(
                 [
                     'challenge_id' => $challengeId,
                     'user_id' => $userId,
-                    'invited_by' => $this->user->getIdentity()->id,
+                    'invited_by' => $invitedByUserId,
                     'invited_at' => $this->getDateTime(),
                     'color' => $this->generateColor($challengeId),
                     'active' => $active

@@ -66,10 +66,30 @@
         </div>
     </div>
 </div>
-{if $challengeStatus->isActive()}
-    <br>
-    {control activityForm}
-{/if}
+<br>
+<div class="row">
+    {if $challengeStatus->isActive()}
+        {control activityForm}
+    {/if}
+    {if $showInvitationLink}
+    <div class="col-xl-4 col-sm-6 mb-3">
+        <div class="form-group">
+            <label for="invitation-link">Invitation link</label>
+            <input id="invitation-link" class="form-control" type="text" value="http://fitchart.net/invitation/{$id}/{$invitationHash}">
+        </div>
+
+        <script type="text/javascript">
+            $(function(){
+                $('#invitation-link').on('click', function () {
+                    $(this).select();
+                    document.execCommand("copy");
+                    alert("Invitation link has been copied. Challenge your friends!");
+                });
+            });
+        </script>
+    </div>
+    {/if}
+</div>
 <br>
 <div class="card mb-3">
     <div class="card-header">

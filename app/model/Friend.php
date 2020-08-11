@@ -21,12 +21,15 @@ class Friend extends BaseModel
     }
 
     /**
-     * @param int $userId
-     * @return ArrayHash $user
+     * @param $userId
+     * @param null $userId2
+     * @return bool|\Nette\Database\Table\IRow
      */
-    public function addFriend($userId)
+    public function addFriend($userId, $userId2 = NULL)
     {
-        $userId2 = $this->user->getIdentity()->id;
+        if (!$userId2) {
+            $userId2 = $this->user->getIdentity()->id;
+        }
 
         $user = $this->context->table('user')->where(['id' => $userId])->fetch();
         if ($user) {

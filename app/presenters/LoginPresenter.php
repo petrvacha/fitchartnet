@@ -125,7 +125,7 @@ class LoginPresenter extends BasePresenter
     {
         $control = $this->resetPasswordFormFactory->create();
         $control->getComponent('resetPasswordForm')->onSuccess[] = function() {
-            $this->flashMessage('Check your mail box.', 'info');
+            $this->flashMessage('Check your spam/mail box.', 'info');
             $this->redirect('Login:resetPassword');
         };
         return $control;
@@ -176,6 +176,7 @@ class LoginPresenter extends BasePresenter
             $this->flashMessage('We are sorry, your reset link is wrong.', parent::MESSAGE_TYPE_ERROR);
             $this->redirect('Homepage:resetError');
         }
+        $this->setLayout('authLayout');
     }
 
     public function renderResetError()

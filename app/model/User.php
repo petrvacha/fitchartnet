@@ -133,8 +133,8 @@ class User extends BaseModel
     }
 
     /**
-     * @param string $token
-     * @return bool
+     * @param $token
+     * @return Nette\Database\Row|false
      */
     public function activeUserByToken($token)
     {
@@ -142,15 +142,15 @@ class User extends BaseModel
 
         if ($user) {
             $user->update(['token' => NULL, 'active' => TRUE, 'updated_at' => $this->getDateTime()]);
-            return true;
+            return $user;
         } else {
             return false;
         }
     }
 
     /**
-     * @param int $userId
-     * @return ActiveRow
+     * @param $userId
+     * @return mixed
      */
     public function getUserData($userId)
     {

@@ -22,7 +22,7 @@ common:
 
 
     session:
-            expiration: 14 days
+            expiration: 101 days
             savePath: "%tempDir%/sessions"
 
 production < common:

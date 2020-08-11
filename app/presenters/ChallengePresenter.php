@@ -6,6 +6,7 @@ use App\Model\ActivityLog;
 use App\Model\ChallengeUser;
 use App\Model\Notification;
 use App\Model\Role;
+use Fitchart\Application\Utilities;
 
 /**
  * Challenge presenter
@@ -130,6 +131,15 @@ class ChallengePresenter extends LoginBasePresenter
         $this->template->challengeStatus = $this->challengeModel->getChallengeStatus($challenge['start_at'], $challenge['end_at']);
 
         $this->template->challengeDays = $this->template->challengeStatus !== Challenge::TEXT_STATUS_GONE ? $challenge['start_at']->diff($challenge['end_at'])->days + 1 : 0;
+        $this->template->id = $id;
+        $this->template->invitationHash = Utilities::generateInvitationHash($id, $challenge->created_at);
+
+        $now = new \DateTime();
+        if ($challenge['end_at'] > $now && $challenge['created_by'] === $this->user->getIdentity()->id || $this->user->getIdentity()->role > Role::MODERATOR) {
+            $this->template->showInvitationLink = true;
+        } else {
+            $this->template->showInvitationLink = false;
+        }
     }
 
     public function actionJoin($challengeId)

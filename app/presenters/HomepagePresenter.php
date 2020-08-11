@@ -42,7 +42,7 @@ class HomepagePresenter extends BasePresenter
         if ($this->getUser()->isLoggedIn()) {
             $this->redirect('Challenge:default');
         }
-        $this->setLayout('authLayout');
+        $this->redirect('Login:default');
     }
 
     public function renderResetPassword()
@@ -64,7 +64,7 @@ class HomepagePresenter extends BasePresenter
                 $this->redirect('Challenge:default');
             }
         }
-        $this->redirect('Homepage:default');
+        $this->redirect('Login:default');
     }
 
     public function renderLaunch()
@@ -144,16 +144,6 @@ class HomepagePresenter extends BasePresenter
     {
         $this->getUser()->logout();
         $this->redirect('Homepage:launch');
-    }
-
-    public function actionNewPassword($token)
-    {
-        $result = $this->userModel->checkToken($token);
-
-        if (!$result) {
-            $this->flashMessage('We are sorry, your reset link is wrong.', parent::MESSAGE_TYPE_ERROR);
-            $this->redirect('Homepage:resetError');
-        }
     }
 
     public function renderResetError()

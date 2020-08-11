@@ -134,4 +134,9 @@ class Utilities extends \Nette\Object
         curl_close($ch);
         fclose($fp);
     }
+
+    public static function generateInvitationHash($challengeId, $createdAt)
+    {
+        return substr(self::create_sha1_hash($challengeId+$createdAt->format('Y-m-d')+'dfwafe]3['), 0, 25);
+    }
 }

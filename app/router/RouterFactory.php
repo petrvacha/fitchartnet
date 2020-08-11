@@ -31,6 +31,7 @@ class RouterFactory
             $router[] = new Route('/reset-password', 'Login:resetPassword');
             $router[] = new Route('/new-password/<token>', 'Login:newPassword');
             $router[] = new Route('/last', 'Homepage:last');
+            $router[] = new Route('/invitation/<challengeId>/<hash>', 'Registration:invitation');
             $router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:launch');
             
             return $router;

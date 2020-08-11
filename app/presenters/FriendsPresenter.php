@@ -91,7 +91,9 @@ class FriendsPresenter extends LoginBasePresenter
     }
 
     /**
-     * @param int $id
+     * @param $id
+     * @param bool $approve
+     * @throws \Nette\Application\AbortException
      */
     public function actionAcceptFriendship($id, $approve = TRUE)
     {

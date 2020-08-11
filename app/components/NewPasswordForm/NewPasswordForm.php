@@ -43,11 +43,13 @@ class NewPasswordForm extends \Fitchart\Application\Control
         $form = new Form;
 
         $form->addPassword('password', 'New password')
+            ->setAttribute('placeholder', 'New password')
             ->setRequired()
             ->addCondition(Form::FILLED)
             ->addRule(Form::MIN_LENGTH, 'Password must be at least %s characters.', 6);
 
         $form->addPassword('confirm_password', 'Confirm new password')
+            ->setAttribute('placeholder', 'Confirm new password')
             ->setRequired()
             ->addConditionOn($form['password'], Form::FILLED)
             ->addRule(Form::EQUAL, "Passwords don't match", $form['password']);
