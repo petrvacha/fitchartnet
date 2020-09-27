@@ -3,8 +3,11 @@
 namespace App\Presenters;
 
 use App\Model\Challenge;
+use App\Model\Friend;
 use App\Model\User;
+use Fitchart\Application\Utilities;
 use Nette;
+use Nette\Http\IRequest;
 
 /**
  * Login presenter
@@ -20,20 +23,31 @@ class LoginPresenter extends BasePresenter
     /** @var \App\Components\NewPasswordForm\INewPasswordFormFactory @inject */
     public $newPasswordFormFactory;
 
-    /** @var Challenge */
-    private $challengeModel;
+    /** @var IRequest */
+    protected $httpRequest;
 
     /** @var User */
     protected $userModel;
 
+    /** @var Challenge */
+    private $challengeModel;
+
+    /** @var Friend */
+    protected $friendModel;
 
     /**
+     * LoginPresenter constructor.
+     * @param IRequest $httpRequest
      * @param User $userModel
+     * @param Challenge $challengeModel
+     * @param Friend $friendModel
      */
-    public function __construct(User $userModel, Challenge $challengeModel)
+    public function __construct(IRequest $httpRequest, User $userModel, Challenge $challengeModel, Friend $friendModel)
     {
+        $this->httpRequest = $httpRequest;
         $this->userModel = $userModel;
         $this->challengeModel = $challengeModel;
+        $this->friendModel = $friendModel;
     }
 
     public function renderDefault()
@@ -105,15 +119,33 @@ class LoginPresenter extends BasePresenter
     {
         $control = $this->signFormFactory->create();
         $control->getComponent('signForm')->onSuccess[] = function() {
-            $challengeId = $this->challengeModel->getLastActiveUserChallenge();
-            if ($challengeId) {
-                $this->flashMessage('This is your challenge! Finish it!', 'info');
-                $this->redirect('Challenge:detail', ['id' => $challengeId->id]);
+
+            $challengeId = $this->httpRequest->getCookie('invitationChallenge');
+            $hash = $this->httpRequest->getCookie('invitationHash');
+            $httpResponse = $this->getHttpResponse();
+            $httpResponse->deleteCookie('invitationChallenge');
+            $httpResponse->deleteCookie('invitationHash');
+
+            if ($hash && $challengeId) {
+                $challenge = $this->challengeModel->findRow($challengeId);
+                if ($hash === Utilities::generateInvitationHash($challengeId, $challenge->created_at)) {
+                    $this->friendModel->addFriend($challenge->created_by, $this->user->getIdentity()->id);
+                    $this->challengeModel->addUserToChallenge($challengeId, $this->user->getIdentity()->id, $challenge->created_by);
+                    $this->flashMessage('The challenge is waiting...', parent::MESSAGE_TYPE_INFO);
+                }
+
             } else {
-                $this->flashMessage('Welcome on board!', 'info');
-                $this->redirect('Challenge:');
+                $challengeId = $this->challengeModel->getLastActiveUserChallenge();
+                if ($challengeId) {
+                    $this->flashMessage('This is your challenge! Finish it!', 'info');
+                    $this->redirect('Challenge:detail', ['id' => $challengeId->id]);
+                } else {
+                    $this->flashMessage('Welcome on board!', 'info');
+                    $this->redirect('Challenge:');
+                }
             }
         };
+
         return $control;
     }
 

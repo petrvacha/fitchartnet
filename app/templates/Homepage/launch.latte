@@ -1,12 +1,95 @@
 {block content}
-    <video id="bgvid" playsinline autoplay muted loop>
-        <source src="{$basePath}/launcher/videos/{$randomNumber}.mp4" type="video/mp4">
-    </video>
-    <div class="pattern"></div>
-    <div id="big-background-container">
-            <h1 class="big-background-title">Fitchart</h1>
-            <div class="divider"></div>
-            <h1 n:block="title" id="colorize">Challenge yourself! Challenge your friends!</h1>
-            <a n:href="Login:default" class="big-background-btn">Action!</a>
-    </div>
+    <section class="main-homepage">
+        <div class="overlay"></div>
+        <div class="homepage-bg">
+            <div class="container pt-5">
+                <div class="flex-wrapper-column">
+                    <div class="row justify-content-center justify-content-sm-between">
+                        <div class="col-12 col-xl-8">
+                            <div aria-hidden="true" class="logo">
+                                <span class="sr-only">Fitchart</span>
+                            </div>
+                            <div class="title text-md-left text-center mt-2 mb-xl-0 mb-4">
+                                <h1>CHALLENGE YOURSELF! CHALLENGE YOUR FRIENDS!</h1>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-4 mt-xl-0 mt-5">
+                            <div class="card card-login">
+                                <div class="card-body">
+                                    <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{$flash->message}</div>
+                                    {control signInForm}
+                                    <div class="text-center">
+                                        <a class="d-block small mt-3" href="{plink Registration:default}">Register an Account</a>
+                                        <a class="d-block small" href="{plink Login:resetPassword}">Forgot Password?</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="homepage-bottom">
+                        <div aria-hidden="true" class="preview">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section-wrapper">
+        <section class="section-secondary">
+            <div class="container h-100 d-flex flex-column justify-content-between">
+                <div class="row mt-4 mb-5 align-items-center">
+                    <div class="col-lg-6 col-12 mb-4">
+                        <img class="second-picture" src="../images/second.jpg">
+                    </div>
+                    <div class="col-lg-6 col-12 text-center text-lg-left">
+                        <h1 class="text-bold">Create Workout Challenge</h1>
+                        <p>
+                           Fitchart is a great web application for you and your friends. Choose exercise and just challenge your friends. It is simple and free.
+                        </p>
+                    </div>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="col-md-3">
+                        <div class="description people">
+                            <div aria-hidden="true" class="people"></div>
+                            <h4>Feel Commitment</h4>
+                            <p>It is not important to win, but to participate. With your friends you can start your unlimited progress.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="description heart">
+                            <h4>Health</h4>
+                            <p>Regular exercise is good for your health. Exercise has been shown to improve your mood and decrease feelings of depression, anxiety and stress.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3"><div class="description chart">
+                            <h4>Track Your Progress</h4>
+                            <p>Tracking your steps is a great opportunity to start a completely new habit.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <footer>
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-md-3">
+                        <div class="footer-logo"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <ul class="links pl-0">
+                            <li><a href="https://twitter.com/fitchartnet" target="_blank">Twitter</a></li>
+                            <li title="Coming soon :)">About</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        “Every action you take is a vote for the type of person you wish to become.”<br>
+                        ― James Clear, Atomic Habits
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
 {/block}

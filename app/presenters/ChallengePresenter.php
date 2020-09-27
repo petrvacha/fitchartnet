@@ -7,6 +7,7 @@ use App\Model\ChallengeUser;
 use App\Model\Notification;
 use App\Model\Role;
 use Fitchart\Application\Utilities;
+use Nette\Http\IRequest;
 
 /**
  * Challenge presenter
@@ -30,22 +31,27 @@ class ChallengePresenter extends LoginBasePresenter
     /** @var \App\Components\ActivityForm\IActivityFormFactory @inject */
     public $activityFormFactory;
 
+    /** @var IRequest */
+    protected $httpRequest;
 
     /**
      * @param Notification $notificationModel
      * @param ActivityLog $activityLog
      * @param Challenge $challengeModel
      * @param ChallengeUser $challengeUserModel
+     * @param IRequest $httpRequest
      */
     public function __construct(Notification $notificationModel,
                                 ActivityLog $activityLog,
                                 Challenge $challengeModel,
-                                ChallengeUser $challengeUserModel)
+                                ChallengeUser $challengeUserModel,
+                                IRequest $httpRequest)
     {
         parent::__construct($notificationModel);
         $this->activityLog = $activityLog;
         $this->challengeUserModel = $challengeUserModel;
         $this->challengeModel = $challengeModel;
+        $this->httpRequest = $httpRequest;
     }
 
     public function renderAfterLogin()
@@ -132,10 +138,11 @@ class ChallengePresenter extends LoginBasePresenter
 
         $this->template->challengeDays = $this->template->challengeStatus !== Challenge::TEXT_STATUS_GONE ? $challenge['start_at']->diff($challenge['end_at'])->days + 1 : 0;
         $this->template->id = $id;
+        $this->template->domainUrl = $this->httpRequest->getUrl()->hostUrl;
         $this->template->invitationHash = Utilities::generateInvitationHash($id, $challenge->created_at);
 
         $now = new \DateTime();
-        if ($challenge['end_at'] > $now && $challenge['created_by'] === $this->user->getIdentity()->id || $this->user->getIdentity()->role > Role::MODERATOR) {
+        if ($challenge['end_at'] > $now && $challenge['created_by'] === $this->user->getIdentity()->id) {
             $this->template->showInvitationLink = true;
         } else {
             $this->template->showInvitationLink = false;

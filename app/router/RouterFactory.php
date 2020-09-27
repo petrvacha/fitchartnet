@@ -24,15 +24,15 @@ class RouterFactory
 
         } else {
             $router = new RouteList();
-            $router[] = new Route('', 'Homepage:launch');
-            $router[] = new Route('/login', 'Login:default');
-            $router[] = new Route('/registration', 'Registration:default');
-            $router[] = new Route('/registration/confirm/<hash>', 'Registration:check');
-            $router[] = new Route('/reset-password', 'Login:resetPassword');
-            $router[] = new Route('/new-password/<token>', 'Login:newPassword');
-            $router[] = new Route('/last', 'Homepage:last');
-            $router[] = new Route('/invitation/<challengeId>/<hash>', 'Registration:invitation');
-            $router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:launch');
+            $router[] = new Route('', 'Homepage:launch', Route::SECURED);
+            $router[] = new Route('/login', 'Login:default', Route::SECURED);
+            $router[] = new Route('/registration', 'Registration:default', Route::SECURED);
+            $router[] = new Route('/registration/confirm/<hash>', 'Registration:check', Route::SECURED);
+            $router[] = new Route('/reset-password', 'Login:resetPassword', Route::SECURED);
+            $router[] = new Route('/new-password/<token>', 'Login:newPassword', Route::SECURED);
+            $router[] = new Route('/last', 'Homepage:last', Route::SECURED);
+            $router[] = new Route('/invitation/<challengeId>/<hash>', 'Registration:invitation', Route::SECURED);
+            $router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:launch', Route::SECURED);
             
             return $router;
         }

@@ -56,12 +56,14 @@ class RegistrationPresenter extends BasePresenter
     }
 
     /**
-     * @param string $hash
+     * @param $hash
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\UI\InvalidLinkException
      */
     public function actionCheck($hash)
     {
         $result = $this->userModel->activeUserByToken($hash);
-        $result = $this->userModel->findRow(98);
+
         if ($result) {
             $challengeId = $this->httpRequest->getCookie('invitationChallenge');
             $hash = $this->httpRequest->getCookie('invitationHash');
@@ -69,7 +71,9 @@ class RegistrationPresenter extends BasePresenter
             if ($hash && $challengeId) {
                 $challenge = $this->challengeModel->findRow($challengeId);
                 if ($hash === Utilities::generateInvitationHash($challengeId, $challenge->created_at)) {
-                    $this->friendModel->addFriend($challenge->created_by, $result->id);
+                    if (!$this->friendModel->areFriends($challenge->created_by, $result->id)) {
+                        $this->friendModel->addFriend($challenge->created_by, $result->id);
+                    }
                     $this->challengeModel->addUserToChallenge($challengeId, $result->id, $challenge->created_by);
 
                     $this->flashMessage('The account is active. The challenge is waiting...', parent::MESSAGE_TYPE_INFO);
@@ -81,11 +85,11 @@ class RegistrationPresenter extends BasePresenter
                     exit;
                 }
             }
-            $this->flashMessage('Congratulations, your account has been activated!', parent::MESSAGE_TYPE_INFO);
+            $this->flashMessage('Congratulations! Your account has been activated!', parent::MESSAGE_TYPE_INFO);
             $this->redirect('Login:default');
 
         } else {
-            $this->flashMessage('We are sorry, your activated link is wrong.', parent::MESSAGE_TYPE_ERROR);
+            $this->flashMessage('We are sorry. Your activated link is wrong.', parent::MESSAGE_TYPE_ERROR);
             $this->redirect('Registration:default');
         }
     }
@@ -95,12 +99,23 @@ class RegistrationPresenter extends BasePresenter
         $challenge = $this->challengeModel->findRow($challengeId);
 
         if ($challenge && $hash === Utilities::generateInvitationHash($challengeId, $challenge->created_at)) {
-            $httpResponse = $this->getHttpResponse();
-            $httpResponse->setCookie('invitationChallenge', $challengeId, '100 days');
-            $httpResponse->setCookie('invitationHash', $hash, '100 days');
-            $registrationUrl = $this->link('Registration:default');
-            $httpResponse->redirect($registrationUrl);
-            exit;
+
+            if ($this->getUser()->isLoggedIn()) {
+                if (!$this->friendModel->areFriends($challenge->created_by, $this->user->getIdentity()->id)) {
+                    $this->friendModel->addFriend($challenge->created_by, $this->user->getIdentity()->id);
+                }
+                $this->challengeModel->addUserToChallenge($challengeId, $this->user->getIdentity()->id, $challenge->created_by);
+                $this->flashMessage('The account is active. The challenge is waiting...', parent::MESSAGE_TYPE_INFO);
+                $this->redirect('Challenge:default');
+
+            } else {
+                $httpResponse = $this->getHttpResponse();
+                $httpResponse->setCookie('invitationChallenge', $challengeId, '100 days');
+                $httpResponse->setCookie('invitationHash', $hash, '100 days');
+                $registrationUrl = $this->link('Registration:default');
+                $httpResponse->redirect($registrationUrl);
+                exit;
+            }
         } else {
             $this->redirect('Registration:errorInvitation');
         }

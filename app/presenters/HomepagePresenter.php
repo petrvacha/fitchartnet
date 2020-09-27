@@ -28,7 +28,9 @@ class HomepagePresenter extends BasePresenter
 
 
     /**
+     * HomepagePresenter constructor.
      * @param User $userModel
+     * @param Challenge $challengeModel
      */
     public function __construct(User $userModel, Challenge $challengeModel)
     {
@@ -70,7 +72,7 @@ class HomepagePresenter extends BasePresenter
     public function renderLaunch()
     {
         if ($this->getUser()->isLoggedIn()) {
-                $this->redirect('Challenge:default');
+            $this->redirect('Challenge:default');
         }
         $this->template->title = 'Fitchart.net';
         $this->template->randomNumber = rand(1,3);

@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
     require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
 
-    var newCssFiles = [
+    let newCssFiles = [
         './node_modules/startbootstrap-sb-admin/vendor/datatables/dataTables.bootstrap4.css',
         './node_modules/startbootstrap-sb-admin/css/sb-admin.css',
         './node_modules/startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css',
@@ -11,7 +11,12 @@ module.exports = function(grunt) {
         './htdocs/css/style-new.css'
     ];
 
-    var newJsFiles = [
+    let frontCssFiles = [
+        './htdocs/css/style-front.css',
+        './node_modules/bootstrap/dist/css/bootstrap.css'
+    ];
+
+    let newJsFiles = [
         './node_modules/startbootstrap-sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js',
         './node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js',
         './node_modules/startbootstrap-sb-admin/vendor/chart.js/Chart.bundle.min.js',
@@ -44,7 +49,9 @@ module.exports = function(grunt) {
                         './htdocs/css/style.css'
                     ],
 
-                    './htdocs/css/style-new.min.css': newCssFiles
+                    './htdocs/css/style-new.min.css': newCssFiles,
+
+                    './htdocs/css/style-front.min.css': frontCssFiles
                 }
             }
         },

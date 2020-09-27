@@ -3,6 +3,7 @@
 namespace App\Presenters;
 use App\model\Notification;
 use Nette\Database\Context;
+use Nette\Http\IRequest;
 
 
 /**
@@ -32,7 +33,8 @@ abstract class LoginBasePresenter extends BasePresenter
         }
     }
 
-    public function beforeRender() {
+    public function beforeRender()
+    {
         parent::beforeRender();
         $this->template->notifications = $this->notificationModel->getNewNotifications();
         $this->template->notificationCount = count($this->template->notifications);

@@ -75,7 +75,7 @@
     <div class="col-xl-4 col-sm-6 mb-3">
         <div class="form-group">
             <label for="invitation-link">Invitation link</label>
-            <input id="invitation-link" class="form-control" type="text" value="http://fitchart.net/invitation/{$id}/{$invitationHash}">
+            <input id="invitation-link" class="form-control" type="text" value="{$domainUrl}/invitation/{$id}/{$invitationHash}">
         </div>
 
         <script type="text/javascript">
@@ -211,12 +211,27 @@ $(function() {
             mode: 'nearest',
             intersect: true
         },
+        elements: {
+            point:{
+                radius: 0
+            }
+        },
+        legend: {
+            labels: {
+                usePointStyle: true,
+                boxWidth: 5,
+                padding: 15
+            }
+        },
         scales: {
             xAxes: [{
                 display: true,
                 scaleLabel: {
                     display: true,
                     labelString: 'day'
+                },
+                gridLines: {
+                    display: false
                 }
             }],
             yAxes: [{
@@ -228,6 +243,9 @@ $(function() {
                 ticks: {
                     suggestedMin: 0,
                     suggestedMax: suggestedMaxCumulative
+                },
+                gridLines: {
+                    display: false
                 }
             }]
         },
@@ -251,6 +269,18 @@ $(function() {
             mode: 'index',
             intersect: false
         },
+        legend: {
+            labels: {
+                usePointStyle: true,
+                boxWidth: 5,
+                padding: 15
+            }
+        },
+        elements: {
+            point:{
+                radius: 0
+            }
+        },
         hover: {
             mode: 'nearest',
             intersect: true
@@ -261,6 +291,9 @@ $(function() {
                 scaleLabel: {
                     display: true,
                     labelString: 'day'
+                },
+                gridLines: {
+                    display: false
                 }
             }],
             yAxes: [{
@@ -272,6 +305,9 @@ $(function() {
                 ticks: {
                     suggestedMin: 0,
                     suggestedMax: suggestedMax
+                },
+                gridLines: {
+                    display: false
                 }
             }]
         }
