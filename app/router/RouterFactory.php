@@ -25,6 +25,7 @@ class RouterFactory
         } else {
             $router = new RouteList();
             $router[] = new Route('', 'Homepage:launch', Route::SECURED);
+            $router[] = new Route('/about', 'Homepage:about', Route::SECURED);
             $router[] = new Route('/login', 'Login:default', Route::SECURED);
             $router[] = new Route('/registration', 'Registration:default', Route::SECURED);
             $router[] = new Route('/registration/confirm/<hash>', 'Registration:check', Route::SECURED);

@@ -47,6 +47,12 @@ class HomepagePresenter extends BasePresenter
         $this->redirect('Login:default');
     }
 
+    public function renderAbout()
+    {
+        $this->template->title = 'About Fitchart.net';
+        $this->setLayout('launch');
+    }
+
     public function renderResetPassword()
     {
         $this->template->title = 'reset password';

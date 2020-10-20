@@ -75,12 +75,24 @@
     padding-bottom: 5px;
 }
 
+.title-black {
+    color:#000000;
+    padding-bottom: 5px;
+}
+
 .title h1 {
+    font-size: 20px;
+}
+
+.title-black h1 {
     font-size: 20px;
 }
 
 @media screen and (max-width: 576px) {
     .title h1 {
+        font-size: 16px;
+    }
+    .title-black h1 {
         font-size: 16px;
     }
 }
@@ -193,8 +205,22 @@
     color: #ffc107;
 }
 
+.black-logo {
+    background-image:url("../images/logo-black.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left;
+    height: 39px;
+    width: 100%;
+    color: #000000;
+}
+
 @media screen and (max-width: 576px) {
     .logo {
+        height: 30px;
+        background-position: center;
+    }
+    .black-logo {
         height: 30px;
         background-position: center;
     }
@@ -253,4 +279,32 @@ footer {
 
 body {
     background-color: blue;
+}
+
+.hyperlink-about {
+    text-decoration: none;
+    color: #75113b;
+}
+
+.hyperlink-about:hover {
+    text-decoration: underline;
+    color: #75113b;
+}
+
+.hyperlink-about:visited {
+    color: #75113b;
+}
+
+.hyperlink-about:active {
+    color: #75113b;
+}
+
+.h2-small {
+    font-size: 25px;
+}
+
+.picture-about {
+    box-shadow: 21px 28px 25px -21px rgba(112,112,112,1);
+    display: block;
+    margin: 0 auto;
 }
