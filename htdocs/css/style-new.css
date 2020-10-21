@@ -124,3 +124,7 @@
 #invitation-link {
     width: 100%;
 }
+
+.score-table td{
+    vertical-align: middle;
+}

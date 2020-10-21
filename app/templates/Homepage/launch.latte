@@ -40,7 +40,11 @@
             <div class="container h-100 d-flex flex-column justify-content-between">
                 <div class="row mt-4 mb-5 align-items-center">
                     <div class="col-lg-6 col-12 mb-4">
-                        <img class="second-picture" src="../images/second.jpg">
+                        <picture>
+                            <source srcset="../images/second.jpg" type="image/jpeg">
+                            <source srcset="../images/second.webp" type="image/webp">
+                            <img class="second-picture" src="../images/second.jpg" alt="Exercise from unsplash.com">
+                        </picture>
                     </div>
                     <div class="col-lg-6 col-12 text-center text-lg-left">
                         <h1 class="text-bold">Create Workout Challenge</h1>
@@ -76,7 +80,7 @@
             <div class="container">
                 <div class="row justify-content-between">
                     <div class="col-md-3">
-                        <div class="footer-logo"></div>
+                        <a class="d-block footer-logo" href="/"></a>
                     </div>
                     <div class="col-md-3">
                         <ul class="links pl-0">

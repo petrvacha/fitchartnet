@@ -67,7 +67,7 @@ class ChallengePresenter extends LoginBasePresenter
 
     public function renderDefault()
     {
-        $this->template->title = 'Stats';
+        $this->template->title = 'Challenges';
         $this->template->challenges = $this->challengeModel->getUserChallenges();
         $this->template->editPermission = ($this->user->getIdentity()->role <= Role::MODERATOR);
         $this['challengeForm']['challengeForm']
@@ -97,13 +97,24 @@ class ChallengePresenter extends LoginBasePresenter
         }
 
         $today = new \DateTime;
+        $userCount = 0;
         foreach($usersPerformances['normal'] as $username => $userValues) {
             foreach ($userValues['days'] as $day => $value) {
                 if ($today->format($usersPerformances['daysFormat']) == $day) {
                     $usersToday[$username] += $value;
                 }
             }
+            $userCount++;
         }
+
+        if ($userCount > 6) {
+            $borderWidth = 1;
+        } elseif ($userCount >4) {
+            $borderWidth = 2;
+        } else {
+            $borderWidth = 3;
+        }
+        $this->template->borderWidth = $borderWidth;
 
         $this->template->usersToday = $usersToday;
 

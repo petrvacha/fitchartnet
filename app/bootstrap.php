@@ -14,38 +14,23 @@ $configurator->createRobotLoader()
 	->addDirectory(__DIR__ . '/../libs')
 	->register();
 
-if (\Nette\Environment::isConsole() && isset($_SERVER['argv'][0]) && Nette\Utils\Strings::endsWith($_SERVER['argv'][0], 'phpunit')) {
-    throw new Nette\Neon\Exception('Test environment is not implemented.');
-    //$enviroment = 'test';
+if (Nette\Utils\Strings::endsWith($_SERVER['SERVER_NAME'], 'fitchart.net')) {
+    $environment = 'production';
+
+} elseif ($configurator->isDebugMode()) {
+    $environment = 'local';
 
 } else {
+    throw new Nette\Neon\Exception('Environment has not been detected.');
+}
 
-    if (\Nette\Environment::isConsole()) {
-        $enviroment = 'cron';
+$configurator->addConfig(__DIR__ . '/config/config.neon', $environment);
 
-    } else {
-        if (Nette\Utils\Strings::endsWith($_SERVER['SERVER_NAME'], 'gamma.fitchart.net')) {
-            $enviroment = 'development';
+if (file_exists($configFile = __DIR__ . '/config/config.local.neon')) {
+    $configurator->addConfig($configFile);
 
-        } elseif (Nette\Utils\Strings::endsWith($_SERVER['SERVER_NAME'], 'fitchart.net')) {
-            $enviroment = 'production';
-
-        } elseif ($configurator->isDebugMode()) {
-            $enviroment = 'local';
-
-        } else {
-            throw new Nette\Neon\Exception('Enviroment has not been detected.');
-        }
-    }
-
-    $configurator->addConfig(__DIR__ . '/config/config.neon', $enviroment);
-
-    if (file_exists($configFile = __DIR__ . '/config/config.local.neon')) {
-        $configurator->addConfig($configFile);
-
-    } else {
-        throw new Nette\Neon\Exception('File \'config.local.neon\' not found in ' . $configFile . '.');
-    }
+} else {
+    throw new Nette\Neon\Exception('File config.local.neon is not found in ' . $configFile . '.');
 }
 
 $container = $configurator->createContainer();

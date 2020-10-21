@@ -111,24 +111,28 @@
                     </thead>
                     <tbody>
                     {foreach $currentUserPerformances as $userPerformance}
-                        <tr {if $user->id === $userPerformance['id']}style="background-color: #fcf8e3"{/if}>
+                        <tr class="score-table" {if $user->id === $userPerformance['id']}style="background-color: #fcf8e3"{/if}>
                             <td n:if="$challengeStatus->isGone()">{$iterator->counter}.</td>
-                            <td>{$userPerformance['username']}</td>
+                            <td>
+                                <img style="border-radius: 10px; margin-right: 15px; max-width: 40px" src="{plink Static:getProfilePicture, $userPerformance['profile_photo']}">
+                                {$userPerformance['username']}
+                            </td>
                             <td class="text-center" style="width: 10em;">
-                                <div class="progress">
+                                <div class="progress" >
                                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$userPerformance['percentage']}" aria-valuemin="0" aria-valuemax="100" style="width: {$userPerformance['percentage']}%;">
-
                                   </div>
                                 </div>
                             </td>
                             <td>
                                 {$userPerformance['current_performance']} {$challenge->activity->log_type->mark} ({$userPerformance['percentage']} %)
                             </td>
-                            <td  n:if="$challengeStatus->isActive()"  class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
+                            <td n:if="$challengeStatus->isActive()" class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">
                                 {$usersToday[$userPerformance['username']]}/{$userPerformance['average_minimum']} {$challenge->activity->log_type->mark}
                             </td>
                             <td>
-                                <a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander"><i class="fas fa-search"></i></a>
+                                <a href="#" data-user-id="{$userPerformance['id']}" data-hidden-content="1" class="expander">
+                                    <i class="fas fa-search"></i>
+                                </a>
                             </td>
                         </tr>
                         <tr id="datalist-{$userPerformance['id']}" class="hidden">
@@ -184,12 +188,12 @@ $(function() {
         e.preventDefault();
         if ($(this).data('hidden-content') == 1) {
             $(this).find('i').removeClass('glyphicon-zoom-in').addClass('glyphicon-zoom-out');
-            var userId = $(this).data('user-id');
+            let userId = $(this).data('user-id');
             $('#datalist-'+userId).removeClass('hidden');
             $(this).data('hidden-content', 0);
         } else {
             $(this).find('i').removeClass('glyphicon-zoom-out').addClass('glyphicon-zoom-in');
-            var userId = $(this).data('user-id');
+            let userId = $(this).data('user-id');
             $('#datalist-'+userId).addClass('hidden');
             $(this).data('hidden-content', 1);
         }
@@ -325,6 +329,7 @@ $(function() {
                     backgroundColor: {$data['color']},
                     borderColor: {$data['color']},
                     data: {$data['daysNoIndex']},
+                    borderWidth: {$borderWidth},
                     fill: false
                 }{last}{else},{/last}
                 {/foreach}
@@ -345,6 +350,7 @@ $(function() {
                     backgroundColor: {$data['color']},
                     borderColor: {$data['color']},
                     data: {$data['daysNoIndex']},
+                    borderWidth: {$borderWidth},
                     fill: false
                 }{last}{else},{/last}
                 {/foreach}
