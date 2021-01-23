@@ -8,17 +8,16 @@ namespace App\Presenters;
  */
 class StaticPresenter extends BasePresenter
 {
-    /** @var Nette\Http\Response */
     protected $httpResponse;
 
+    protected $httpRequest;
 
-    /**
-     * @param \Nette\Database\Context $context
-     */
+
     public function __construct(\Nette\DI\Container $context)
     {
         parent::__construct();
         $this->httpResponse = $context->getByType('Nette\Http\Response');
+        $this->httpRequest = $context->getByType('Nette\Http\Request');
     }
 
     /**
@@ -77,9 +76,18 @@ class StaticPresenter extends BasePresenter
     {
         $fp = fopen($path, 'rb');
         $size = getimagesize($path);
+        fclose($fp);
+        $this->httpResponse->setHeader('Pragma', null);
+        $this->httpResponse->setHeader('Cache-Control', 'max-age=86400');
         $this->httpResponse->setContentType('Content-Type', $size['mime']);
         $this->httpResponse->setContentType('Content-Length', filesize($path));
-        fpassthru($fp);
-        fclose($fp);
+
+
+        $context = new \Nette\Http\Context($this->httpRequest, $this->httpResponse);
+
+        $mTime = filemtime($path);
+        if ($context->isModified($mTime)) {
+            readfile($path);
+        }
     }
 }

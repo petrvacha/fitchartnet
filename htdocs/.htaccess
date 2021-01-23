@@ -25,3 +25,11 @@
 		AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript text/javascript application/javascript application/json
 	</IfModule>
 </IfModule>
+
+<Files *.js>
+    Header unset "Cache-Control"
+    Header unset "last-modified"
+    Header unset "expires"
+    Header unset "etag"
+    Header add "Cache-Control" "max-age=31536000, public"
+</Files>
