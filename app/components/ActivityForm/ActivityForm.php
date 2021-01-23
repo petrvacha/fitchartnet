@@ -81,7 +81,7 @@ class ActivityForm extends \Fitchart\Application\Control
 
         $form->addText('value', $countLabel)
             ->setAttribute('placeholder', '0')
-            ->setRequired('You forget fill important number.')
+            ->setRequired('You forgot to fill important number.')
             ->addRule(Form::INTEGER, 'Wrong format. Input must be an integer.');
         //$form['value']->getLabelPrototype()->style = 'float: left; width: 65px;';
 
