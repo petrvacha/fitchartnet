@@ -4,3 +4,6 @@ database:
 	password: ''
 	options:
 		lazy: yes
+
+parameters:
+	salt_number:

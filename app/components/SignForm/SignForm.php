@@ -34,6 +34,7 @@ class SignForm extends \Fitchart\Application\Control
     public function createComponentSignForm()
     {
         $form = new Form;
+        $form->addProtection();
         $form->addText('username', 'Email')
             ->setRequired('Please enter your username.')
             ->setAttribute('placeholder', 'Email');

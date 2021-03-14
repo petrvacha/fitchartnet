@@ -35,6 +35,7 @@ class ResetPasswordForm extends \Fitchart\Application\Control
     public function createComponentResetPasswordForm()
     {
         $form = new Form;
+        $form->addProtection();
 
         $form->addText('email', 'Email')
             ->setRequired('Please enter your email.')
