@@ -15,7 +15,6 @@ class StaticPresenter extends BasePresenter
 
     public function __construct(\Nette\DI\Container $context)
     {
-        parent::__construct();
         $this->httpResponse = $context->getByType('Nette\Http\Response');
         $this->httpRequest = $context->getByType('Nette\Http\Request');
     }

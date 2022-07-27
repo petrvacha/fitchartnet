@@ -34,7 +34,6 @@ class ChallengeForm extends \Fitchart\Application\Control
                                 \App\Model\Activity $activityModel,
                                 \App\Model\Challenge $challengeModel)
     {
-        parent::__construct();
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;

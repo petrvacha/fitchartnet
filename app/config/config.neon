@@ -1,42 +1,17 @@
-#
-# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
-# http://nette.org/security-warning
-#
-common:
+includes:
+    - parameters.neon
+    - services.neon
 
-    includes:
-        - parameters.neon
-        - services.neon
+parameters:
 
-    parameters:
+php:
+        date.timezone: Europe/Prague
 
+application:
+        errorPresenter: Error
+        mapping:
+            *: App\*Module\Presenters\*Presenter
 
-    php:
-            date.timezone: Europe/Prague
-
-
-    application:
-            errorPresenter: Error
-            mapping:
-                    *: App\*Module\Presenters\*Presenter
-
-
-    session:
-            expiration: 101 days
-            savePath: "%tempDir%/sessions"
-
-production < common:
-    includes:
-        - production/parameters.neon
-
-development < common:
-    includes:
-        - development/parameters.neon
-
-local < common:
-    includes:
-        - local/parameters.neon
-
-cron < common:
-    includes:
-        - cron/parameters.neon
+session:
+        expiration: 365 days
+        savePath: "%tempDir%/sessions"

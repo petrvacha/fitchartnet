@@ -6,7 +6,7 @@ use Nette;
 use Fitchart\Application\Mailer;
 
 
-class MailerFactory extends Nette\Object
+class MailerFactory
 {
     /** @var ILogger */
     protected $logger;

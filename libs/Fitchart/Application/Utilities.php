@@ -7,8 +7,9 @@ use Nette\Utils\Strings;
 /**
  * Helpful utilities
  */
-class Utilities extends \Nette\Object
+class Utilities
 {
+    use \Nette\SmartObject;
     /**
      * Tring to find PHP_URL_PATH in string
      *
@@ -137,6 +138,6 @@ class Utilities extends \Nette\Object
 
     public static function generateInvitationHash($challengeId, $createdAt)
     {
-        return substr(self::create_sha1_hash($challengeId+$createdAt->format('Y-m-d')+'dfwafe]3['), 0, 25);
+        return substr(self::create_sha1_hash($challengeId.$createdAt->format('Y-m-d').'dfwafe]3['), 0, 25);
     }
 }

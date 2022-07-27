@@ -10,7 +10,7 @@ use Nette\Mail\Message;
 use Fitchart\Application\NotImplementedException;
 
 
-class MailerManager extends Nette\Object
+class MailerManager
 {
     /** @const REGISTRATION_NEW_USER string */
     const REGISTRATION_NEW_USER = 'registration_new_user';

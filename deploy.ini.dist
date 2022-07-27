@@ -1,0 +1,56 @@
+[fitchart.net] ; There may be more than one section
+; remote FTP server
+remote = ftp://name:password@server/directory
+
+; FTP passive mode
+passivemode = yes
+
+; local path (optional)
+local = '/path/to/project'
+
+; run in test-mode? (can be enabled by option -t or --test too)
+test = no
+
+; files and directories to ignore
+ignore = "
+    .git*
+    /private
+    /sql
+    /log
+    /app/config/config.local.neon
+    /temp/cache/*
+    /temp/sessions/*
+    deploy.ini
+    deploy.log
+    Gruntfile.js
+    package-lock.json
+    package.json
+    phpunit.xml
+    ruleset.xml
+"
+
+;reupload = www/index.php
+
+; is allowed to delete remote files? (defaults to yes)
+allowdelete = yes
+
+; jobs to run before file upload
+;;before[] = http://example.com/deployment.php?before
+
+; jobs to run after file upload
+;;after[] = http://example.com/deployment.php?after
+
+; directories to purge after file upload
+purge[] = temp/cache
+purge[] = temp/sessions
+; files to preprocess (defaults to *.js *.css)
+;;preprocess = no
+
+; log file (defaults to config file with extension .log)
+log = x
+
+; directory for temporary files (defaults to system's temporary directory)
+tempdir = temp/
+
+; enable colored highlights? (defaults to autodetect)
+colors = yes

@@ -43,7 +43,6 @@ class ActivityForm extends \Fitchart\Application\Control
                                 \App\Model\Challenge $challengeModel,
                                 \App\Model\ActivityLog $activityLogModel)
     {
-        parent::__construct();
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;

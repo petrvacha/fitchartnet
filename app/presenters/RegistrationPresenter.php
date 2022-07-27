@@ -34,7 +34,6 @@ class RegistrationPresenter extends BasePresenter
      */
     public function __construct(IRequest $httpRequest, User $userModel, Challenge $challengeModel, Friend $friendModel)
     {
-        parent::__construct();
         $this->httpRequest = $httpRequest;
         $this->userModel = $userModel;
         $this->challengeModel = $challengeModel;

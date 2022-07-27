@@ -333,7 +333,7 @@ class Challenge extends BaseModel
         $startDateTime->setTime(0,0,0);
         $endDateTime = $challenge[0]['end_at'];
         $endDateTime->setTime(23,59,59);
-        $today = new DateTime();
+        $today = new \DateTime();
         $dayFormat = "y/m/d";
 
         if ($startDateTime->format('y') === $endDateTime->format('y') && $startDateTime->format('y') === $today->format('y')) {

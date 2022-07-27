@@ -8,7 +8,7 @@ use Nette\DI\Container;
 use Fitchart\Application\Mailer;
 
 
-class MessageFactory extends Nette\Object
+class MessageFactory
 {
     /** @var  Mailer */
     protected $mailer;

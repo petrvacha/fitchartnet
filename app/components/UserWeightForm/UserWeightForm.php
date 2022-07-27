@@ -21,7 +21,6 @@ class UserWeightForm extends \Fitchart\Application\Control
     public function __construct($userId,
                                 \App\Model\Weight $userWeight)
     {
-        parent::__construct();
         $this->userId = $userId;
         $this->weightModel = $userWeight;
     }

@@ -1,5 +1,4 @@
 {
-	"name": "Fitchart",
 	"type": "project",
 	"authors": [
 		{
@@ -8,28 +7,34 @@
 		}
 	],
 	"require": {
-		"php": "<= 7.0.33",
-		"nette/application": "~2.3.14",
-		"nette/bootstrap": "~2.3.4",
-		"nette/caching": "~2.3.5",
-		"nette/component-model": "~2.2.4",
-		"nette/database": "~2.3.8",
-		"nette/deprecated": "~2.3.2",
-		"nette/di": "~2.3.10",
-		"nette/finder": "~2.3.2",
-		"nette/forms": "~2.3.8",
-		"nette/http": "~2.3.6",
-		"nette/mail": "~2.3.5",
-		"nette/neon": "~2.3.4",
-		"nette/php-generator": "~2.3.5",
-		"nette/reflection": "~2.3.2",
-		"nette/robot-loader": "~2.3.1",
-		"nette/safe-stream": "~2.3.2",
-		"nette/security": "~2.3.1",
-		"nette/tokenizer": "~2.2.1",
-		"nette/utils": "~2.3.8",
-		"latte/latte": "~2.3.11",
-		"tracy/tracy": "~2.3.10",
+		"php": ">= 7.4",
+		"nette/application": "3.0.*",
+		"nette/bootstrap": "3.0.*",
+		"nette/caching": "3.0.*",
+		"nette/database": "3.0.*",
+		"nette/di": "3.*",
+		"nette/forms": "3.0.*",
+		"nette/http": "3.0.*",
+		"nette/security": "3.0.*",
+
+
+		"nette/component-model": "3.*",
+
+		"nette/deprecated": "2.*",
+
+		"nette/finder": "2.*",
+
+		"nette/mail": "3.*",
+		"nette/neon": "2.*",
+		"nette/php-generator": "3.6.7",
+		"nette/reflection": "2.*",
+		"nette/robot-loader": "3.4.1",
+		"nette/safe-stream": "2.*",
+
+		"nette/tokenizer": "3.*",
+		"nette/utils": "3.*",
+		"latte/latte": "2.*",
+		"tracy/tracy": "2.*",
 	  	"dg/ftp-deployment": "2.7"
 	},
 	"require-dev": {

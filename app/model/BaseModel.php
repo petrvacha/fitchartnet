@@ -8,7 +8,7 @@ use \Fitchart\Application\Utilities;
 /**
  * Basic operations
  */
-class BaseModel extends \Nette\Object
+class BaseModel
 {
     
     /** @var string Table name */

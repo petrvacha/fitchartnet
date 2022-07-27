@@ -3,10 +3,11 @@
 namespace Fitchart\Application;
 
 use App\Model\Challenge;
-use Nette\Object;
 
-class ChallengeStatus extends Object
+class ChallengeStatus
 {
+    use \Nette\SmartObject;
+
     /** @var  string */
     protected $textState;
 

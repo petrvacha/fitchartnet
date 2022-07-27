@@ -27,7 +27,7 @@ class Mailer extends SendmailMailer implements IMailer
     /**
      * @param \Nette\Mail\Message $mail
      */
-    public function send(Message $mail)
+    public function send(Message $mail): void
     {
         parent::send($mail);
         if ($this->logger && FALSE) {

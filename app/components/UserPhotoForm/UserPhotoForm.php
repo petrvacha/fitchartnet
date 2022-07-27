@@ -22,7 +22,6 @@ class UserPhotoForm extends \Fitchart\Application\Control
     public function __construct($userId,
                                 \App\Model\User $userModel)
     {
-        parent::__construct();
         $this->userId = $userId;
         $this->userModel = $userModel;
     }

@@ -36,7 +36,6 @@ class UserProfileForm extends \Fitchart\Application\Control
                                 \App\Model\Gender $genderModel,
                                 \App\Model\Privacy $privacyModel)
     {
-        parent::__construct();
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->genderModel = $genderModel;
