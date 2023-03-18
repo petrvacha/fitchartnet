@@ -10,11 +10,11 @@ class UserPhotoForm extends \Fitchart\Application\Control
 {
     /** @var int */
     protected $userId;
-    
+
     /** @var \App\Model\User */
     protected $userModel;
 
-    
+
     /**
      * @param int $userId
      * @param \App\Model\User $userModel

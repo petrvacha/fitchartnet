@@ -42,12 +42,12 @@ class UserPresenter extends LoginBasePresenter
     public function renderProfile()
     {
         $this->template->user = $this->userModel->getUserData($this->user->id);
-        $this->template->title = 'your profile';
+        $this->template->title = 'Profile';
     }
 
     public function renderEdit()
     {
-        $this->template->title = 'profile edit';
+        $this->template->title = 'Settings';
         $this->template->user = $this->userModel->getUserData($this->user->id);
         $newAvatar = $this->session->getSection('newAvatar');
         $this->template->newAvatar = $newAvatar->status ?: FALSE;

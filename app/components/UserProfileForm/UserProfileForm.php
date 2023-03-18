@@ -62,16 +62,16 @@ class UserProfileForm extends \Fitchart\Application\Control
             ->setRequired()
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
             ->addRule(Form::EMAIL, '%label is not a valid email')
-            ->addRule(callback($this, 'isEmailAvailable'), 'This email is already taken!');
+            ->addRule([$this, 'isEmailAvailable'], 'This email is already taken!');
 
         $form->addText('username', 'Username')
             ->setRequired()
             ->addRule(Form::FILLED, '%label must be filled')
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50)
-            ->addRule(callback($this, 'isUsernameAvailable'), 'This username is already taken!');
+            ->addRule([$this, 'isUsernameAvailable'], 'This username is already taken!');
 
         $form->addPassword('old_password', 'Old password');
-        
+
         $form->addPassword('password', 'New password')
             ->setRequired(false)
             ->addCondition(Form::FILLED)
