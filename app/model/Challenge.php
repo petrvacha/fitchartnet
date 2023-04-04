@@ -338,9 +338,9 @@ class Challenge extends BaseModel
 
         if ($startDateTime->format('y') === $endDateTime->format('y') && $startDateTime->format('y') === $today->format('y')) {
             $dayFormat = "m/d";
-            $returnData['daysFormat'] = $dayFormat;
-            $returnData['dayMaximum'] = 0;
         }
+        $returnData['daysFormat'] = $dayFormat;
+        $returnData['dayMaximum'] = 0;
 
         for ($day = clone $startDateTime; $day <= $endDateTime; $day->add(new \DateInterval('P1D'))) {
             $returnData['days'][] = $day->format($dayFormat);
