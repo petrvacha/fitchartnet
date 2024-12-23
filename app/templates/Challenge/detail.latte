@@ -103,8 +103,8 @@
                     <thead>
                     <tr>
                         <th n:if="$challengeStatus->isGone()">#</th>
-                        <th>name</th>
-                        <th colspan="2">current performance</th>
+                        <th>hero</th>
+                        <th>current performance</th>
                         <th n:if="$challengeStatus->isActive()" class="text-center">today's status</th>
                         <th>details</th>
                     </tr>
@@ -118,12 +118,10 @@
                                 {$userPerformance['username']}
                             </td>
                             <td class="text-center" style="width: 10em;">
-                                <div class="progress" >
+                                <div class="progress">
                                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$userPerformance['percentage']}" aria-valuemin="0" aria-valuemax="100" style="width: {$userPerformance['percentage']}%;">
                                   </div>
                                 </div>
-                            </td>
-                            <td>
                                 {$userPerformance['current_performance']} {$challenge->activity->log_type->mark} ({$userPerformance['percentage']} %)
                             </td>
                             <td n:if="$challengeStatus->isActive()" class="text-center" style="color: {if $usersToday[$userPerformance['username']] < $userPerformance['average_minimum']}red{else}green{/if}">

@@ -1,9 +1,13 @@
 database:
-	dsn: 'mysql:host=localhost;dbname='
-	user: ''
-	password: ''
+	dsn: 'mysql:host=database;port=3306;dbname=test'
+	user: 'test'
+	password: 'test'
 	options:
 		lazy: yes
 
 parameters:
-	salt_number:
+	salt_number: 123456
+	config:
+		enabledSendEmail: FALSE    # FALSE = Neodesílají se emaily (použito pro vývoj)
+		enabledSaveEmail: TRUE      # TRUE = Ukládání emailů (použito pro vývoj)
+		measureGoogleAnalytics: FALSE

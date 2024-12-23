@@ -48,10 +48,14 @@ class User extends BaseModel
     /** @var \App\Model\Role $roleModel */
     protected $user;
 
+    /** @var \Nette\Security\Passwords */
+    protected $passwords;
+
 
     /**
      * @param \Nette\Database\Context $context
      * @param \Nette\Security\User $user
+     * @param \Nette\Security\Passwords $passwords
      * @param \App\Model\Privacy $privacyModel
      * @param \App\Model\Role $roleModel
      * @param \App\Model\Friend $friendModel
@@ -59,6 +63,7 @@ class User extends BaseModel
      */
     public function __construct(\Nette\Database\Context $context,
                                 \Nette\Security\User $user,
+                                \Nette\Security\Passwords $passwords,
                                 Privacy $privacyModel,
                                 Role $roleModel,
                                 Friend $friendModel,
@@ -66,6 +71,7 @@ class User extends BaseModel
     {
         parent::__construct($context);
         $this->user = $user;
+        $this->passwords = $passwords;
         $this->privacyModel = $privacyModel;
         $this->roleModel = $roleModel;
         $this->friendModel = $friendModel;
@@ -74,17 +80,16 @@ class User extends BaseModel
 
     /**
      * Adds new user.
-     * @param array $values
+     * @param $values
      * @return array
      */
     public function add($values)
     {
         $roleModel = $this->roleModel;
         $privacyModel = $this->privacyModel;
-
         $insert = [
             'username' => $values->username,
-            'password' => Passwords::hash($values->password),
+            'password' => $this->passwords->hash($values->password),
             'email' => $values->email,
             'token' => Utilities::create_sha1_hash($values->email, $this->getDateTime()),
             'api_token' => $this->getFreeApiToken($values->username),
