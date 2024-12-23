@@ -4,7 +4,16 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $configurator = new Nette\Configurator;
 
-$configurator->setDebugMode($configurator->detectDebugMode());
+$NETTE_DEBUG = getenv('NETTE_DEBUG', TRUE);
+
+if ($NETTE_DEBUG === '1') {
+    $configurator->setDebugMode(TRUE);
+} elseif ($NETTE_DEBUG == '0') {
+    $configurator->setDebugMode(FALSE);
+} else {
+    $configurator->setDebugMode($configurator->detectDebugMode());
+}
+
 $configurator->enableDebugger(__DIR__ . '/../log');
 error_reporting(~E_USER_DEPRECATED);
 $configurator->setTempDirectory(__DIR__ . '/../temp');

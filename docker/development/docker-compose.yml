@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  php:
+    container_name: fitchartnet
+    image: fitchartnet_php
+    build:
+      context: ../..
+      dockerfile: docker/development/build/php/Dockerfile
+    volumes:
+      - ../../:/var/www/html
+    ports:
+      - 80:80
+    environment:
+      - NETTE_DEBUG=1
+
+  database:
+    container_name: fitchartnet_db
+    image: fitchartnet_mysql
+    build: build/database
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: test
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOST=database
+      - PMA_USER=test
+      - PMA_PASSWORD=test

@@ -15,7 +15,7 @@ class RegistrationForm extends \Fitchart\Application\Control
     private $minimumTime = 4;
 
     /** @var integer */
-    private $maximumTime = 30;
+    private $maximumTime = 300;
 
     /** @var  array */
     protected $parameters;

@@ -85,6 +85,7 @@ class ChallengePresenter extends LoginBasePresenter
         }
 
         $this->template->challenge = $challenge = $this->challengeModel->findRow($id);
+        $this->template->challengeTitle = $challenge->activity->name . ": " . $challenge->name;
         $this->template->usersPerformances = $usersPerformances = $this->challengeModel->getUsersPerformances($id);
 
         $this->template->currentUserPerformances = $this->challengeModel->getCurrentUserPerformances($id);
