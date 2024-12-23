@@ -1,5 +1,5 @@
 # Fitchart
- Fitchart is a vintage sports web application designed for creating sports challenges. After more than a decade of operation, it has been released as open-source software under the GNU GPLv3 license. You can access it at https://fitchart.net. [https://fitchart.net](https://fitchart.net).
+Fitchart is a vintage sports web application designed for creating sports challenges. After more than a decade of operation, it has been released as open-source software under the GNU GPLv3 license. You can access it at [https://fitchart.net](https://fitchart.net).
 
 
 ## Installation
