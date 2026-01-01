@@ -119,6 +119,12 @@
     #bgvid {
         display: none;
     }
+    .navbar {
+        padding: .1rem 1rem
+    }
+    body {
+        line-height: 1;
+    }
 }
 
 #invitation-link {
