@@ -129,6 +129,42 @@ CREATE TABLE `challenge_user` (
   CONSTRAINT `challenge_user_ibfk_3` FOREIGN KEY (`invited_by`) REFERENCES `user` (`id`) -- Opravený cizí klíč
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `weight` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) NOT NULL,
+  `value` int NOT NULL,
+  `datetime` datetime NOT NULL,
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+);
+
+CREATE TABLE `notification` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) NOT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT '0',
+  `message` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+);
+
+CREATE TABLE `friend` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) NOT NULL,
+  `user_id2` int(11) NOT NULL,
+  `created_at` datetime NULL,
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  FOREIGN KEY (`user_id2`) REFERENCES `user` (`id`)
+);
+
+CREATE TABLE `friendship_request` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `approved` tinyint(1) NULL,
+  `to_user_id` int(11) NOT NULL,
+  `from_user_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  FOREIGN KEY (`to_user_id`) REFERENCES `user` (`id`),
+  FOREIGN KEY (`from_user_id`) REFERENCES `user` (`id`)
+);
 
 USE `test`;
 
@@ -175,4 +211,4 @@ INSERT INTO `privacy` (`id`, `name`, `description`, `active`) VALUES
 
 --- user:test, password:123456
 INSERT INTO `user` (`id`, `facebook_id`, `firstname`, `surname`, `email`, `username`, `gender_id`, `role_id`, `privacy_id`, `created_at`, `updated_at`, `last_action`, `token`, `facebook_access_token`, `api_token`, `bio`, `active`, `password`, `state`, `profile_photo`) VALUES
-(4, NULL, NULL, NULL, 'test@test.com', 'test', NULL, 4, 3, '2024-12-23 13:00:55', '2024-12-23 13:00:55', NULL, 'e6b163ea799166eb3ade68e2065fba55bac95099', NULL, '537ec3', NULL, 0, '$2y$10$ahBK33jMrUVmFqx/aRa8ruOxswLBhu42K0ZmLLKQZ48ba5w3jxZaG', 'new', NULL);
+(1, NULL, NULL, NULL, 'test@test.com', 'test', NULL, 4, 3, '2024-12-23 13:00:55', '2024-12-23 13:00:55', NULL, 'e6b163ea799166eb3ade68e2065fba55bac95099', NULL, '537ec3', NULL, 0, '$2y$10$ahBK33jMrUVmFqx/aRa8ruOxswLBhu42K0ZmLLKQZ48ba5w3jxZaG', 'new', NULL);

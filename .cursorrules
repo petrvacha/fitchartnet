@@ -1,0 +1,464 @@
+# Fitchart - Agent Documentation
+
+## About the Project
+
+**Fitchart** is a vintage sports web application designed for creating sports challenges. After more than a decade of operation, it has been released as open-source software under the GNU GPLv3 license. The application is available at [https://fitchart.net](https://fitchart.net).
+
+- **Author**: Petr Vácha ([petrvacha.com](http://petrvacha.com))
+- **License**: GNU General Public License v3.0
+- **Version**: 0.3
+
+---
+
+## Technology Stack
+
+### Backend
+- **PHP** >= 7.4
+- **Nette Framework 3.x** - PHP framework (MVC architecture)
+  - `nette/application` - Presenter/View layer
+  - `nette/database` - Database layer
+  - `nette/forms` - Forms
+  - `nette/security` - Authentication and authorization
+  - `nette/mail` - Email sending
+- **Latte 2.x** - Templating system
+- **Tracy** - Debugging and error handling
+
+### Frontend
+- **Bootstrap 4** (SB Admin template)
+- **jQuery 3.x**
+- **Chart.js** - Charts and performance visualization
+- **Font Awesome** - Icons
+- **Cropper.js** - Profile photo cropping
+
+### Database
+- **MariaDB / MySQL**
+
+### Build Tools
+- **Grunt** - Asset bundling (CSS/JS minification)
+- **Composer** - PHP dependency management
+- **npm** - JavaScript dependencies
+
+### Development Environment
+- **Docker & Docker Compose**
+- **phpMyAdmin** for database management
+
+---
+
+## Main Application Features
+
+### 1. User System
+- Registration and login
+- Password reset (email workflow)
+- Profile photo management with cropping
+- Privacy settings (5 levels)
+- User roles: superadmin, admin, moderator, user, spectator
+
+### 2. Sports Challenges
+- Creating custom challenges with target values
+- Time-limited challenges (start/end date)
+- Inviting friends to challenges
+- Real-time challenge progress tracking
+- Cumulative and daily performance charts
+
+### 3. Activities
+Supported sports activities:
+- **Count-based**: push-ups, pull-ups, squats, sit-ups, burpees, etc.
+- **Time-based**: plank, handstand, wall squat, etc.
+
+### 4. Social Features
+- Friendship system (friendship requests)
+- Notifications
+- Public/private profiles
+
+### 5. Weight Tracking
+- Recording weight over time
+
+---
+
+## Directory Structure
+
+```
+fitchartnet/
+├── app/                          # Main application code
+│   ├── bootstrap.php             # Application bootstrap
+│   ├── components/               # Reusable components (forms)
+│   │   ├── ActivityForm/         # Activity logging form
+│   │   ├── ChallengeForm/        # Challenge creation form
+│   │   ├── RegistrationForm/     # Registration form
+│   │   ├── SignForm/             # Login form
+│   │   ├── UserPhotoForm/        # Profile photo upload
+│   │   ├── UserProfileForm/      # Profile editing
+│   │   └── ...
+│   ├── config/                   # Configuration
+│   │   ├── config.neon           # Main configuration
+│   │   ├── config.local.neon     # Local configuration (ignored in git)
+│   │   ├── services.neon         # DI services
+│   │   └── parameters.neon       # Application parameters
+│   ├── model/                    # Data models
+│   │   ├── BaseModel.php         # Base model
+│   │   ├── User.php              # User model
+│   │   ├── Challenge.php         # Challenge model
+│   │   ├── Activity.php          # Activity model
+│   │   ├── ActivityLog.php       # Activity log
+│   │   └── ...
+│   ├── presenters/               # Presenters (controllers)
+│   │   ├── BasePresenter.php     # Base presenter
+│   │   ├── ChallengePresenter.php
+│   │   ├── UserPresenter.php
+│   │   └── ...
+│   ├── router/                   # Routing
+│   │   └── RouterFactory.php
+│   └── templates/                # Latte templates
+│       ├── @layout.latte         # Main layout
+│       ├── Challenge/
+│       ├── User/
+│       └── ...
+├── docker/                       # Docker configuration
+│   └── development/
+│       ├── docker-compose.yml
+│       └── build/
+├── htdocs/                       # Public files (document root)
+│   ├── index.php                 # Entry point
+│   ├── css/                      # Styles
+│   ├── js/                       # JavaScript
+│   ├── images/                   # Images
+│   └── fonts/                    # Fonts
+├── libs/                         # Custom libraries
+│   └── Fitchart/
+│       └── Application/
+│           ├── Utilities.php     # Helper utilities
+│           ├── ChallengeStatus.php
+│           ├── Exceptions.php
+│           └── ...
+├── private/                      # Private files (user avatars)
+│   └── images/
+├── sql/                          # SQL scripts
+│   ├── development.sql           # Development database dump
+│   └── history/                  # SQL migration history
+├── temp/                         # Temporary files
+├── log/                          # Logs
+├── vendor/                       # Composer dependencies
+├── composer.json
+├── package.json
+├── Gruntfile.js
+├── Makefile                      # Make commands for development
+└── README.md
+```
+
+---
+
+## Database Schema
+
+### Main Tables
+- `user` - Users
+- `challenge` - Sports challenges
+- `challenge_user` - User-challenge relationship
+- `activity` - Activity types
+- `activity_log` - Activity records
+- `friend` - Friendships
+- `friendship_request` - Friendship requests
+- `notification` - Notifications
+- `weight` - Weight records
+
+### Lookup Tables
+- `role` - User roles
+- `privacy` - Privacy levels
+- `gender` - Gender
+- `log_type` - Activity log type (count/time)
+
+---
+
+## Development - Quick Start
+
+### Prerequisites
+- Docker and Docker Compose
+- Make (optional)
+
+### Starting Up
+
+```bash
+# 1. Create .env (optional)
+cp docker/development/env.example docker/development/.env
+
+# 2. Build and start
+make rebuild
+
+# 3. Import database
+make db-import FILE=sql/development.sql
+
+# 4. Create local configuration
+cp app/config/config.local.neon.dist app/config/config.local.neon
+```
+
+### Access Points
+- **Web application**: http://localhost:80
+- **phpMyAdmin**: http://localhost:8081
+- **Database**: localhost:3307 (user: test, password: test, database: test)
+
+### Test User
+- **Username**: test
+- **Password**: 123456
+
+### Useful Make Commands
+```bash
+make help           # Show all available commands
+make up             # Start containers
+make down           # Stop containers
+make shell          # Enter PHP container
+make logs           # Show logs
+make db-shell       # Enter MySQL shell
+make composer-install  # Install PHP dependencies
+```
+
+---
+
+## Build Frontend Assets
+
+```bash
+# Install npm dependencies
+npm install
+
+# Build (CSS/JS minification)
+grunt build
+
+# Development build (without minification)
+grunt dev
+```
+
+---
+
+## Architecture and Patterns
+
+### Nette Framework Conventions
+- **Presenter** = Controller in MVC
+- **Component** = Reusable UI component (forms)
+- **Model** = Data access layer
+- **Latte** = Templating system
+
+### Dependency Injection
+Services are defined in `app/config/services.neon` and automatically injected.
+
+### Naming Conventions
+- Presenters: `*Presenter.php`
+- Models: `*.php` in `app/model/`
+- Templates: `Presenter/action.latte`
+- Components: `I*Factory` interface for generated factories
+
+---
+
+## Coding Standards & Conventions
+
+> ⚠️ **IMPORTANT FOR AI AGENTS**: This project uses older technologies. Do not use modern syntax or libraries that are not compatible!
+
+### PHP Version and Syntax
+
+**Use PHP 7.4 syntax.** Typed properties are OK, but the following PHP 8.0+ features are NOT supported:
+
+```php
+// ✅ CORRECT (PHP 7.4)
+protected ?string $tableName = null;
+public function findRow(int $id): ?array
+
+// ❌ WRONG (PHP 8.0+ - union types)
+public function findRow(int|string $id): array|null
+
+// ❌ WRONG (PHP 8.0+ - named arguments)
+$this->redirect(destination: 'Homepage:default');
+
+// ❌ WRONG (PHP 8.0+ - constructor property promotion)
+public function __construct(private Database $db) {}
+
+// ❌ WRONG (PHP 8.0+ - match expression)
+$result = match($status) { ... };
+
+// ❌ WRONG (PHP 8.1+ - readonly, enums)
+readonly class User {}
+enum Status: string {}
+```
+
+### Database Access
+
+**For database operations, use `Nette\Database\Context` with fluent interface**, not raw SQL (unless absolutely necessary for complex queries).
+
+```php
+// ✅ CORRECT - Nette Database fluent interface
+$this->context->table('user')->where('id', $userId)->fetch();
+$this->getTable()->where(['active' => true])->fetchAll();
+$this->findBy(['challenge_id' => $id])->select('user_id')->fetchAll();
+
+// ✅ OK for complex queries - raw SQL via context->query()
+$this->context->query("
+    SELECT U.id, U.username, SUM(AL.value) as total
+    FROM user U
+    JOIN activity_log AL ON AL.user_id = U.id
+    WHERE ...
+    GROUP BY U.id
+")->fetchAll();
+
+// ❌ WRONG - don't use PDO directly or other DB libraries
+$pdo->prepare("SELECT * FROM user WHERE id = ?");
+```
+
+**BaseModel provides these methods:**
+- `findAll()` - all records
+- `findBy(array $by)` - by conditions
+- `findOneBy(array $by)` - single record
+- `findRow($id)` - by ID
+- `insert($data)`, `update($data)`, `delete($id)`
+
+### Dependency Injection
+
+**Prefer constructor injection for models and services.** For component factories in presenters, use `@inject` annotation on **public** properties.
+
+```php
+// ✅ CORRECT - Constructor injection for models
+class ChallengePresenter extends LoginBasePresenter
+{
+    /** @var Challenge */
+    protected $challengeModel;
+
+    /** @var ChallengeUser */
+    protected $challengeUserModel;
+
+    public function __construct(
+        Notification $notificationModel,
+        Challenge $challengeModel,
+        ChallengeUser $challengeUserModel
+    ) {
+        parent::__construct($notificationModel);
+        $this->challengeModel = $challengeModel;
+        $this->challengeUserModel = $challengeUserModel;
+    }
+}
+
+// ✅ CORRECT - @inject for component factories (MUST be public!)
+/** @var \App\Components\ChallengeForm\IChallengeFormFactory @inject */
+public $challengeFormFactory;
+
+// ❌ WRONG - @inject on private/protected
+/** @var SomeService @inject */
+private $service;  // Won't work!
+```
+
+### JavaScript
+
+**Write new features in plain JavaScript (ES5/ES6) or jQuery 3.x.** Do not use modern frameworks.
+
+```javascript
+// ✅ CORRECT - jQuery
+$(document).ready(function() {
+    $('.js-button').on('click', function(e) {
+        e.preventDefault();
+        var data = $(this).data('value');
+        // ...
+    });
+});
+
+// ✅ CORRECT - Vanilla JS (ES5/ES6 - reasonably)
+document.addEventListener('DOMContentLoaded', function() {
+    var buttons = document.querySelectorAll('.js-button');
+    buttons.forEach(function(btn) {
+        btn.addEventListener('click', handleClick);
+    });
+});
+
+// ❌ WRONG - Modern frameworks
+import React from 'react';
+import { createApp } from 'vue';
+
+// ❌ WRONG - ES modules in browser
+import { helper } from './utils.js';
+```
+
+**Libraries available in the project:**
+- jQuery 3.x
+- Chart.js (for charts)
+- DataTables (tables)
+- Cropper.js (image cropping)
+- jQuery DateTimePicker
+- jQuery TokenInput
+- netteForms.js, nette.ajax.js
+
+### Latte Templates
+
+```latte
+{* ✅ CORRECT - Latte 2.x syntax *}
+{if $user}
+    <p>{$user->username}</p>
+{/if}
+
+{foreach $items as $item}
+    <li n:class="$iterator->odd ? 'odd'">{$item}</li>
+{/foreach}
+
+{control challengeForm}
+
+{* ❌ WRONG - Latte 3.x syntax *}
+{$user?->username}  {* Nullsafe operator - depends on PHP version *}
+```
+
+### Nette Forms in Components
+
+```php
+// ✅ CORRECT - Creating a form in a component
+protected function createComponentChallengeForm()
+{
+    $form = new \Nette\Application\UI\Form;
+    $form->addText('name', 'Name')
+         ->setRequired('Please enter name.');
+    $form->addSubmit('submit', 'Save');
+    $form->onSuccess[] = [$this, 'processForm'];
+    return $form;
+}
+```
+
+### Naming Conventions
+
+| Type | Convention | Example |
+|------|------------|---------|
+| Presenter | `*Presenter` | `ChallengePresenter` |
+| Model | Singular | `Challenge`, `User` |
+| Component | `*Form`, `*Control` | `ChallengeForm` |
+| Factory interface | `I*Factory` | `IChallengeFormFactory` |
+| DB table | snake_case | `challenge_user` |
+| Template | `action.latte` | `detail.latte` |
+
+### Flash Messages
+
+```php
+// Message types defined in BasePresenter
+$this->flashMessage('Success!', self::MESSAGE_TYPE_SUCCESS);  // 'success'
+$this->flashMessage('Info', self::MESSAGE_TYPE_INFO);         // 'info'  
+$this->flashMessage('Error!', self::MESSAGE_TYPE_ERROR);      // 'danger'
+```
+
+---
+
+## API
+
+The application contains `ApiPresenter` for API endpoints (probably for mobile app or external integrations).
+
+---
+
+## Deployment
+
+The project contains `deploy.ini.dist` for [FTP Deployment](https://github.com/dg/ftp-deployment) tool.
+
+---
+
+## Development Notes
+
+1. **Debug mode**: In Docker development environment, `NETTE_DEBUG=1` is set
+2. **Tracy Bar**: Available at the bottom of the page in debug mode
+3. **Cache**: When changing configuration, delete `temp/cache/`
+4. **Sessions**: Stored in `temp/sessions/`
+5. **Logs**: Stored in `log/`
+
+---
+
+## Contact
+
+- **Author**: Petr Vácha
+- **Email**: mail@petrvacha.com
+- **Web**: [petrvacha.com](http://petrvacha.com)
+
