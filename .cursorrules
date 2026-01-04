@@ -250,6 +250,22 @@ Services are defined in `app/config/services.neon` and automatically injected.
 
 > ⚠️ **IMPORTANT FOR AI AGENTS**: This project uses older technologies. Do not use modern syntax or libraries that are not compatible!
 
+### Task Execution
+
+**Only do what is explicitly requested. Do not add extra features, improvements, or "helpful" additions that were not asked for.** Stick strictly to the requirements.
+
+**If tests exist in the project, run them after making changes to verify functionality.** Check for test directories or test files and execute the appropriate test command (e.g., `phpunit`, `vendor/bin/phpunit`, or similar).
+
+**Never modify code in the `vendor/` directory.** The `vendor/` directory contains third-party dependencies managed by Composer. Any changes to dependencies must be done through proper installation/update commands (e.g., `composer install`, `composer update`, `composer require`) that will work with all dependencies.
+
+### Language
+
+**This project is entirely in English.** All code, comments, documentation, commit messages, and user-facing text must be written in English.
+
+### Code Comments
+
+**Add comments sparingly.** Only add comments when the code is unclear or non-intuitive. Well-written code should be self-explanatory. Avoid obvious or redundant comments.
+
 ### PHP Version and Syntax
 
 **Use PHP 7.4 syntax.** Typed properties are OK, but the following PHP 8.0+ features are NOT supported:

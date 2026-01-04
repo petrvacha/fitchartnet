@@ -7,7 +7,7 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 RUN a2enmod rewrite headers
 RUN service apache2 restart
 
-# Instalace ZIP extension a dalších PHP extensions + Node.js
+# Install ZIP extension and other PHP extensions + Node.js
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
@@ -22,10 +22,10 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /var/www/html
 
-# Instalace Composer (bez self-update, protože composer:latest je už aktuální)
+# Install Composer (without self-update, composer:latest is already up to date)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Kopírování entrypoint scriptu
+# Copy entrypoint script
 COPY docker/development/build/php/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

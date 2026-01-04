@@ -68,13 +68,13 @@ CREATE TABLE `activity` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `log_type_id` int(11) NOT NULL,
   `name` varchar(25) NOT NULL,
-  `description` varchar(255) DEFAULT NULL, -- Opraveno na varchar(255)
+  `description` varchar(255) DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `log_type_id` (`log_type_id`),
-  CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`log_type_id`) REFERENCES `log_type` (`id`) -- Opravený cizí klíč
+  CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`log_type_id`) REFERENCES `log_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `activity_log` (
@@ -88,8 +88,8 @@ CREATE TABLE `activity_log` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `activity_id` (`activity_id`),
-  CONSTRAINT `activity_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`), -- Opravený cizí klíč
-  CONSTRAINT `activity_log_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`) -- Opravený cizí klíč
+  CONSTRAINT `activity_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `activity_log_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `challenge` (
@@ -108,8 +108,8 @@ CREATE TABLE `challenge` (
   PRIMARY KEY (`id`),
   KEY `activity_id` (`activity_id`),
   KEY `created_by` (`created_by`),
-  CONSTRAINT `challenge_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`), -- Opravený cizí klíč
-  CONSTRAINT `challenge_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) -- Opravený cizí klíč
+  CONSTRAINT `challenge_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`),
+  CONSTRAINT `challenge_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `challenge_user` (
@@ -124,9 +124,9 @@ CREATE TABLE `challenge_user` (
   KEY `challenge_id` (`challenge_id`),
   KEY `user_id` (`user_id`),
   KEY `invited_by` (`invited_by`),
-  CONSTRAINT `challenge_user_ibfk_1` FOREIGN KEY (`challenge_id`) REFERENCES `challenge` (`id`), -- Opravený cizí klíč
-  CONSTRAINT `challenge_user_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`), -- Opravený cizí klíč
-  CONSTRAINT `challenge_user_ibfk_3` FOREIGN KEY (`invited_by`) REFERENCES `user` (`id`) -- Opravený cizí klíč
+  CONSTRAINT `challenge_user_ibfk_1` FOREIGN KEY (`challenge_id`) REFERENCES `challenge` (`id`),
+  CONSTRAINT `challenge_user_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `challenge_user_ibfk_3` FOREIGN KEY (`invited_by`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `weight` (
@@ -209,6 +209,6 @@ INSERT INTO `privacy` (`id`, `name`, `description`, `active`) VALUES
 (4,	'public in system',	'',	1),
 (5,	'public for all',	'',	1);
 
---- user:test, password:123456
+-- user:test, password:123456
 INSERT INTO `user` (`id`, `facebook_id`, `firstname`, `surname`, `email`, `username`, `gender_id`, `role_id`, `privacy_id`, `created_at`, `updated_at`, `last_action`, `token`, `facebook_access_token`, `api_token`, `bio`, `active`, `password`, `state`, `profile_photo`) VALUES
 (1, NULL, NULL, NULL, 'test@test.com', 'test', NULL, 4, 3, '2024-12-23 13:00:55', '2024-12-23 13:00:55', NULL, 'e6b163ea799166eb3ade68e2065fba55bac95099', NULL, '537ec3', NULL, 0, '$2y$10$ahBK33jMrUVmFqx/aRa8ruOxswLBhu42K0ZmLLKQZ48ba5w3jxZaG', 'new', NULL);
