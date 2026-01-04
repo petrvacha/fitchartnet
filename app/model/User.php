@@ -188,10 +188,10 @@ class User extends BaseModel
         if (!empty($data['password']) && !empty($data['confirm_password'])) {
 
             if (empty($data['old_password']) && !empty($user->password) ||
-                !empty($data['old_password']) && !Passwords::verify($data['old_password'], $user->password)) {
+                !empty($data['old_password']) && !$this->passwords->verify($data['old_password'], $user->password)) {
                 throw new \Fitchart\Application\SecurityException('Password is incorrect.');
             }
-            $data['password'] = Passwords::hash($data['password']);
+            $data['password'] = $this->passwords->hash($data['password']);
 
         } else {
             unset($data['password']);
@@ -428,7 +428,7 @@ class User extends BaseModel
         if ($user) {
             if ($values['password'] === $values['confirm_password']) {
                 $user->update([
-                    'password' => Passwords::hash($values['password']),
+                    'password' => $this->passwords->hash($values['password']),
                     'token' => NULL
                     ]);
             } else {
