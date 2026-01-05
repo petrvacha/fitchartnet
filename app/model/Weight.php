@@ -21,7 +21,7 @@ class Weight extends BaseModel
     
     /**
      * @param int $userId
-     * @return Nette\Database\Table\ActiveRow
+     * @return \Nette\Database\Table\ActiveRow|false
      */
     public function getUserLastWeight($userId)
     {
@@ -41,7 +41,7 @@ class Weight extends BaseModel
     }
 
     /**
-     * @param Nette\Utils\ArrayHash $values
+     * @param \Nette\Utils\ArrayHash $values
      */
     public function insertWeight($values)
     {

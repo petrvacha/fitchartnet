@@ -1,0 +1,361 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Nette\\\\Configurator\\:\\:addConfig\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 1
+			path: app/bootstrap.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of method App\\\\Model\\\\Challenge\\:\\:createNewChallenge\\(\\) expects array, Nette\\\\Utils\\\\ArrayHash given\\.$#"
+			count: 1
+			path: app/components/ChallengeForm/ChallengeForm.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of method App\\\\Model\\\\Challenge\\:\\:updateChallenge\\(\\) expects array, Nette\\\\Utils\\\\ArrayHash given\\.$#"
+			count: 1
+			path: app/components/ChallengeForm/ChallengeForm.php
+
+		-
+			message: "#^Parameter \\#1 \\$logger of method Fitchart\\\\Application\\\\Mailer\\:\\:setLogger\\(\\) expects Fitchart\\\\Application\\\\ILogger, App\\\\Components\\\\ILogger given\\.$#"
+			count: 1
+			path: app/components/MailerFactory.php
+
+		-
+			message: "#^Property App\\\\Components\\\\MailerFactory\\:\\:\\$logger \\(App\\\\Components\\\\ILogger\\) does not accept App\\\\Model\\\\LoggerModel\\.$#"
+			count: 1
+			path: app/components/MailerFactory.php
+
+		-
+			message: "#^Property App\\\\Components\\\\MailerFactory\\:\\:\\$logger has unknown class App\\\\Components\\\\ILogger as its type\\.$#"
+			count: 1
+			path: app/components/MailerFactory.php
+
+		-
+			message: "#^Access to property \\$data on an unknown class Latte\\\\Template\\.$#"
+			count: 2
+			path: app/components/MailerManager.php
+
+		-
+			message: "#^Constant APP_DIR not found\\.$#"
+			count: 1
+			path: app/components/MailerManager.php
+
+		-
+			message: "#^Method App\\\\Components\\\\MailerManager\\:\\:templateFactory\\(\\) has invalid return type Latte\\\\Template\\.$#"
+			count: 1
+			path: app/components/MailerManager.php
+
+		-
+			message: "#^Method App\\\\Components\\\\MailerManager\\:\\:templateFactory\\(\\) should return Latte\\\\Template but returns Nette\\\\Application\\\\UI\\\\ITemplate\\.$#"
+			count: 1
+			path: app/components/MailerManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$html of method Nette\\\\Mail\\\\Message\\:\\:setHtmlBody\\(\\) expects string, Latte\\\\Template given\\.$#"
+			count: 1
+			path: app/components/MailerManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function strip_tags expects string, Latte\\\\Template given\\.$#"
+			count: 1
+			path: app/components/MailerManager.php
+
+		-
+			message: "#^Method App\\\\Components\\\\MailerManagerFactory\\:\\:init\\(\\) should return Fitchart\\\\Application\\\\Mailer but returns App\\\\Components\\\\MailerManager\\.$#"
+			count: 1
+			path: app/components/MailerManagerFactory.php
+
+		-
+			message: "#^Parameter \\#2 \\$message of class App\\\\Components\\\\MailerManager constructor expects Nette\\\\Mail\\\\Message, App\\\\Components\\\\Message given\\.$#"
+			count: 1
+			path: app/components/MailerManagerFactory.php
+
+		-
+			message: "#^Property App\\\\Components\\\\MailerManagerFactory\\:\\:\\$message \\(App\\\\Components\\\\Message\\) does not accept Nette\\\\Mail\\\\Message\\.$#"
+			count: 1
+			path: app/components/MailerManagerFactory.php
+
+		-
+			message: "#^Property App\\\\Components\\\\MailerManagerFactory\\:\\:\\$message has unknown class App\\\\Components\\\\Message as its type\\.$#"
+			count: 1
+			path: app/components/MailerManagerFactory.php
+
+		-
+			message: "#^Call to an undefined method Nette\\\\Mail\\\\Message\\:\\:setBcc\\(\\)\\.$#"
+			count: 1
+			path: app/components/MessageFactory.php
+
+		-
+			message: "#^Parameter \\#1 \\$control of method Nette\\\\Forms\\\\Controls\\\\BaseControl\\:\\:addConditionOn\\(\\) expects Nette\\\\Forms\\\\IControl, Nette\\\\ComponentModel\\\\IComponent given\\.$#"
+			count: 1
+			path: app/components/NewPasswordForm/NewPasswordForm.php
+
+		-
+			message: "#^Access to an undefined property Nette\\\\Forms\\\\IControl\\:\\:\\$value\\.$#"
+			count: 6
+			path: app/components/RegistrationForm/RegistrationForm.php
+
+		-
+			message: "#^Call to an undefined method Fitchart\\\\Application\\\\Mailer\\:\\:action\\(\\)\\.$#"
+			count: 1
+			path: app/components/RegistrationForm/RegistrationForm.php
+
+		-
+			message: "#^Call to an undefined method Fitchart\\\\Application\\\\Mailer\\:\\:action\\(\\)\\.$#"
+			count: 1
+			path: app/components/ResetPasswordForm/ResetPasswordForm.php
+
+		-
+			message: "#^Dead catch \\- Fitchart\\\\Application\\\\SecurityException is never thrown in the try block\\.$#"
+			count: 1
+			path: app/components/UserPhotoForm/UserPhotoForm.php
+
+		-
+			message: "#^Access to an undefined property Nette\\\\Forms\\\\IControl\\:\\:\\$value\\.$#"
+			count: 2
+			path: app/components/UserProfileForm/UserProfileForm.php
+
+		-
+			message: "#^Parameter \\#1 \\$control of method Nette\\\\Forms\\\\Controls\\\\BaseControl\\:\\:addConditionOn\\(\\) expects Nette\\\\Forms\\\\IControl, Nette\\\\ComponentModel\\\\IComponent given\\.$#"
+			count: 1
+			path: app/components/UserProfileForm/UserProfileForm.php
+
+		-
+			message: "#^Access to private property Nette\\\\Database\\\\Context\\:\\:\\$connection\\.$#"
+			count: 1
+			path: app/model/BaseModel.php
+
+		-
+			message: "#^Call to an undefined method Nette\\\\Database\\\\IRow\\:\\:ref\\(\\)\\.$#"
+			count: 1
+			path: app/model/Challenge.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 4
+			path: app/model/Challenge.php
+
+		-
+			message: "#^Cannot access property \\$role on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 1
+			path: app/model/Challenge.php
+
+		-
+			message: "#^Method App\\\\Model\\\\Challenge\\:\\:getCurrentUserPerformances\\(\\) should return bool\\|Nette\\\\Database\\\\IRow but returns array\\<Nette\\\\Database\\\\IRow\\>\\.$#"
+			count: 1
+			path: app/model/Challenge.php
+
+		-
+			message: "#^Parameter \\#2 \\$userId of method App\\\\Model\\\\ChallengeUser\\:\\:addNewUser\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: app/model/Challenge.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 2
+			path: app/model/ChallengeUser.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 3
+			path: app/model/Friend.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 3
+			path: app/model/FriendshipRequest.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Model\\\\Role\\:\\:getIdentity\\(\\)\\.$#"
+			count: 2
+			path: app/model/Notification.php
+
+		-
+			message: "#^Property App\\\\Model\\\\Notification\\:\\:\\$user \\(App\\\\Model\\\\Role\\) does not accept Nette\\\\Security\\\\User\\.$#"
+			count: 1
+			path: app/model/Notification.php
+
+		-
+			message: "#^Constant USER_AVATAR_DIR not found\\.$#"
+			count: 2
+			path: app/model/User.php
+
+		-
+			message: "#^Constant USER_ORIGIN_AVATAR_DIR not found\\.$#"
+			count: 2
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:activeUserByToken\\(\\) has invalid return type App\\\\Model\\\\Nette\\\\Database\\\\Row\\.$#"
+			count: 1
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:activeUserByToken\\(\\) should return App\\\\Model\\\\Nette\\\\Database\\\\Row\\|false but returns Nette\\\\Database\\\\Table\\\\ActiveRow\\.$#"
+			count: 1
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:getFreeUsers\\(\\) should return Nette\\\\Utils\\\\ArrayHash but returns array\\<Nette\\\\Database\\\\IRow\\>\\.$#"
+			count: 1
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:getFriendList\\(\\) should return Nette\\\\Utils\\\\ArrayHash but returns array\\<Nette\\\\Database\\\\IRow\\>\\.$#"
+			count: 1
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:getFriendshipOfferList\\(\\) should return Nette\\\\Utils\\\\ArrayHash but returns array\\<Nette\\\\Database\\\\IRow\\>\\.$#"
+			count: 1
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:getFriendshipRequestList\\(\\) should return Nette\\\\Utils\\\\ArrayHash but returns array\\<Nette\\\\Database\\\\IRow\\>\\.$#"
+			count: 1
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:getUserList\\(\\) should return Nette\\\\Utils\\\\ArrayHash but returns array\\<Nette\\\\Database\\\\IRow\\>\\.$#"
+			count: 2
+			path: app/model/User.php
+
+		-
+			message: "#^Method App\\\\Model\\\\User\\:\\:getUserLoginData\\(\\) should return bool but returns array\\.$#"
+			count: 1
+			path: app/model/User.php
+
+		-
+			message: "#^Cannot access property \\$weight on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 1
+			path: app/model/Weight.php
+
+		-
+			message: "#^Parameter \\#1 \\$id of method App\\\\Model\\\\BaseModel\\:\\:findRow\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: app/presenters/ApiPresenter.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 2
+			path: app/presenters/ChallengePresenter.php
+
+		-
+			message: "#^Cannot access property \\$role on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 3
+			path: app/presenters/ChallengePresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$input of function array_reduce expects array, bool\\|Nette\\\\Database\\\\IRow given\\.$#"
+			count: 1
+			path: app/presenters/ChallengePresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\HomepagePresenter\\:\\:createComponentNewPasswordForm\\(\\) should return Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\NewPasswordForm\\.$#"
+			count: 1
+			path: app/presenters/HomepagePresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\HomepagePresenter\\:\\:createComponentResetPasswordForm\\(\\) should return Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\ResetPasswordForm\\.$#"
+			count: 1
+			path: app/presenters/HomepagePresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\HomepagePresenter\\:\\:createComponentSignInForm\\(\\) should return Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\SignForm\\.$#"
+			count: 1
+			path: app/presenters/HomepagePresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$token of method App\\\\Components\\\\NewPasswordForm\\\\INewPasswordFormFactory\\:\\:create\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: app/presenters/HomepagePresenter.php
+
+		-
+			message: "#^Access to an undefined property Nette\\\\Security\\\\IIdentity\\:\\:\\$data\\.$#"
+			count: 1
+			path: app/presenters/LoginBasePresenter.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 2
+			path: app/presenters/LoginPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\LoginPresenter\\:\\:createComponentNewPasswordForm\\(\\) should return Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\NewPasswordForm\\.$#"
+			count: 1
+			path: app/presenters/LoginPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\LoginPresenter\\:\\:createComponentResetPasswordForm\\(\\) should return Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\ResetPasswordForm\\.$#"
+			count: 1
+			path: app/presenters/LoginPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\LoginPresenter\\:\\:createComponentSignInForm\\(\\) should return Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\SignForm\\.$#"
+			count: 1
+			path: app/presenters/LoginPresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$token of method App\\\\Components\\\\NewPasswordForm\\\\INewPasswordFormFactory\\:\\:create\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: app/presenters/LoginPresenter.php
+
+		-
+			message: "#^Parameter \\#2 \\$challengeId of method App\\\\Components\\\\ActivityForm\\\\IActivityFormFactory\\:\\:create\\(\\) expects int, null given\\.$#"
+			count: 1
+			path: app/presenters/MainPresenter.php
+
+		-
+			message: "#^Access to property \\$id on an unknown class App\\\\Model\\\\Nette\\\\Database\\\\Row\\.$#"
+			count: 3
+			path: app/presenters/RegistrationPresenter.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 3
+			path: app/presenters/RegistrationPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\RegistrationPresenter\\:\\:createComponentRegistrationForm\\(\\) has invalid return type App\\\\Presenters\\\\Nette\\\\Application\\\\UI\\\\Form\\.$#"
+			count: 1
+			path: app/presenters/RegistrationPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\RegistrationPresenter\\:\\:createComponentRegistrationForm\\(\\) should return App\\\\Presenters\\\\Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\RegistrationForm\\.$#"
+			count: 1
+			path: app/presenters/RegistrationPresenter.php
+
+		-
+			message: "#^Constant USER_AVATAR_DIR not found\\.$#"
+			count: 3
+			path: app/presenters/StaticPresenter.php
+
+		-
+			message: "#^Constant USER_ORIGIN_AVATAR_DIR not found\\.$#"
+			count: 1
+			path: app/presenters/StaticPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\UserPresenter\\:\\:createComponentUserPhotoForm\\(\\) should return App\\\\Components\\\\ChallengeForm but returns App\\\\Components\\\\UserPhotoForm\\.$#"
+			count: 1
+			path: app/presenters/UserPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\UserPresenter\\:\\:createComponentUserProfileForm\\(\\) has invalid return type App\\\\Presenters\\\\Form\\.$#"
+			count: 1
+			path: app/presenters/UserPresenter.php
+
+		-
+			message: "#^Method App\\\\Presenters\\\\UserPresenter\\:\\:createComponentUserProfileForm\\(\\) should return App\\\\Presenters\\\\Form but returns App\\\\Components\\\\UserProfileForm\\.$#"
+			count: 1
+			path: app/presenters/UserPresenter.php
+
+		-
+			message: "#^Call to static method createFromFormat\\(\\) on an unknown class Fitchart\\\\Application\\\\DateTime\\.$#"
+			count: 1
+			path: libs/Fitchart/Application/Utilities.php
+
+		-
+			message: "#^Call to static method getLastErrors\\(\\) on an unknown class Fitchart\\\\Application\\\\DateTime\\.$#"
+			count: 1
+			path: libs/Fitchart/Application/Utilities.php

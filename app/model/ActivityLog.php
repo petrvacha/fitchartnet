@@ -58,7 +58,7 @@ class ActivityLog extends BaseModel
         $thisYearEnd->modify('last day of December this year');
 
         $preparedData = [];
-        $firstActivity = !empty($data) ? $data[key($data)] : null;
+        $firstActivity = !empty($data) ? $data[key($data)]->updated_at : null;
 
         foreach($data as $i => $item) {
             if (!isset($preparedData[$item->activity_id])) {
@@ -78,8 +78,10 @@ class ActivityLog extends BaseModel
                 for ($month = clone $thisYearStart; $month <= $thisYearEnd; $month->add(new DateInterval('P1M'))) {
                     $preparedData[$item->activity_id]['year'][$month->format('m.Y')] = 0;
                 }
-                for ($year = clone $firstActivity; $year <= $thisYearEnd; $year->add(new DateInterval('P1Y'))) {
-                    $preparedData[$item->activity_id]['all'][$year->format('Y')] = 0;
+                if ($firstActivity) {
+                    for ($year = clone $firstActivity; $year <= $thisYearEnd; $year->add(new DateInterval('P1Y'))) {
+                        $preparedData[$item->activity_id]['all'][$year->format('Y')] = 0;
+                    }
                 }
             }
 

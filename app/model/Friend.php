@@ -5,7 +5,7 @@ namespace App\Model;
 
 class Friend extends BaseModel
 {
-    /** @var \App\Model\Role $user */
+    /** @var \Nette\Security\User $user */
     protected $user;
 
 

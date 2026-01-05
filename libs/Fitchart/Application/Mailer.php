@@ -30,7 +30,7 @@ class Mailer extends SendmailMailer implements IMailer
     public function send(Message $mail): void
     {
         parent::send($mail);
-        if ($this->logger && FALSE) {
+        if ($this->logger) {
             $this->logger->mailLog($mail);
         }
     }

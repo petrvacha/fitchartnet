@@ -16,7 +16,7 @@ class UserWeightForm extends \Fitchart\Application\Control
 
     /**
      * @param int $userId
-     * @param \App\Model\User $userWeight
+     * @param \App\Model\Weight $userWeight
      */
     public function __construct($userId,
                                 \App\Model\Weight $userWeight)

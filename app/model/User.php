@@ -126,12 +126,14 @@ class User extends BaseModel
      */
     public function activeBy($type, $value)
     {
+        $user = null;
         if ($type === self::ACTIVE_BY_TOKEN || $type === self::ACTIVE_BY_ID) {
-            $user = $this->findOneBy(self::ACTIVE_BY_TOKEN, $value);
+            $user = $this->findOneBy([$type => $value]);
         }
 
         if ($user) {
-            return $user->update('active', 1);
+            $user->update(['active' => 1]);
+            return true;
         } else {
             return FALSE;
         }
@@ -179,7 +181,7 @@ class User extends BaseModel
     }
 
     /**
-     * @param Nette\Utils\ArrayHash $data
+     * @param \Nette\Utils\ArrayHash $data
      * @throws SecurityException
      */
     public function updateUserData($data)

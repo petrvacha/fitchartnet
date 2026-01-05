@@ -75,7 +75,7 @@ class Utilities
      * @param string $input
      * @param string $salt
      * @param int|NULL $truncateTo
-     * @return bool
+     * @return string
      */
     public static function create_sha1_hash($input, $salt = '', $truncateTo = NULL)
     {

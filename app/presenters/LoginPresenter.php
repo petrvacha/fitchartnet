@@ -185,11 +185,8 @@ class LoginPresenter extends BasePresenter
      */
     protected function createComponentLaunchAlertForm()
     {
-        $form = $this->launchAlertFormFactory->create();
-
-        $form->onSuccess[] = function () {
-            $this->redirect('Main:default');
-        };
+        // TODO: LaunchAlertForm component needs to be created
+        $form = new \Nette\Application\UI\Form;
         return $form;
     }
 

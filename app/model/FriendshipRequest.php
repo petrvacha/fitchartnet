@@ -5,7 +5,7 @@ namespace App\Model;
 
 class FriendshipRequest extends BaseModel
 {
-    /** @var Nette\Security\User $user */
+    /** @var \Nette\Security\User $user */
     protected $user;
 
     /** @var Friend $friendModel */
