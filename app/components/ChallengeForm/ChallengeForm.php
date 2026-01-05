@@ -105,12 +105,15 @@ class ChallengeForm extends \Fitchart\Application\Control
     public function formSent(Form $form, ArrayHash $values)
     {
         $presenter = $this->getPresenter();
+        if (!$presenter) {
+            return;
+        }
         if (empty($values['id'])) {
             $this->challengeModel->createNewChallenge($values);
-            $presenter->flashMessage('New challenge has been created.', $presenter::MESSAGE_TYPE_SUCCESS);
+            $presenter->flashMessage('New challenge has been created.', \App\Presenters\BasePresenter::MESSAGE_TYPE_SUCCESS);
         } else {
             $this->challengeModel->updateChallenge($values);
-            $presenter->flashMessage('The challenge has been updated.', $presenter::MESSAGE_TYPE_SUCCESS);
+            $presenter->flashMessage('The challenge has been updated.', \App\Presenters\BasePresenter::MESSAGE_TYPE_SUCCESS);
         }
     }
 

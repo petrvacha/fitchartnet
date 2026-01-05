@@ -101,7 +101,7 @@ class ApiPresenter extends \Nette\Application\UI\Presenter
                 $values = ['user_id' => $user->id, 'activity_id' => (int) $activityId, 'value' => $value];
                 $values['created_at'] = $values['updated_at'] = $datetime ?: new \DateTime;
                 $this->activityLogModel->{$actionType}($values);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->sendJson(['status' => self::STATUS_ERROR]);
             }
             $this->sendJson(['status' => self::STATUS_OK]);

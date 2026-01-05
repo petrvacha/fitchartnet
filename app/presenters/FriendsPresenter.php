@@ -109,7 +109,7 @@ class FriendsPresenter extends LoginBasePresenter
      */
     public function actionRemoveFriendshipRequest($id)
     {
-        $removed = $this->friendshipRequestModel->removeFriendshipRequest($id, FALSE);
+        $removed = $this->friendshipRequestModel->removeFriendshipRequest($id);
         if ($removed) {
             $this->flashMessage('Friendship request has been removed.', 'info');
         }

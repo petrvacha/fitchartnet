@@ -14,7 +14,7 @@ class BaseModel
     /** @var string Table name */
     protected $tableName;
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     protected $context;
 
     /** @var string */
@@ -42,7 +42,7 @@ class BaseModel
     }
 
     /**
-     * @return Nette\Database\Table\Selection
+     * @return \Nette\Database\Table\Selection
      */
     protected function getTable()
     {
@@ -50,7 +50,7 @@ class BaseModel
     }
 
     /**
-     * @return Nette\Database\Table\Selection
+     * @return \Nette\Database\Table\Selection
      */
     public function findAll()
     {
@@ -59,7 +59,7 @@ class BaseModel
 
     /**
      * @param array $by
-     * @return Nette\Database\Table\Selection
+     * @return \Nette\Database\Table\Selection
      */
     public function findBy(array $by)
     {
@@ -69,7 +69,7 @@ class BaseModel
     /**
      * @param string $keyName
      * @param string $valueName
-     * @return Nette\Database\Table\Selection
+     * @return array
      */
     public function findActivePairs($keyName = 'id', $valueName = 'name')
     {
@@ -81,7 +81,7 @@ class BaseModel
     /**
      * @param string $keyName
      * @param string $valueName
-     * @return Nette\Database\Table\Selection
+     * @return array
      */
     public function findPairs($keyName = 'id', $valueName = 'name')
     {
@@ -91,7 +91,7 @@ class BaseModel
 
     /**
      * @param array $by
-     * @return Nette\Database\Row
+     * @return \Nette\Database\Table\ActiveRow|false
      */
     public function findOneBy(array $by)
     {
@@ -101,8 +101,8 @@ class BaseModel
     /**
      * Returns row by primary key
      * 
-     * @param $id
-     * @param Nette\Database\Row
+     * @param int $id
+     * @return \Nette\Database\Table\ActiveRow|false
      */
     public function findRow($id)
     {
@@ -110,8 +110,8 @@ class BaseModel
     }
 
     /**
-     * @param $data
-     * @return 
+     * @param array|\Traversable $data
+     * @return \Nette\Database\Table\ActiveRow
      */
     public function insert($data)
     {
@@ -119,8 +119,8 @@ class BaseModel
     }
 
     /**
-     * @param $data
-     * @return
+     * @param array|\Traversable $data
+     * @return int Number of affected rows
      */
     public function update($data)
     {
@@ -138,7 +138,7 @@ class BaseModel
 
     /**
      * @param array $data
-     * @return bool|int
+     * @return \Nette\Database\Table\ActiveRow|false
      */
     public function insertUpdate($data)
     {
@@ -174,7 +174,7 @@ class BaseModel
 
     /**
      * @param string|NULL $format
-     * @return DateTime
+     * @return DateTime|string
      */
     public function getDateTime($format = NULL)
     {

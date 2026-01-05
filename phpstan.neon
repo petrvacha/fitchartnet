@@ -1,0 +1,21 @@
+includes:
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon
+	- phpstan-baseline.neon
+
+parameters:
+	level: 5
+	paths:
+		- app
+		- libs
+	excludePaths:
+		- app/templates
+		- temp
+		- vendor
+		- htdocs
+	bootstrapFiles:
+		- vendor/autoload.php
+	phpVersion: 70400
+	treatPhpDocTypesAsCertain: false
+	checkUninitializedProperties: true
+	checkNullables: true

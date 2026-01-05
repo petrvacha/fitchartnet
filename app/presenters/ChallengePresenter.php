@@ -119,9 +119,9 @@ class ChallengePresenter extends LoginBasePresenter
 
         $this->template->usersToday = $usersToday;
 
-        $this->template->currentTotalPerformance = 0 + array_reduce($this->template->currentUserPerformances, function($i, $obj) {
-            return $i += $obj->current_performance;
-        });
+        $this->template->currentTotalPerformance = 0 + (int) array_reduce($this->template->currentUserPerformances, function($i, $obj) {
+            return $i + (int) $obj->current_performance;
+        }, 0);
 
         $this->template->activeUsers = [];
 

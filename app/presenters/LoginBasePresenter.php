@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Presenters;
-use App\model\Notification;
+use App\Model\Notification;
 use Nette\Database\Context;
 use Nette\Http\IRequest;
 

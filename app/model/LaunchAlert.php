@@ -7,7 +7,7 @@ class LaunchAlert extends BaseModel
 {
     /**
      * Adds en email for the launch alert
-     * @param ArrayHash $values
+     * @param \Nette\Utils\ArrayHash $values
      */
     public function insertEmail($values)
     {
