@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Presenters;
+
 use App\Model\ActivityLog;
+use App\Model\Friend;
+use App\Model\FriendshipRequest;
 use App\Model\Notification;
 use App\Model\User;
-use App\Model\FriendshipRequest;
-use App\Model\Friend;
-
 
 /**
  * Friends presenter
@@ -32,12 +32,13 @@ class FriendsPresenter extends LoginBasePresenter
      * @param FriendshipRequest $friendshipRequestModel
      * @param Friend $friendModel
      */
-    public function __construct(Notification $notificationModel,
-                                ActivityLog $activityLog,
-                                User $userModel,
-                                FriendshipRequest $friendshipRequestModel,
-                                Friend $friendModel)
-    {
+    public function __construct(
+        Notification $notificationModel,
+        ActivityLog $activityLog,
+        User $userModel,
+        FriendshipRequest $friendshipRequestModel,
+        Friend $friendModel
+    ) {
         parent::__construct($notificationModel);
         $this->activityLog = $activityLog;
         $this->userModel = $userModel;
@@ -95,7 +96,7 @@ class FriendsPresenter extends LoginBasePresenter
      * @param bool $approve
      * @throws \Nette\Application\AbortException
      */
-    public function actionAcceptFriendship($id, $approve = TRUE)
+    public function actionAcceptFriendship($id, $approve = true)
     {
         $friend = $this->friendshipRequestModel->acceptFriendshipRequest($id, $approve);
         if ($friend && $approve) {
@@ -115,5 +116,4 @@ class FriendsPresenter extends LoginBasePresenter
         }
         $this->redirect('Friends:default');
     }
-
 }

@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Presenters;
+
 use App\Model\Notification;
 use App\Model\User;
 use Nette\Http\Session;
-
 
 /**
  * User presenter
@@ -30,10 +30,11 @@ class UserPresenter extends LoginBasePresenter
      * @param User $userModel
      * @param Session $session
      */
-    public function __construct(Notification $notificationModel,
-                                User $userModel,
-                                Session $session)
-    {
+    public function __construct(
+        Notification $notificationModel,
+        User $userModel,
+        Session $session
+    ) {
         parent::__construct($notificationModel);
         $this->session = $session;
         $this->userModel = $userModel;
@@ -50,7 +51,7 @@ class UserPresenter extends LoginBasePresenter
         $this->template->title = 'Settings';
         $this->template->user = $this->userModel->getUserData($this->user->id);
         $newAvatar = $this->session->getSection('newAvatar');
-        $this->template->newAvatar = $newAvatar->status ?: FALSE;
+        $this->template->newAvatar = $newAvatar->status ?: false;
         unset($newAvatar->status);
     }
 
@@ -87,10 +88,9 @@ class UserPresenter extends LoginBasePresenter
         $control = $this->userPhotoFormFactory->create($this->user->id);
 
         $control->getComponent('userPhotoForm')->onSuccess[] = function () {
-            $this->session->getSection('newAvatar')->status = TRUE;
+            $this->session->getSection('newAvatar')->status = true;
             $this->redirect('User:edit');
         };
         return $control;
     }
-
 }

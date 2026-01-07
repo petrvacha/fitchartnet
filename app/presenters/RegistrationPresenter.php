@@ -3,13 +3,12 @@
 
 namespace App\Presenters;
 
-
+use App\Components\RegistrationForm\IRegistrationFormFactory;
 use App\Model\Challenge;
 use App\Model\Friend;
+use App\Model\User;
 use Fitchart\Application\Utilities;
 use Nette\Http\IRequest;
-use \App\Model\User;
-use \App\Components\RegistrationForm\IRegistrationFormFactory;
 
 class RegistrationPresenter extends BasePresenter
 {
@@ -51,7 +50,6 @@ class RegistrationPresenter extends BasePresenter
 
     public function renderError()
     {
-
     }
 
     /**
@@ -86,7 +84,6 @@ class RegistrationPresenter extends BasePresenter
             }
             $this->flashMessage('Congratulations! Your account has been activated!', parent::MESSAGE_TYPE_INFO);
             $this->redirect('Login:default');
-
         } else {
             $this->flashMessage('We are sorry. Your activated link is wrong.', parent::MESSAGE_TYPE_ERROR);
             $this->redirect('Registration:default');
@@ -98,7 +95,6 @@ class RegistrationPresenter extends BasePresenter
         $challenge = $this->challengeModel->findRow($challengeId);
 
         if ($challenge && $hash === Utilities::generateInvitationHash($challengeId, $challenge->created_at)) {
-
             if ($this->getUser()->isLoggedIn()) {
                 if (!$this->friendModel->areFriends($challenge->created_by, $this->user->getIdentity()->id)) {
                     $this->friendModel->addFriend($challenge->created_by, $this->user->getIdentity()->id);
@@ -106,7 +102,6 @@ class RegistrationPresenter extends BasePresenter
                 $this->challengeModel->addUserToChallenge($challengeId, $this->user->getIdentity()->id, $challenge->created_by);
                 $this->flashMessage('The account is active. The challenge is waiting...', parent::MESSAGE_TYPE_INFO);
                 $this->redirect('Challenge:default');
-
             } else {
                 $httpResponse = $this->getHttpResponse();
                 $httpResponse->setCookie('invitationChallenge', $challengeId, '100 days');
@@ -127,7 +122,7 @@ class RegistrationPresenter extends BasePresenter
     protected function createComponentRegistrationForm()
     {
         $control = $this->registrationFormFactory->create();
-        $control->getComponent('registrationForm')->onSuccess[] = function() {
+        $control->getComponent('registrationForm')->onSuccess[] = function () {
             $this->flashMessage('Check your spam box and confirm the registration.', 'info');
             $this->redirect('Registration:');
         };

@@ -2,15 +2,14 @@
 
 namespace App\Model;
 
+use Fitchart\Application\Utilities;
 use Nette\Utils\DateTime;
-use \Fitchart\Application\Utilities;
 
 /**
  * Basic operations
  */
 class BaseModel
 {
-    
     /** @var string Table name */
     protected $tableName;
 
@@ -18,7 +17,7 @@ class BaseModel
     protected $context;
 
     /** @var string */
-    protected $datetime = NULL;
+    protected $datetime = null;
     
 
     /**
@@ -74,7 +73,7 @@ class BaseModel
     public function findActivePairs($keyName = 'id', $valueName = 'name')
     {
         return $this->getTable()
-                    ->where(['active' => TRUE])
+                    ->where(['active' => true])
                     ->fetchPairs($keyName, $valueName);
     }
 
@@ -100,7 +99,7 @@ class BaseModel
 
     /**
      * Returns row by primary key
-     * 
+     *
      * @param int $id
      * @return \Nette\Database\Table\ActiveRow|false
      */
@@ -133,7 +132,7 @@ class BaseModel
      */
     public function delete($id)
     {
-        return $this->findBy(array($this->getTable()->getPrimary() => (int) $id))->delete();
+        return $this->findBy([$this->getTable()->getPrimary() => (int) $id])->delete();
     }
 
     /**
@@ -149,7 +148,7 @@ class BaseModel
             if ($record) {
                 $record->update($data);
             } else {
-                return FALSE;
+                return false;
             }
         }
 
@@ -163,7 +162,7 @@ class BaseModel
     {
         $columns = $this->context->connection->getSupplementalDriver()->getColumns($this->getTableName());
 
-        $columnsResult = array();
+        $columnsResult = [];
 
         foreach ($columns as $column) {
             $columnsResult[] = $column['name'];
@@ -176,11 +175,11 @@ class BaseModel
      * @param string|NULL $format
      * @return DateTime|string
      */
-    public function getDateTime($format = NULL)
+    public function getDateTime($format = null)
     {
         if (empty($format)) {
             return $this->datetime ?: new DateTime();
-        } else if ($this->datetime) {
+        } elseif ($this->datetime) {
             $this->datetime = new DateTime($this->datetime);
             return $this->datetime->format($format);
         } else {
@@ -188,5 +187,4 @@ class BaseModel
             return $this->datetime->format($format);
         }
     }
-    
 }

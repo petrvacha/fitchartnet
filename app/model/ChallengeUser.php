@@ -2,17 +2,16 @@
 
 namespace App\Model;
 
-
 /**
  * ChallengeUser Model
  */
 class ChallengeUser extends BaseModel
 {
     /** @const COLOR_BLACK string */
-    const COLOR_BLACK = '#000000';
+    public const COLOR_BLACK = '#000000';
 
     /** @const COLOR_WHITE string */
-    const COLOR_WHITE = '#FFFFFF';
+    public const COLOR_WHITE = '#FFFFFF';
 
     /** @var \Nette\Security\User */
     protected $user;
@@ -23,9 +22,10 @@ class ChallengeUser extends BaseModel
      * @param \Nette\Database\Context $context
      * @param \Nette\Security\User $user
      */
-    public function __construct(\Nette\Database\Context $context,
-                                \Nette\Security\User $user)
-    {
+    public function __construct(
+        \Nette\Database\Context $context,
+        \Nette\Security\User $user
+    ) {
         parent::__construct($context);
         $this->user = $user;
     }
@@ -35,7 +35,7 @@ class ChallengeUser extends BaseModel
      * @param int $userId
      * @param bool $active
      */
-    public function addNewUser($challengeId, $userId, $active = FALSE, $invitedByUserId = NULL)
+    public function addNewUser($challengeId, $userId, $active = false, $invitedByUserId = null)
     {
         if (!$invitedByUserId) {
             $invitedByUserId = $this->user->getIdentity()->id;
@@ -95,22 +95,21 @@ class ChallengeUser extends BaseModel
 
         $users = $this->findBy(['challenge_id' => $challengeId])->fetchAll();
 
-        $find = FALSE;
-        while ($find === FALSE) {
+        $find = false;
+        while ($find === false) {
             $r = array_rand($colors);
             $generatedColor = '#' . $colors[$r];
 
             if (!empty($users)) {
-                $find = TRUE;
+                $find = true;
                 foreach ($users as $user) {
                     if ($user['color'] === $generatedColor) {
-                        $find = FALSE;
+                        $find = false;
                         break;
                     }
                 }
-
             } else {
-                $find = TRUE;
+                $find = true;
             }
         }
 
@@ -130,7 +129,7 @@ class ChallengeUser extends BaseModel
      * @param $challengeId
      * @param bool $active
      */
-    public function attend($challengeId, $active = TRUE)
+    public function attend($challengeId, $active = true)
     {
         $this->findBy(['challenge_id' => $challengeId, 'user_id' => $this->user->getIdentity()->id])
             ->update(['active' => $active]);

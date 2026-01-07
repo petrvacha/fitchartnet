@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-
 class LaunchAlert extends BaseModel
 {
     /**

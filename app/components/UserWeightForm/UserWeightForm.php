@@ -2,8 +2,8 @@
 
 namespace App\Components;
 
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
+use Nette\Utils\ArrayHash;
 
 class UserWeightForm extends \Fitchart\Application\Control
 {
@@ -18,9 +18,10 @@ class UserWeightForm extends \Fitchart\Application\Control
      * @param int $userId
      * @param \App\Model\Weight $userWeight
      */
-    public function __construct($userId,
-                                \App\Model\Weight $userWeight)
-    {
+    public function __construct(
+        $userId,
+        \App\Model\Weight $userWeight
+    ) {
         $this->userId = $userId;
         $this->weightModel = $userWeight;
     }
@@ -30,7 +31,7 @@ class UserWeightForm extends \Fitchart\Application\Control
      */
     public function createComponentUserWeightForm()
     {
-        $form = new Form;
+        $form = new Form();
         $form->addText('value', 'Weight')
             ->addRule(Form::FILLED, '%label must be filled')
             ->addRule(Form::FLOAT, '%label must be number')
@@ -38,7 +39,7 @@ class UserWeightForm extends \Fitchart\Application\Control
             ->setAttribute('placeholder', 'new weight');
 
         $form->addSubmit('submit', 'Update');
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
         
         $this->addBootstrapStyling($form);
         return $form;
@@ -59,10 +60,8 @@ class UserWeightForm extends \Fitchart\Application\Control
         try {
             $values['user_id'] = $this->userId;
             $this->weightModel->insertWeight($values);
-            
         } catch (\Fitchart\Application\SecurityException $e) {
             $form->addError($e->getMessage());
         }
     }
-    
 }

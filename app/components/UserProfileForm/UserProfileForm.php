@@ -2,10 +2,8 @@
 
 namespace App\Components;
 
-use Nette;
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
-
+use Nette\Utils\ArrayHash;
 
 class UserProfileForm extends \Fitchart\Application\Control
 {
@@ -31,11 +29,12 @@ class UserProfileForm extends \Fitchart\Application\Control
      * @param \App\Model\Gender $genderModel
      * @param \App\Model\Privacy $privacyModel
      */
-    public function __construct($userId,
-                                \App\Model\User $userModel,
-                                \App\Model\Gender $genderModel,
-                                \App\Model\Privacy $privacyModel)
-    {
+    public function __construct(
+        $userId,
+        \App\Model\User $userModel,
+        \App\Model\Gender $genderModel,
+        \App\Model\Privacy $privacyModel
+    ) {
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->genderModel = $genderModel;
@@ -49,7 +48,7 @@ class UserProfileForm extends \Fitchart\Application\Control
      */
     public function createComponentUserProfileForm()
     {
-        $form = new Form;
+        $form = new Form();
         $form->addText('firstname', 'Firstname')
             ->setRequired()
             ->addRule(Form::MAX_LENGTH, '%label is way too long', 50);
@@ -86,7 +85,7 @@ class UserProfileForm extends \Fitchart\Application\Control
         $form->addSubmit('submit', 'Save');
 
         $form->setDefaults($this->userData);
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
 
         $this->addBootstrapStyling($form);
 
@@ -108,7 +107,6 @@ class UserProfileForm extends \Fitchart\Application\Control
         $values['id'] = $this->userId;
         try {
             $this->userModel->updateUserData($values);
-            
         } catch (\Fitchart\Application\SecurityException $e) {
             $form->addError($e->getMessage());
         }
@@ -125,11 +123,11 @@ class UserProfileForm extends \Fitchart\Application\Control
         $user = $this->userModel->findOneBy(['username' => $userNameCandidate->value]);
 
         if ($user && $user->id === $this->userId) {
-            return TRUE;
-        } else if ($user) {
-            return FALSE;
+            return true;
+        } elseif ($user) {
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
@@ -143,11 +141,11 @@ class UserProfileForm extends \Fitchart\Application\Control
         $user = $this->userModel->findOneBy(['email' => $emailCandidate->value]);
 
         if ($user && $user->id === $this->userId) {
-            return TRUE;
-        } else if ($user) {
-            return FALSE;
+            return true;
+        } elseif ($user) {
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 }

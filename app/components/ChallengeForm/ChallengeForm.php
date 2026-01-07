@@ -2,8 +2,8 @@
 
 namespace App\Components;
 
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
+use Nette\Utils\ArrayHash;
 
 /**
  * ChallengeForm component
@@ -29,11 +29,12 @@ class ChallengeForm extends \Fitchart\Application\Control
      * @param \App\Model\Activity $activityModel
      * @param \App\Model\Challenge $challengeModel
      */
-    public function __construct($userId,
-                                \App\Model\User $userModel,
-                                \App\Model\Activity $activityModel,
-                                \App\Model\Challenge $challengeModel)
-    {
+    public function __construct(
+        $userId,
+        \App\Model\User $userModel,
+        \App\Model\Activity $activityModel,
+        \App\Model\Challenge $challengeModel
+    ) {
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;
@@ -45,7 +46,7 @@ class ChallengeForm extends \Fitchart\Application\Control
      */
     public function createComponentChallengeForm()
     {
-        $form = new Form;
+        $form = new Form();
 
         $form->addHidden('id');
 
@@ -55,7 +56,7 @@ class ChallengeForm extends \Fitchart\Application\Control
             ->addRule(Form::MAX_LENGTH, '%label is too long', 50);
 
         $form->addTextArea('description', 'Description')
-            ->setRequired(FALSE)
+            ->setRequired(false)
             ->addRule(Form::MAX_LENGTH, '%label is too long', 1000);
 
         $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
@@ -75,10 +76,10 @@ class ChallengeForm extends \Fitchart\Application\Control
             ->addRule(Form::INTEGER, '%label must be an integer.');
 
         $form->addTextArea('users', 'Invite your friends')
-            ->setRequired(FALSE)
+            ->setRequired(false)
             ->addRule(Form::MAX_LENGTH, '%label is too long', 1000);
 
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
 
         $this->addBootstrapStyling($form);
         return $form;
@@ -87,7 +88,7 @@ class ChallengeForm extends \Fitchart\Application\Control
     public function render()
     {
         $this->template->setFile($this->getTemplatePath());
-        $this->template->availableUsers = $this->userModel->getAvailableUsers(TRUE);
+        $this->template->availableUsers = $this->userModel->getAvailableUsers(true);
         $this->template->currentUsers = isset($this->data['users']) ? $this->data['users'] : [];
 
         if (!$this['challengeForm']->offsetExists('submit')) {
@@ -116,5 +117,4 @@ class ChallengeForm extends \Fitchart\Application\Control
             $presenter->flashMessage('The challenge has been updated.', \App\Presenters\BasePresenter::MESSAGE_TYPE_SUCCESS);
         }
     }
-
 }

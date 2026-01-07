@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-
 class FriendshipRequest extends BaseModel
 {
     /** @var \Nette\Security\User $user */
@@ -21,11 +20,12 @@ class FriendshipRequest extends BaseModel
      * @param Friend $friendModel
      * @param Notification $notificationModel
      */
-    public function __construct(\Nette\Database\Context $context,
-                                \Nette\Security\User $user,
-                                Friend $friendModel,
-                                Notification $notificationModel)
-    {
+    public function __construct(
+        \Nette\Database\Context $context,
+        \Nette\Security\User $user,
+        Friend $friendModel,
+        Notification $notificationModel
+    ) {
         parent::__construct($context);
         $this->user = $user;
         $this->friendModel = $friendModel;
@@ -44,11 +44,11 @@ class FriendshipRequest extends BaseModel
 
         if ($sameRequest && empty($sameRequest['approved'])) {
             if ($sameRequest['from_user_id'] === $fromUserId) {
-                $sameRequest->update(['approved' => NULL, 'updated_at' => $this->getDateTime()]); //@todo frozen branch
+                $sameRequest->update(['approved' => null, 'updated_at' => $this->getDateTime()]); //@todo frozen branch
             } else {
                 $this->acceptFriendshipRequest($toUserId);
             }
-            return TRUE;
+            return true;
         }
 
         if (!$sameRequest) {
@@ -62,7 +62,7 @@ class FriendshipRequest extends BaseModel
             $this->notificationModel->insertNotification(Notification::MESSAGE_NEW_FRIEND_REQUEST, $toUserId);
             return $this->insert($insertData);
         }
-        return FALSE;
+        return false;
     }
 
 
@@ -71,7 +71,7 @@ class FriendshipRequest extends BaseModel
      * @param bool $approve
      * @return mixed
      */
-    public function acceptFriendshipRequest($userId, $approve = TRUE)
+    public function acceptFriendshipRequest($userId, $approve = true)
     {
         $toUserId = $this->user->getIdentity()->id;
         $updateData = ['approved' => $approve, 'updated_at' => $this->getDateTime()];
@@ -80,7 +80,7 @@ class FriendshipRequest extends BaseModel
         if ($updated && empty($updated['approved']) && $approve) {
             return $this->friendModel->addFriend($userId);
         }
-        return FALSE;
+        return false;
     }
 
     /**

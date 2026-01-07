@@ -2,9 +2,8 @@
 
 namespace App\Components;
 
-use Nette;
 use Fitchart\Application\Mailer;
-
+use Nette;
 
 class MailerManagerFactory
 {
@@ -37,18 +36,18 @@ class MailerManagerFactory
      * @param Nette\Application\UI\ITemplateFactory $templateFactory
      * @param array $config
      */
-    public function __construct(MailerFactory $mailerFactory, 
-                                MessageFactory $messageFactory,
-                                Nette\Http\Request $request,
-                                Nette\Application\UI\ITemplateFactory $templateFactory,
-                                array $config)
-    {
+    public function __construct(
+        MailerFactory $mailerFactory,
+        MessageFactory $messageFactory,
+        Nette\Http\Request $request,
+        Nette\Application\UI\ITemplateFactory $templateFactory,
+        array $config
+    ) {
         $this->mailer = $mailerFactory->init();
         $this->message = $messageFactory->init();
         $this->request = $request;
         $this->templateFactory = $templateFactory;
         $this->config = $config;
-
     }
 
     /**
@@ -58,5 +57,4 @@ class MailerManagerFactory
     {
         return new MailerManager($this->mailer, $this->message, $this->request, $this->templateFactory, $this->config);
     }
-
 }

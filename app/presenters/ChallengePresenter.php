@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Presenters;
-use App\Model\Challenge;
+
 use App\Model\ActivityLog;
+use App\Model\Challenge;
 use App\Model\ChallengeUser;
 use App\Model\Notification;
 use App\Model\Role;
@@ -14,7 +15,6 @@ use Nette\Http\IRequest;
  */
 class ChallengePresenter extends LoginBasePresenter
 {
-
     /** @var ActivityLog */
     protected $activityLog;
 
@@ -41,12 +41,13 @@ class ChallengePresenter extends LoginBasePresenter
      * @param ChallengeUser $challengeUserModel
      * @param IRequest $httpRequest
      */
-    public function __construct(Notification $notificationModel,
-                                ActivityLog $activityLog,
-                                Challenge $challengeModel,
-                                ChallengeUser $challengeUserModel,
-                                IRequest $httpRequest)
-    {
+    public function __construct(
+        Notification $notificationModel,
+        ActivityLog $activityLog,
+        Challenge $challengeModel,
+        ChallengeUser $challengeUserModel,
+        IRequest $httpRequest
+    ) {
         parent::__construct($notificationModel);
         $this->activityLog = $activityLog;
         $this->challengeUserModel = $challengeUserModel;
@@ -97,9 +98,9 @@ class ChallengePresenter extends LoginBasePresenter
             $usersToday[$user['username']] = 0;
         }
 
-        $today = new \DateTime;
+        $today = new \DateTime();
         $userCount = 0;
-        foreach($usersPerformances['normal'] as $username => $userValues) {
+        foreach ($usersPerformances['normal'] as $username => $userValues) {
             foreach ($userValues['days'] as $day => $value) {
                 if ($today->format($usersPerformances['daysFormat']) == $day) {
                     $usersToday[$username] += $value;
@@ -110,7 +111,7 @@ class ChallengePresenter extends LoginBasePresenter
 
         if ($userCount > 6) {
             $borderWidth = 1;
-        } elseif ($userCount >4) {
+        } elseif ($userCount > 4) {
             $borderWidth = 2;
         } else {
             $borderWidth = 3;
@@ -119,7 +120,7 @@ class ChallengePresenter extends LoginBasePresenter
 
         $this->template->usersToday = $usersToday;
 
-        $this->template->currentTotalPerformance = 0 + (int) array_reduce($this->template->currentUserPerformances, function($i, $obj) {
+        $this->template->currentTotalPerformance = 0 + (int) array_reduce($this->template->currentUserPerformances, function ($i, $obj) {
             return $i + (int) $obj->current_performance;
         }, 0);
 
@@ -140,7 +141,7 @@ class ChallengePresenter extends LoginBasePresenter
             } else {
                 $this->template->currentUserPerformances[$i]['average_minimum'] = '-';
             }
-            $this->template->currentUserPerformances[$i]['percentage'] = ceil($p['current_performance']*100/$challenge['final_value']);
+            $this->template->currentUserPerformances[$i]['percentage'] = ceil($p['current_performance'] * 100 / $challenge['final_value']);
         }
 
         $this->template->users = $users;
@@ -169,7 +170,7 @@ class ChallengePresenter extends LoginBasePresenter
 
     public function actionLeave($challengeId)
     {
-        $this->challengeUserModel->attend($challengeId, FALSE);
+        $this->challengeUserModel->attend($challengeId, false);
         $this->redirect('Challenge:');
     }
 
@@ -193,7 +194,7 @@ class ChallengePresenter extends LoginBasePresenter
     protected function createComponentChallengeForm()
     {
         $control = $this->challengeFormFactory->create($this->user->id);
-        $control->getComponent('challengeForm')->onSuccess[] = function() {
+        $control->getComponent('challengeForm')->onSuccess[] = function () {
             $this->redirect('Challenge:');
         };
         return $control;
@@ -201,17 +202,16 @@ class ChallengePresenter extends LoginBasePresenter
 
     protected function createComponentActivityForm()
     {
-        $challengeId = NULL;
+        $challengeId = null;
         if (isset($this->request->getParameters()['id'])) {
             $challengeId = $this->request->getParameters()['id'];
         }
         $control = $this->activityFormFactory->create($this->user->id, $challengeId);
-        $control->getComponent('activityForm')->onSuccess[] = function() {
+        $control->getComponent('activityForm')->onSuccess[] = function () {
             $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
             $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_SUCCESS);
             $this->redirect('Challenge:detail', ['id' => $this->getParameter('id')]);
         };
         return $control;
     }
-
 }

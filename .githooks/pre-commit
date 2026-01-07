@@ -1,0 +1,41 @@
+#!/bin/sh
+# This script is a Git pre-commit hook that runs ECS and PHPStan on staged PHP files.
+# It automatically formats code and checks for issues before committing.
+# If you want to skip the hook, set the environment variable SKIP_GIT_HOOKS to any value.
+
+if [ -n "$SKIP_GIT_HOOKS" ]; then
+    echo "Skipping pre-commit hook because SKIP_GIT_HOOKS is set."
+    exit 0
+fi
+
+changed_files=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$')
+
+if [ -z "$changed_files" ]; then
+    echo "No PHP files changed."
+    exit 0
+fi
+
+# Check if Docker container is running
+if ! docker ps --format '{{.Names}}' | grep -q '^fitchartnet$'; then
+    echo "Docker container 'fitchartnet' is not running."
+    echo "Start it with: make up"
+    exit 1
+fi
+
+echo "Running ECS (Easy Coding Standard)..."
+if ! docker exec fitchartnet vendor/bin/ecs check --fix; then
+    echo "ECS found issues that could not be automatically fixed."
+    exit 1
+fi
+
+# Re-add files that were fixed by ECS
+echo "$changed_files" | xargs git add
+
+echo "Running PHPStan..."
+if ! docker exec fitchartnet vendor/bin/phpstan analyse --memory-limit=512M; then
+    echo "PHPStan found issues. Please fix them before committing."
+    exit 1
+fi
+
+echo "All checks passed."
+exit 0

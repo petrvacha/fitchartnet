@@ -1,11 +1,9 @@
 <?php
 
 namespace App\Model;
-use Cassandra\Date;
-use Fitchart\Application\ChallengeStatus;
-use Fitchart\Application\SecurityException;
-use Nette\Utils\DateTime;
 
+use Fitchart\Application\ChallengeStatus;
+use Nette\Utils\DateTime;
 
 /**
  * Challenge Model
@@ -13,28 +11,28 @@ use Nette\Utils\DateTime;
 class Challenge extends BaseModel
 {
     /** @const STATE_FINISHED int */
-    const STATE_FINISHED = 0;
+    public const STATE_FINISHED = 0;
 
     /** @const STATE_NEW int */
-    const STATE_NEW = 1;
+    public const STATE_NEW = 1;
 
     /** @const STATE_IN_PROGRESS int */
-    const STATE_IN_PROGRESS = 2;
+    public const STATE_IN_PROGRESS = 2;
 
     /** @const STATE_CANCELED int */
-    const STATE_CANCELED = 3;
+    public const STATE_CANCELED = 3;
 
     /** @const STATE_INACTIVE int */
-    const STATE_INACTIVE = 4;
+    public const STATE_INACTIVE = 4;
 
     /** @const TEXT_STATUS_PREPARED string */
-    const TEXT_STATUS_PREPARED = 'Prepared';
+    public const TEXT_STATUS_PREPARED = 'Prepared';
 
     /** @const TEXT_STATUS_ACTIVE string */
-    const TEXT_STATUS_ACTIVE = 'Active';
+    public const TEXT_STATUS_ACTIVE = 'Active';
 
     /** @const TEXT_STATUS_GONE string */
-    const TEXT_STATUS_GONE = 'Gone';
+    public const TEXT_STATUS_GONE = 'Gone';
 
 
     /** @var \Nette\Security\User */
@@ -57,12 +55,13 @@ class Challenge extends BaseModel
      * @param ChallengeUser $challengeUserModel
      * @param Notification $notificationModel
      */
-    public function __construct(\Nette\Database\Context $context,
-                                \Nette\Security\User $user,
-                                User $userModel,
-                                ChallengeUser $challengeUserModel,
-                                Notification $notificationModel)
-    {
+    public function __construct(
+        \Nette\Database\Context $context,
+        \Nette\Security\User $user,
+        User $userModel,
+        ChallengeUser $challengeUserModel,
+        Notification $notificationModel
+    ) {
         parent::__construct($context);
         $this->user = $user;
         $this->userModel = $userModel;
@@ -155,7 +154,7 @@ class Challenge extends BaseModel
                 $this->addUserToChallenge($challengeId, $userId);
             }
         }
-        $this->challengeUserModel->addNewUser($challengeId, $this->user->getIdentity()->id, TRUE);
+        $this->challengeUserModel->addNewUser($challengeId, $this->user->getIdentity()->id, true);
     }
 
     /**
@@ -163,10 +162,10 @@ class Challenge extends BaseModel
      * @param $userId
      * @param null $invitedByUserId
      */
-    public function addUserToChallenge($challengeId, $userId, $invitedByUserId = NULL)
+    public function addUserToChallenge($challengeId, $userId, $invitedByUserId = null)
     {
         if (is_numeric($userId)) {
-            $this->challengeUserModel->addNewUser($challengeId, $userId, FALSE, $invitedByUserId);
+            $this->challengeUserModel->addNewUser($challengeId, $userId, false, $invitedByUserId);
             $this->notificationModel->insertNotification(Notification::MESSAGE_NEW_CHALLENGE, $userId);
         }
     }
@@ -204,7 +203,8 @@ class Challenge extends BaseModel
     {
         $now = new \DateTime();
 
-        $challenges = $this->context->query("
+        $challenges = $this->context->query(
+            "
             SELECT
                 C.id
             FROM
@@ -216,7 +216,9 @@ class Challenge extends BaseModel
                 CU.active = true AND             
                 C.end_at >= ?
             ORDER BY
-                C.end_at DESC", $this->user->getIdentity()->id, $now
+                C.end_at DESC",
+            $this->user->getIdentity()->id,
+            $now
         )->fetchAll();
 
         $countChallenges = count($challenges);
@@ -232,7 +234,8 @@ class Challenge extends BaseModel
      */
     public function getUserChallenges()
     {
-        return $this->context->query("
+        return $this->context->query(
+            "
             SELECT
                 C.id,
                 C.name,
@@ -263,7 +266,8 @@ class Challenge extends BaseModel
             GROUP BY
                 C.id
             ORDER BY
-                C.end_at DESC", $this->user->getIdentity()->id
+                C.end_at DESC",
+            $this->user->getIdentity()->id
         )->fetchAll();
     }
 
@@ -330,9 +334,9 @@ class Challenge extends BaseModel
                     C.id = ?", $challengeId)->fetchAll();
 
         $startDateTime = new \DateTime($challenge[0]['start_at']);
-        $startDateTime->setTime(0,0,0);
+        $startDateTime->setTime(0, 0, 0);
         $endDateTime = $challenge[0]['end_at'];
-        $endDateTime->setTime(23,59,59);
+        $endDateTime->setTime(23, 59, 59);
         $today = new \DateTime();
         $dayFormat = "y/m/d";
 
@@ -414,7 +418,7 @@ class Challenge extends BaseModel
      * @param string $endAt
      * @return ChallengeStatus
      */
-    public function getChallengeStatus($startAt, $endAt )
+    public function getChallengeStatus($startAt, $endAt)
     {
         $now = new \DateTime();
 

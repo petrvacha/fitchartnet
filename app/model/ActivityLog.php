@@ -3,9 +3,8 @@
 
 namespace App\Model;
 
-use \DateTime;
-use \DateInterval;
-
+use DateInterval;
+use DateTime;
 
 /**
  * ActivityLog Model
@@ -18,7 +17,7 @@ class ActivityLog extends BaseModel
      */
     public function getUserActities($userId)
     {
-        $conditions = ['user_id' => $userId, 'active' => TRUE];
+        $conditions = ['user_id' => $userId, 'active' => true];
         return $this->findBy($conditions)->order('updated_at DESC')->fetchAll();
     }
 
@@ -28,7 +27,7 @@ class ActivityLog extends BaseModel
      */
     public function getUserActivityList($userId)
     {
-        $conditions = ['user_id' => $userId, 'active' => TRUE];
+        $conditions = ['user_id' => $userId, 'active' => true];
         return $this->findBy($conditions)->group('activity_id')->fetchAll();
     }
 
@@ -39,7 +38,7 @@ class ActivityLog extends BaseModel
     public function getUserPreparedData($userId)
     {
         $data = $this
-                    ->findBy(['user_id' => $userId, 'active' => TRUE])
+                    ->findBy(['user_id' => $userId, 'active' => true])
                     ->order('updated_at ASC')
                     ->fetchAll();
 
@@ -60,7 +59,7 @@ class ActivityLog extends BaseModel
         $preparedData = [];
         $firstActivity = !empty($data) ? $data[key($data)]->updated_at : null;
 
-        foreach($data as $i => $item) {
+        foreach ($data as $i => $item) {
             if (!isset($preparedData[$item->activity_id])) {
                 $preparedData[$item->activity_id] = [
                     'name' => $item->activity->name,
@@ -95,16 +94,13 @@ class ActivityLog extends BaseModel
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
-
             } elseif ($item->updated_at >= $thisMonthStart) {
                 $this->addValue($preparedData[$item->activity_id]['month'], $keyItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
-
             } elseif ($item->updated_at >= $thisYearStart) {
                 $this->addValue($preparedData[$item->activity_id]['year'], $keyMonthItemTime, $item->value);
                 $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
-
             } else {
                 $this->addValue($preparedData[$item->activity_id]['all'], $keyYearItemTime, $item->value);
             }

@@ -17,7 +17,7 @@ class Utilities
      * @param string|NULL $serverName
      * @return mixed
      */
-    public static function getPath($url, $serverName = NULL)
+    public static function getPath($url, $serverName = null)
     {
         if (empty($serverName)) {
             $serverName = $_SERVER['SERVER_NAME'];
@@ -33,19 +33,14 @@ class Utilities
 
         if (parse_url($url, PHP_URL_SCHEME)) {
             $normalizedUrl = $url;
-
         } elseif (Strings::startsWith($url, 'www.')) {
             $normalizedUrl = 'http://' . $url;
-
         } elseif (Strings::startsWith($url, '//')) {
             $normalizedUrl = 'http:' . $url;
-
         } elseif (Strings::startsWith($url, $serverName)) {
             $normalizedUrl = 'http://www.' . $url;
-
         } elseif (Strings::startsWith($url, '/')) {
             $normalizedUrl = 'http://www.example.com' . $url;
-
         } else {
             $normalizedUrl = 'http://www.example.com/' . $url;
         }
@@ -53,9 +48,8 @@ class Utilities
         if (filter_var($normalizedUrl, FILTER_VALIDATE_URL)) {
             $path = parse_url($normalizedUrl, PHP_URL_PATH);
             return Strings::endsWith($path, '/') ? $path : $path . '/';
-
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -77,7 +71,7 @@ class Utilities
      * @param int|NULL $truncateTo
      * @return string
      */
-    public static function create_sha1_hash($input, $salt = '', $truncateTo = NULL)
+    public static function create_sha1_hash($input, $salt = '', $truncateTo = null)
     {
         return $truncateTo ? substr(sha1($input . $salt), 0, $truncateTo) : sha1($input . $salt);
     }
@@ -88,7 +82,7 @@ class Utilities
      */
     public static function convertClassNameToTableName($fullClassName)
     {
-        return self::decamelize(lcfirst(substr($fullClassName, strrpos($fullClassName, '\\')+1)));
+        return self::decamelize(lcfirst(substr($fullClassName, strrpos($fullClassName, '\\') + 1)));
     }
 
     /**
@@ -138,6 +132,6 @@ class Utilities
 
     public static function generateInvitationHash($challengeId, $createdAt)
     {
-        return substr(self::create_sha1_hash($challengeId.$createdAt->format('Y-m-d').'dfwafe]3['), 0, 25);
+        return substr(self::create_sha1_hash($challengeId . $createdAt->format('Y-m-d') . 'dfwafe]3['), 0, 25);
     }
 }

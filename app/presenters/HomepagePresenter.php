@@ -81,13 +81,12 @@ class HomepagePresenter extends BasePresenter
             $this->redirect('Challenge:default');
         }
         $this->template->title = 'Fitchart.net';
-        $this->template->randomNumber = rand(1,3);
+        $this->template->randomNumber = rand(1, 3);
         $this->setLayout('launch');
     }
 
     public function renderRegistred()
     {
-
     }
 
     /**
@@ -97,7 +96,7 @@ class HomepagePresenter extends BasePresenter
     protected function createComponentSignInForm()
     {
         $control = $this->signFormFactory->create();
-        $control->getComponent('signForm')->onSuccess[] = function() {
+        $control->getComponent('signForm')->onSuccess[] = function () {
             $this->flashMessage('Welcome on board!', 'info');
             $this->redirect('Challenge:');
         };
@@ -111,7 +110,7 @@ class HomepagePresenter extends BasePresenter
     protected function createComponentResetPasswordForm()
     {
         $control = $this->resetPasswordFormFactory->create();
-        $control->getComponent('resetPasswordForm')->onSuccess[] = function() {
+        $control->getComponent('resetPasswordForm')->onSuccess[] = function () {
             $this->flashMessage('Check your mail box and follow the instruction.', 'info');
             $this->redirect('Homepage:');
         };
@@ -127,7 +126,7 @@ class HomepagePresenter extends BasePresenter
         $token = str_replace('/new-password/', '', $this->getHttpRequest()->getUrl()->path);
         $token = str_replace('/', '', $token);
         $control = $this->newPasswordFormFactory->create($token);
-        $control->getComponent('newPasswordForm')->onSuccess[] = function() {
+        $control->getComponent('newPasswordForm')->onSuccess[] = function () {
             $this->flashMessage('Your password has been changed.', 'info');
             $this->redirect('Homepage:');
         };
@@ -141,7 +140,7 @@ class HomepagePresenter extends BasePresenter
     protected function createComponentLaunchAlertForm()
     {
         // TODO: LaunchAlertForm component needs to be created
-        $form = new \Nette\Application\UI\Form;
+        $form = new \Nette\Application\UI\Form();
         return $form;
     }
 
@@ -153,6 +152,5 @@ class HomepagePresenter extends BasePresenter
 
     public function renderResetError()
     {
-
     }
 }

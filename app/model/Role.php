@@ -5,17 +5,17 @@ namespace App\Model;
 class Role extends BaseModel
 {
     /** @const SUPERADMIN int */
-    const SUPERADMIN = 1;
+    public const SUPERADMIN = 1;
 
     /** @const ADMIN int */
-    const ADMIN = 2;
+    public const ADMIN = 2;
 
     /** @const MODERATOR int */
-    const MODERATOR = 3;
+    public const MODERATOR = 3;
 
     /** @const USER int */
-    const USER = 4;
+    public const USER = 4;
 
     /** @const SPECTATOR int */
-    const SPECTATOR = 5;
+    public const SPECTATOR = 5;
 }

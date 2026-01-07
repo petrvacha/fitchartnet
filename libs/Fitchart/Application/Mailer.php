@@ -2,8 +2,8 @@
 
 namespace Fitchart\Application;
 
-use Nette\Mail\SendmailMailer;
 use Nette\Mail\Message;
+use Nette\Mail\SendmailMailer;
 
 /**
  * Mailer
@@ -13,7 +13,7 @@ use Nette\Mail\Message;
 class Mailer extends SendmailMailer implements IMailer
 {
     /** @var \Fitchart\Application\ILogger */
-    protected $logger = NULL;
+    protected $logger = null;
 
 
     /**

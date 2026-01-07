@@ -2,11 +2,9 @@
 
 namespace App\Components;
 
-use Nette;
-use Nette\Mail\Message;
-use Nette\DI\Container;
 use Fitchart\Application\Mailer;
-
+use Nette\DI\Container;
+use Nette\Mail\Message;
 
 class MessageFactory
 {
@@ -33,7 +31,7 @@ class MessageFactory
      */
     public function init()
     {
-        $message  = new Message();
+        $message = new Message();
 
         if (isset($this->parameters['config']['emailMessageFrom']) && !empty($this->parameters['config']['emailMessageFrom'])) {
             $message->setFrom($this->parameters['config']['emailMessageFrom'], $this->parameters['config']['emailNameFrom']);
@@ -45,5 +43,4 @@ class MessageFactory
 
         return $message;
     }
-
 }
