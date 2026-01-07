@@ -67,5 +67,16 @@ cp app/config/config.local.neon.dist app/config/config.local.neon
 - phpMyAdmin: http://localhost:8081
 - Database: localhost:3307 (user: test, password: test, database: test)
 
+## Tests
+- Install dev dependency if missing: `composer require --dev nette/tester`
+- Optional env vars for the test DB (defaults work in Docker/PHP container and CI):
+  - `TEST_DB_DSN` or granular `TEST_DB_HOST`/`TEST_DB_PORT`/`TEST_DB_NAME`
+  - `TEST_DB_USER` (default `test`) - used for application operations
+  - `TEST_DB_PASSWORD` (default `test`)
+  - `TEST_DB_ROOT_USER` (default `root`) - used for DDL operations (DROP/CREATE DATABASE)
+  - `TEST_DB_ROOT_PASSWORD` (default `root`)
+- The suite loads `sql/development.sql` into the test database before each test case.
+- Run tests from project root: `vendor/bin/tester -C tests`
+- GitHub Actions workflow (`.github/workflows/tests.yml`) runs the suite automatically with a MySQL service.
 
 

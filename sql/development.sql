@@ -195,7 +195,7 @@ GROUP BY
     challenge_id,
     user_id
 ORDER BY
-    AL.created_at ASC
+    AL.created_at ASC;
 
 USE `test`;
 

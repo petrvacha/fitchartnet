@@ -1,7 +1,11 @@
 .idea
 /nbproject/
-/log/
+/log/*
+!/log/.gitkeep
 /temp/
+/tests/temp/*
+!/tests/temp/cache/.gitkeep
+!/tests/temp/sessions/.gitkeep
 /htdocs/css/style.min.css
 /htdocs/js/script.min.js
 /node_modules/
