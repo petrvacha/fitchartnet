@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-
 class Friend extends BaseModel
 {
     /** @var \Nette\Security\User $user */
@@ -13,9 +12,10 @@ class Friend extends BaseModel
      * @param \Nette\Database\Context $context
      * @param \Nette\Security\User $user
      */
-    public function __construct(\Nette\Database\Context $context,
-                                \Nette\Security\User $user)
-    {
+    public function __construct(
+        \Nette\Database\Context $context,
+        \Nette\Security\User $user
+    ) {
         parent::__construct($context);
         $this->user = $user;
     }
@@ -25,7 +25,7 @@ class Friend extends BaseModel
      * @param null $userId2
      * @return bool|\Nette\Database\Table\IRow
      */
-    public function addFriend($userId, $userId2 = NULL)
+    public function addFriend($userId, $userId2 = null)
     {
         if (!$userId2) {
             $userId2 = $this->user->getIdentity()->id;
@@ -54,13 +54,12 @@ class Friend extends BaseModel
      * @param int|NULL $userId2
      * @return mixed
      */
-    public function areFriends($userId, $userId2 = NULL)
+    public function areFriends($userId, $userId2 = null)
     {
-        if ($userId2 === NULL) {
+        if ($userId2 === null) {
             $userId2 = $this->user->getIdentity()->id;
         }
 
         return $this->findBy(['user_id' => $userId, 'user_id2' => $userId2])->fetch();
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Presenters;
 
-
 /**
  * Static presenter
  */
@@ -26,7 +25,7 @@ class StaticPresenter extends BasePresenter
     {
         $path = USER_AVATAR_DIR . '/' . $picture;
 
-        if (!file_exists($path)|| !$this->getUser()->isLoggedIn() || !$picture) {
+        if (!file_exists($path) || !$this->getUser()->isLoggedIn() || !$picture) {
             $path = USER_AVATAR_DIR . '/no-photo-available.png';
         }
 
@@ -44,7 +43,6 @@ class StaticPresenter extends BasePresenter
 
         if (file_exists($path) && $picture && $this->getUser()->isLoggedIn()) {
             $this->setPictureResponse($path);
-
         } else {
             $this->httpResponse->setCode(\Nette\Http\Response::S404_NOT_FOUND);
         }

@@ -2,9 +2,7 @@
 
 namespace App\Components;
 
-use Nette;
 use Fitchart\Application\Mailer;
-
 
 class MailerFactory
 {
@@ -18,9 +16,10 @@ class MailerFactory
     /**
      * @param \App\Model\LoggerModel $logger
      */
-    public function __construct(\App\Model\LoggerModel $logger,
-                                \Nette\DI\Container $container)
-    {
+    public function __construct(
+        \App\Model\LoggerModel $logger,
+        \Nette\DI\Container $container
+    ) {
         $this->logger = $logger;
         $this->parameters = $container->getParameters();
     }
@@ -35,5 +34,4 @@ class MailerFactory
         $mailer->setLogger($this->logger);
         return $mailer;
     }
-
 }

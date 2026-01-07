@@ -3,16 +3,15 @@
 
 namespace App\Model;
 
-
 use Nette\Application\LinkGenerator;
 
 class Notification extends BaseModel
 {
     /** @const MESSAGE_NEW_CHALLENGE string */
-    const MESSAGE_NEW_CHALLENGE = 'New challenge request';
+    public const MESSAGE_NEW_CHALLENGE = 'New challenge request';
 
     /** @const MESSAGE_NEW_FRIEND_REQUEST string */
-    const MESSAGE_NEW_FRIEND_REQUEST = 'New friendship request';
+    public const MESSAGE_NEW_FRIEND_REQUEST = 'New friendship request';
 
 
     /** @var \App\Model\Role $user */
@@ -27,10 +26,11 @@ class Notification extends BaseModel
      * @param \Nette\Security\User $user
      * @param LinkGenerator $linkGenerator
      */
-    public function __construct(\Nette\Database\Context $context,
-                                \Nette\Security\User $user,
-                                LinkGenerator $linkGenerator)
-    {
+    public function __construct(
+        \Nette\Database\Context $context,
+        \Nette\Security\User $user,
+        LinkGenerator $linkGenerator
+    ) {
         parent::__construct($context);
         $this->user = $user;
         $this->linkGenerator = $linkGenerator;
@@ -50,7 +50,7 @@ class Notification extends BaseModel
                 $link = $this->linkGenerator->link('Friends:default');
                 break;
             default:
-                $link = NULL;
+                $link = null;
         }
 
         if ($link) {
@@ -69,13 +69,13 @@ class Notification extends BaseModel
     public function getNewNotifications()
     {
         $userId = $this->user->getIdentity()->id;
-        return $this->findBy(['user_id' => $userId, 'seen' => FALSE])->fetchAll();
+        return $this->findBy(['user_id' => $userId, 'seen' => false])->fetchAll();
     }
 
     public function setSeenAll()
     {
         $userId = $this->user->getIdentity()->id;
-        $this->findBy(['user_id' => $userId, 'seen' => FALSE])->update(['seen' => TRUE]);
+        $this->findBy(['user_id' => $userId, 'seen' => false])->update(['seen' => true]);
     }
 
     /**
@@ -83,6 +83,6 @@ class Notification extends BaseModel
      */
     public function setNotificationSeen($id)
     {
-        $this->findBy(['id' => $id])->update(['seen' => TRUE]);
+        $this->findBy(['id' => $id])->update(['seen' => true]);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Fitchart\Application;
 
-use \Nette\Mail\Message;
+use Nette\Mail\Message;
 
 /**
  * IMailer

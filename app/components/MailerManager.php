@@ -3,20 +3,19 @@
 
 namespace App\Components;
 
+use Fitchart\Application\IMailer;
+use Fitchart\Application\NotImplementedException;
 use Latte\Template;
 use Nette;
-use Fitchart\Application\IMailer;
 use Nette\Mail\Message;
-use Fitchart\Application\NotImplementedException;
-
 
 class MailerManager
 {
     /** @const REGISTRATION_NEW_USER string */
-    const REGISTRATION_NEW_USER = 'registration_new_user';
+    public const REGISTRATION_NEW_USER = 'registration_new_user';
 
     /** @const RESET_PASSWORD string */
-    const RESET_PASSWORD = 'reset_password';
+    public const RESET_PASSWORD = 'reset_password';
 
 
     /** @var Nette\Application\UI\ITemplateFactory */
@@ -43,12 +42,13 @@ class MailerManager
      * @param Nette\Application\UI\ITemplateFactory $templateFactory
      * @param array $config
      */
-    public function __construct(IMailer $mailer, 
-                                Message $message,
-                                Nette\Http\IRequest $httpRequest,
-                                Nette\Application\UI\ITemplateFactory $templateFactory,
-                                $config)
-    {
+    public function __construct(
+        IMailer $mailer,
+        Message $message,
+        Nette\Http\IRequest $httpRequest,
+        Nette\Application\UI\ITemplateFactory $templateFactory,
+        $config
+    ) {
         $this->mailer = $mailer;
         $this->message = $message;
         $this->httpRequest = $httpRequest;
@@ -67,7 +67,7 @@ class MailerManager
         $domain = $this->httpRequest->getUrl()->host;
         $domainWithScheme = $this->httpRequest->getUrl()->hostUrl;
 
-        switch($actionName) {
+        switch ($actionName) {
             case self::REGISTRATION_NEW_USER:
                 $subject = 'Fitchart.net - Registration';
                 $confirmationLink = $domainWithScheme . '/registration/confirm/' . $data['token'];
@@ -123,5 +123,4 @@ class MailerManager
     {
         return $this->templateFactory->createTemplate()->setFile(APP_DIR . '/templates/Email/' . $lang . '/' . $action . '.latte');
     }
-
 }

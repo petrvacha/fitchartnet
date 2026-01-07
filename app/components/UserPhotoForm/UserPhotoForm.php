@@ -2,9 +2,8 @@
 
 namespace App\Components;
 
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
-
+use Nette\Utils\ArrayHash;
 
 class UserPhotoForm extends \Fitchart\Application\Control
 {
@@ -19,9 +18,10 @@ class UserPhotoForm extends \Fitchart\Application\Control
      * @param int $userId
      * @param \App\Model\User $userModel
      */
-    public function __construct($userId,
-                                \App\Model\User $userModel)
-    {
+    public function __construct(
+        $userId,
+        \App\Model\User $userModel
+    ) {
         $this->userId = $userId;
         $this->userModel = $userModel;
     }
@@ -31,14 +31,14 @@ class UserPhotoForm extends \Fitchart\Application\Control
      */
     public function createComponentUserPhotoForm()
     {
-        $form = new Form;
+        $form = new Form();
         $form->addUpload('photo', 'Photo:')
             ->setRequired()
             ->addRule(Form::IMAGE, 'File has to be JPEG, PNG or GIF.');
 
         $form->addSubmit('upload', 'Upload');
 
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
 
         $this->addBootstrapStyling($form);
         return $form;
@@ -60,7 +60,6 @@ class UserPhotoForm extends \Fitchart\Application\Control
         $values['userId'] = $this->userId;
         try {
             $this->userModel->updatePhoto($values);
-
         } catch (\Fitchart\Application\SecurityException $e) {
             $form->addError($e->getMessage());
         } catch (\Fitchart\Application\DataException $e) {

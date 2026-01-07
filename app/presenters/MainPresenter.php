@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Presenters;
+
 use App\Model\ActivityLog;
 use App\Model\Notification;
 use App\Model\Weight;
-
 
 /**
  * Main presenter
@@ -12,7 +12,7 @@ use App\Model\Weight;
 class MainPresenter extends LoginBasePresenter
 {
     /** @const NUMBER_THOUSAND int */
-    const NUMBER_THOUSAND = 1000;
+    public const NUMBER_THOUSAND = 1000;
 
 
     /** @var \App\Model\ActivityLog */
@@ -34,10 +34,11 @@ class MainPresenter extends LoginBasePresenter
      * @param ActivityLog $activityLog
      * @param Weight $weightModel
      */
-    public function __construct(Notification $notificationModel,
-                                ActivityLog $activityLog,
-                                Weight $weightModel)
-    {
+    public function __construct(
+        Notification $notificationModel,
+        ActivityLog $activityLog,
+        Weight $weightModel
+    ) {
         parent::__construct($notificationModel);
         $this->activityLog = $activityLog;
         $this->weightModel = $weightModel;
@@ -89,9 +90,9 @@ class MainPresenter extends LoginBasePresenter
      */
     protected function createComponentActivityForm()
     {
-        $control = $this->activityFormFactory->create($this->user->id, NULL);
+        $control = $this->activityFormFactory->create($this->user->id, null);
 
-        $control->getComponent('activityForm')->onSuccess[] = function() {
+        $control->getComponent('activityForm')->onSuccess[] = function () {
             $awesomeShout = ['Good job!', 'Wooohooooo!', 'Not bad.', 'Awesome!'];
             $this->flashMessage($awesomeShout[array_rand($awesomeShout)], parent::MESSAGE_TYPE_SUCCESS);
             $this->redirect('Main:AddWorkout');
@@ -106,11 +107,10 @@ class MainPresenter extends LoginBasePresenter
     {
         $control = $this->userWeightFormFactory->create($this->user->id);
 
-        $control->getComponent('userWeightForm')->onSuccess[] = function() {
+        $control->getComponent('userWeightForm')->onSuccess[] = function () {
             $this->flashMessage('New weight has been updated.', parent::MESSAGE_TYPE_SUCCESS);
             $this->redirect('Main:Weight');
         };
         return $control;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Components\ActivityForm;
 
-
 interface IActivityFormFactory
 {
     /**
@@ -10,5 +9,5 @@ interface IActivityFormFactory
      * @param int $challengeId
      * @return \App\Components\ActivityForm
      */
-    function create($userId, $challengeId);
+    public function create($userId, $challengeId);
 }

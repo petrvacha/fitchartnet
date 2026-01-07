@@ -3,9 +3,7 @@
 namespace App\Model;
 
 use Nette;
-use Nette\Utils\Strings;
 use Nette\Security\Passwords;
-
 
 /**
  * Authenticator
@@ -14,18 +12,18 @@ class Authenticator implements Nette\Security\IAuthenticator
 {
     use Nette\SmartObject;
 
-    const TABLE_NAME = 'user';
-    const COLUMN_ID = 'id';
-    const COLUMN_NAME = 'username';
-    const COLUMN_EMAIL = 'email';
-    const COLUMN_PASSWORD_HASH = 'password';
-    const COLUMN_ROLE = 'role';
+    public const TABLE_NAME = 'user';
+    public const COLUMN_ID = 'id';
+    public const COLUMN_NAME = 'username';
+    public const COLUMN_EMAIL = 'email';
+    public const COLUMN_PASSWORD_HASH = 'password';
+    public const COLUMN_ROLE = 'role';
 
 
     /** @var Nette\Database\Context */
     private $database;
 
-	/** @var Passwords */
+    /** @var Passwords */
     private $passwords;
 
 
@@ -57,7 +55,6 @@ class Authenticator implements Nette\Security\IAuthenticator
             } else {
                 throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
             }
-
         } elseif (!$this->passwords->verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
             throw new Nette\Security\AuthenticationException('Your password is incorrect.', self::INVALID_CREDENTIAL);
         }

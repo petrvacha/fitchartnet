@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# Automatically adds branch name and branch description to every commit message.
+#
+COMMIT_EDITMSG=$1
+
+# Check if commit message file exists
+if [ ! -f "$COMMIT_EDITMSG" ]; then
+  exit 0
+fi
+
+add_branch_name() {
+  # More reliable way to get branch name
+  NAME=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  
+  # Skip if detached HEAD or error
+  if [ -z "$NAME" ] || [ "$NAME" = "HEAD" ]; then
+    return 0
+  fi
+  
+  DESCRIPTION=$(git config branch."$NAME".description 2>/dev/null)
+  
+  # Read original message
+  ORIGINAL_MSG=$(cat "$COMMIT_EDITMSG")
+  
+  # Check if branch name is already prepended to avoid duplication
+  if echo "$ORIGINAL_MSG" | grep -q "^$NAME:"; then
+    return 0
+  fi
+  
+  # Prepend branch name
+  echo "$NAME: $ORIGINAL_MSG" > "$COMMIT_EDITMSG"
+  
+  # Append description if exists
+  if [ -n "$DESCRIPTION" ]; then
+    echo "" >> "$COMMIT_EDITMSG"
+    echo "$DESCRIPTION" >> "$COMMIT_EDITMSG"
+  fi
+}
+
+# Check if this is a merge commit
+if ! grep -qi 'merge' "$COMMIT_EDITMSG"; then
+  add_branch_name
+fi

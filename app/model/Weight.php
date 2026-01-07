@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-
 class Weight extends BaseModel
 {
     /** @var \Nette\Security\User */
@@ -12,9 +11,10 @@ class Weight extends BaseModel
     /**
      * @param \Nette\Security\User $user
      */
-    public function __construct(\Nette\Database\Context $context,
-                                \Nette\Security\User $user)
-    {
+    public function __construct(
+        \Nette\Database\Context $context,
+        \Nette\Security\User $user
+    ) {
         parent::__construct($context);
         $this->user = $user;
     }
@@ -58,5 +58,4 @@ class Weight extends BaseModel
     {
         $this->findBy(['id' => $id, 'user_id' => $userId])->delete();
     }
-    
 }

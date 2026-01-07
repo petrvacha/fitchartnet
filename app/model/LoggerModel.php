@@ -2,23 +2,23 @@
 
 namespace App\Model;
 
-use \Nette\Mail\Message;
 use Fitchart\Application\ILogger;
+use Nette\Mail\Message;
 
 class LoggerModel extends BaseModel implements ILogger
 {
     /** @const EMAIL_TEMPLATE_RELEASE string */
-    const EMAIL_TEMPLATE_RELEASE = 'release';
+    public const EMAIL_TEMPLATE_RELEASE = 'release';
 
     /** @const EMAIL_TEMPLATE_NEW_ACCOUNT string */
-    const EMAIL_TEMPLATE_NEW_ACCOUNT = 'new_account';
+    public const EMAIL_TEMPLATE_NEW_ACCOUNT = 'new_account';
 
     /** @const EMAIL_TEMPLATE_RESET_PASSWORD string */
-    const EMAIL_TEMPLATE_RESET_PASSWORD = 'reset_password';
+    public const EMAIL_TEMPLATE_RESET_PASSWORD = 'reset_password';
 
     
     /** @const EMAIL_TABLE string */
-    const EMAIL_TABLE = 'email';
+    public const EMAIL_TABLE = 'email';
 
 
     /**
@@ -26,12 +26,12 @@ class LoggerModel extends BaseModel implements ILogger
      */
     public function mailLog(Message $mail)
     {
-        $this->context->table(self::EMAIL_TABLE)->insert(array(
+        $this->context->table(self::EMAIL_TABLE)->insert([
            'to' => $mail->getHeader('To'),
            'subject' => $mail->getSubject(),
            'body' => $mail->getBody(),
            'sentAt' => $this->getDateTime()
-        ));
+        ]);
     }
 
     /**
@@ -41,15 +41,13 @@ class LoggerModel extends BaseModel implements ILogger
      */
     public function log($userId, $activity, array $data = [])
     {
-        $insert = array(
+        $insert = [
             'userId' => $userId,
             'activity' => $activity
-        );
+        ];
         if (!empty($data)) {
             $insert['data'] = serialize($data);
         }
         $this->context->table($this->getTableName())->insert($insert);
     }
-
-
 }

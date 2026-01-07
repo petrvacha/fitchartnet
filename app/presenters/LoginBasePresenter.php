@@ -1,17 +1,14 @@
 <?php
 
 namespace App\Presenters;
-use App\Model\Notification;
-use Nette\Database\Context;
-use Nette\Http\IRequest;
 
+use App\Model\Notification;
 
 /**
  * Login Base presenter for all application presenters.
  */
 abstract class LoginBasePresenter extends BasePresenter
 {
-
     /** @var Notification */
     protected $notificationModel;
 
@@ -58,7 +55,7 @@ abstract class LoginBasePresenter extends BasePresenter
     public function actionSeenNotification($id)
     {
         $notification = $this->notificationModel->findRow($id);
-        $this->notificationModel->findBy(['link' => $notification->link])->update(['seen' => TRUE]);
+        $this->notificationModel->findBy(['link' => $notification->link])->update(['seen' => true]);
         $this->redirectUrl($notification->link);
     }
 }

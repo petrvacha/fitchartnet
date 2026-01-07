@@ -2,8 +2,8 @@
 
 namespace App\Components;
 
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
+use Nette\Utils\ArrayHash;
 
 /**
  * ActivityForm component
@@ -36,13 +36,14 @@ class ActivityForm extends \Fitchart\Application\Control
      * @param \App\Model\Activity $activityModel
      * @param \App\Model\ActivityLog $activityLogModel
      */
-    public function __construct($userId,
-                                $challengeId,
-                                \App\Model\User $userModel,
-                                \App\Model\Activity $activityModel,
-                                \App\Model\Challenge $challengeModel,
-                                \App\Model\ActivityLog $activityLogModel)
-    {
+    public function __construct(
+        $userId,
+        $challengeId,
+        \App\Model\User $userModel,
+        \App\Model\Activity $activityModel,
+        \App\Model\Challenge $challengeModel,
+        \App\Model\ActivityLog $activityLogModel
+    ) {
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;
@@ -56,12 +57,12 @@ class ActivityForm extends \Fitchart\Application\Control
      */
     public function createComponentActivityForm()
     {
-        $form = new Form;
+        $form = new Form();
         $form->addText('created_at', 'Time')
             ->setAttribute('placeholder', 'now')
             ->getControlPrototype()->addClass('datetimepicker');
 
-       // $form['created_at']->getLabelPrototype()->style = 'float: left; width: 60px;';
+        // $form['created_at']->getLabelPrototype()->style = 'float: left; width: 60px;';
 
 
 
@@ -69,10 +70,8 @@ class ActivityForm extends \Fitchart\Application\Control
         $challenge = $this->challengeModel->findRow($this->challengeId);
         if ($challenge) {
             if ($challenge->activity->log_type->mark) {
-
                 $countLabel .= ' [' . $challenge->activity->log_type->mark . ']';
             }
-
         } else {
             $form->addSelect('activity_id', 'Activity', $this->activityModel->getList());
         }
@@ -88,7 +87,7 @@ class ActivityForm extends \Fitchart\Application\Control
 
         $form->addSubmit('submit', 'Add');
 
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
 
         $this->addBootstrapStyling($form);
         return $form;
@@ -116,7 +115,7 @@ class ActivityForm extends \Fitchart\Application\Control
         }
         if (empty($values['id'])) {
             if (empty($values['created_at'])) {
-                $values['created_at'] = new \DateTime;
+                $values['created_at'] = new \DateTime();
             }
             $values['updated_at'] = $values['created_at'];
             $this->activityLogModel->insert($values);
@@ -124,5 +123,4 @@ class ActivityForm extends \Fitchart\Application\Control
             $this->activityLogModel->update($values);
         }
     }
-
 }

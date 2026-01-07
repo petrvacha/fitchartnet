@@ -4,20 +4,19 @@ namespace App\Presenters;
 
 use Nette\Utils\DateTime;
 
-
 /**
  * Base presenter for all application presenters.
  */
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
     /** @const MESSAGE_TYPE_INFO string */
-    const MESSAGE_TYPE_INFO = 'info';
+    public const MESSAGE_TYPE_INFO = 'info';
 
     /** @const MESSAGE_TYPE_SUCCESS string */
-    const MESSAGE_TYPE_SUCCESS = 'success';
+    public const MESSAGE_TYPE_SUCCESS = 'success';
 
     /** @const MESSAGE_TYPE_ERROR string */
-    const MESSAGE_TYPE_ERROR = 'danger';
+    public const MESSAGE_TYPE_ERROR = 'danger';
 
 
     protected function beforeRender()

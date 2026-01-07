@@ -4,33 +4,32 @@ namespace App\Model;
 
 use Fitchart\Application\InvalidArgumentException;
 use Fitchart\Application\SecurityException;
-use Nette\Security\Passwords;
 use Fitchart\Application\Utilities;
-use \Nette\Utils\ArrayHash;
+use Nette\Utils\ArrayHash;
 use Nette\Utils\Image;
 
 class User extends BaseModel
 {
     /** @const USER_STATE_NEW string */
-    const USER_STATE_NEW = 'new';
+    public const USER_STATE_NEW = 'new';
 
     /** @const USER_STATE_ACTIVE string */
-    const USER_STATE_ACTIVE = 'active';
+    public const USER_STATE_ACTIVE = 'active';
 
     /** @const ACTIVE_BY_TOKEN string */
-    const ACTIVE_BY_TOKEN = 'token';
+    public const ACTIVE_BY_TOKEN = 'token';
 
     /** @const ACTIVE_BY_ID string */
-    const ACTIVE_BY_ID = 'id';
+    public const ACTIVE_BY_ID = 'id';
 
     /** @const API_TOKEN_LENGTH int */
-    const API_TOKEN_LENGTH = 6;
+    public const API_TOKEN_LENGTH = 6;
 
     /** @const AVATAR_SIZE_WIDTH int */
-    const AVATAR_SIZE_WIDTH = 250;
+    public const AVATAR_SIZE_WIDTH = 250;
 
     /** @const AVATAR_SIZE_HEIGHT int */
-    const AVATAR_SIZE_HEIGHT = 250;
+    public const AVATAR_SIZE_HEIGHT = 250;
 
 
     /** @var \App\Model\Privacy */
@@ -61,14 +60,15 @@ class User extends BaseModel
      * @param \App\Model\Friend $friendModel
      * @param \App\Model\FriendshipRequest $friendshipRequest
      */
-    public function __construct(\Nette\Database\Context $context,
-                                \Nette\Security\User $user,
-                                \Nette\Security\Passwords $passwords,
-                                Privacy $privacyModel,
-                                Role $roleModel,
-                                Friend $friendModel,
-                                FriendshipRequest $friendshipRequest)
-    {
+    public function __construct(
+        \Nette\Database\Context $context,
+        \Nette\Security\User $user,
+        \Nette\Security\Passwords $passwords,
+        Privacy $privacyModel,
+        Role $roleModel,
+        Friend $friendModel,
+        FriendshipRequest $friendshipRequest
+    ) {
         parent::__construct($context);
         $this->user = $user;
         $this->passwords = $passwords;
@@ -135,7 +135,7 @@ class User extends BaseModel
             $user->update(['active' => 1]);
             return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -148,7 +148,7 @@ class User extends BaseModel
         $user = $this->findOneBy(['token' => $token]);
 
         if ($user) {
-            $user->update(['token' => NULL, 'active' => TRUE, 'updated_at' => $this->getDateTime()]);
+            $user->update(['token' => null, 'active' => true, 'updated_at' => $this->getDateTime()]);
             return $user;
         } else {
             return false;
@@ -188,13 +188,11 @@ class User extends BaseModel
     {
         $user = $this->findRow($data['id']);
         if (!empty($data['password']) && !empty($data['confirm_password'])) {
-
             if (empty($data['old_password']) && !empty($user->password) ||
                 !empty($data['old_password']) && !$this->passwords->verify($data['old_password'], $user->password)) {
                 throw new \Fitchart\Application\SecurityException('Password is incorrect.');
             }
             $data['password'] = $this->passwords->hash($data['password']);
-
         } else {
             unset($data['password']);
         }
@@ -220,10 +218,9 @@ class User extends BaseModel
             $image->save(USER_AVATAR_DIR . '/' . $fileName);
             $this->findRow($data['userId'])->update(['profile_photo' => $fileName]);
             $this->user->getIdentity()->profile_photo = $fileName;
-
         } else {
             throw new \Fitchart\Application\DataException('An error occurred in the upload.');
-       }
+        }
     }
 
     /**
@@ -272,14 +269,14 @@ class User extends BaseModel
             return $arr;
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
      * @param string $subject
      * @return ArrayHash
      */
-    public function getUserList($subject = NULL)
+    public function getUserList($subject = null)
     {
         $privacyModel = $this->privacyModel;
         $userId = $this->user->getIdentity()->id;
@@ -299,7 +296,8 @@ class User extends BaseModel
     {
         $privacyModel = $this->privacyModel;
         $userId = $this->user->getIdentity()->id;
-        return $this->context->query("
+        return $this->context->query(
+            "
             SELECT
                 U.id,
                 U.username,
@@ -329,7 +327,6 @@ class User extends BaseModel
             $privacyModel::PUBLIC_IN_SYSTEM,
             $userId
         )->fetchAll();
-
     }
 
     /**
@@ -362,7 +359,7 @@ class User extends BaseModel
      * @param bool $transform
      * @return mixed
      */
-    public function getAvailableUsers($transform = FALSE)
+    public function getAvailableUsers($transform = false)
     {
         if ($this->user->getIdentity()->role <= Role::ADMIN) {
             $users = $this->getTable()->where('id <> ?', $this->user->getIdentity()->id)->fetchPairs('id', 'username');
@@ -425,13 +422,13 @@ class User extends BaseModel
      */
     public function updateUserPassword($values)
     {
-        $user = empty($values['token']) ? FALSE : $this->findOneBy(['token' => $values['token']]);
+        $user = empty($values['token']) ? false : $this->findOneBy(['token' => $values['token']]);
 
         if ($user) {
             if ($values['password'] === $values['confirm_password']) {
                 $user->update([
                     'password' => $this->passwords->hash($values['password']),
-                    'token' => NULL
+                    'token' => null
                     ]);
             } else {
                 throw new SecurityException('The passwords are not the same.');

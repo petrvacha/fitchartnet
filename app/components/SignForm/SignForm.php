@@ -2,8 +2,8 @@
 
 namespace App\Components;
 
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
+use Nette\Utils\ArrayHash;
 
 /**
  * SignForm component
@@ -21,9 +21,10 @@ class SignForm extends \Fitchart\Application\Control
      * @param \Nette\Security\User $user
      * @param \App\Model\User $userModel
      */
-    public function __construct(\Nette\Security\User $user,
-                                \App\Model\User $userModel)
-    {
+    public function __construct(
+        \Nette\Security\User $user,
+        \App\Model\User $userModel
+    ) {
         $this->user = $user;
         $this->userModel = $userModel;
     }
@@ -33,7 +34,7 @@ class SignForm extends \Fitchart\Application\Control
      */
     public function createComponentSignForm()
     {
-        $form = new Form;
+        $form = new Form();
         $form->addProtection();
         $form->addText('username', 'Email')
             ->setRequired('Please enter your username.')
@@ -45,7 +46,7 @@ class SignForm extends \Fitchart\Application\Control
 
         $form->addSubmit('submit', 'Login');
 
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
         
         $this->addBootstrapStyling($form);
         return $form;
@@ -67,9 +68,7 @@ class SignForm extends \Fitchart\Application\Control
 
         try {
             $this->user->login($values->username, $values->password);
-            
         } catch (\Nette\Security\AuthenticationException $e) {
-            
             $form->addError($e->getMessage());
         }
     }

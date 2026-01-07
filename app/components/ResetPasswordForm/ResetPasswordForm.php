@@ -4,9 +4,8 @@ namespace App\Components;
 
 use Fitchart\Application\InvalidArgumentException;
 use Nette;
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
-
+use Nette\Utils\ArrayHash;
 
 class ResetPasswordForm extends \Fitchart\Application\Control
 {
@@ -34,7 +33,7 @@ class ResetPasswordForm extends \Fitchart\Application\Control
      */
     public function createComponentResetPasswordForm()
     {
-        $form = new Form;
+        $form = new Form();
         $form->addProtection();
 
         $form->addText('email', 'Email')
@@ -44,7 +43,7 @@ class ResetPasswordForm extends \Fitchart\Application\Control
 
         $form->addSubmit('submit', 'Reset Password');
 
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
 
         $this->addBootstrapStyling($form);
         return $form;
@@ -66,12 +65,10 @@ class ResetPasswordForm extends \Fitchart\Application\Control
             $userData = $this->userModel->prepareResetToken($values);
             $mailerManager = $this->mailerManagerFactory->init();
             $mailerManager->action(MailerManager::RESET_PASSWORD, $userData);
-
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
             $form->addError($e->getMessage());
         } catch (InvalidArgumentException $e) {
             $form->addError($e->getMessage());
         }
     }
-
 }

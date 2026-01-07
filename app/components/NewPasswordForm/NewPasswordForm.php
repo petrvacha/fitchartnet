@@ -3,12 +3,9 @@
 namespace App\Components;
 
 use App\Model\User;
-use Fitchart\Application\InvalidArgumentException;
 use Fitchart\Application\SecurityException;
-use Nette;
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
-
+use Nette\Utils\ArrayHash;
 
 class NewPasswordForm extends \Fitchart\Application\Control
 {
@@ -40,7 +37,7 @@ class NewPasswordForm extends \Fitchart\Application\Control
      */
     public function createComponentNewPasswordForm()
     {
-        $form = new Form;
+        $form = new Form();
 
         $form->addPassword('password', 'New password')
             ->setAttribute('placeholder', 'New password')
@@ -60,7 +57,7 @@ class NewPasswordForm extends \Fitchart\Application\Control
 
         $form->setDefaults(['token' => $this->token]);
 
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
 
         $this->addBootstrapStyling($form);
         return $form;
@@ -74,10 +71,8 @@ class NewPasswordForm extends \Fitchart\Application\Control
     {
         try {
             $this->userModel->updateUserPassword($values);
-
         } catch (SecurityException $e) {
             $form->addError($e->getMessage());
         }
     }
-
 }

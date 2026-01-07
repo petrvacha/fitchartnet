@@ -2,17 +2,15 @@
 
 namespace App;
 
-use Nette\Application\Routers\RouteList;
+use Nette\Application\Routers\CliRouter;
 use Nette\Application\Routers\Route,
-    Nette\Application\Routers\CliRouter;
+    Nette\Application\Routers\RouteList;
 
 /**
  * Router factory.
  */
 class RouterFactory
 {
-
-
     /**
      * @return \Nette\Application\IRouter
      */
@@ -20,8 +18,7 @@ class RouterFactory
     {
         $router = new RouteList();
         if ($consoleMode) {
-            $router[] = new CliRouter(array('action' => 'Cli:Cli:cron'));
-
+            $router[] = new CliRouter(['action' => 'Cli:Cli:cron']);
         } else {
             $router = new RouteList();
             $router[] = new Route('', 'Homepage:launch');
@@ -40,6 +37,4 @@ class RouterFactory
 
         return $router;
     }
-
-
 }

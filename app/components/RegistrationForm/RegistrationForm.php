@@ -2,12 +2,11 @@
 
 namespace App\Components;
 
+use App\Model\User;
 use Nette;
-use Nette\Utils\ArrayHash;
 use Nette\Application\UI\Form;
 use Nette\DI\Container;
-use \App\Model\User;
-
+use Nette\Utils\ArrayHash;
 
 class RegistrationForm extends \Fitchart\Application\Control
 {
@@ -45,7 +44,7 @@ class RegistrationForm extends \Fitchart\Application\Control
      */
     public function createComponentRegistrationForm()
     {
-        $form = new Form;
+        $form = new Form();
         $form->addProtection();
 
         $form->addText('username', 'Username')
@@ -74,7 +73,7 @@ class RegistrationForm extends \Fitchart\Application\Control
 
         $form->addSubmit('submit', 'Sign Up');
 
-        $form->onSuccess[] = array($this, 'formSent');
+        $form->onSuccess[] = [$this, 'formSent'];
 
         $this->addBootstrapStyling($form);
         return $form;
@@ -96,7 +95,6 @@ class RegistrationForm extends \Fitchart\Application\Control
             $userData = $this->userModel->add($values);
             $mailerManager = $this->mailerManagerFactory->init();
             $mailerManager->action(MailerManager::REGISTRATION_NEW_USER, $userData);
-
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
             $form->addError($e->getMessage());
         } catch (\Exception $e) {
@@ -110,7 +108,7 @@ class RegistrationForm extends \Fitchart\Application\Control
      */
     public function isUsernameAvailable($userNameCandidate)
     {
-        return $this->userModel->findOneBy(['username' => $userNameCandidate->value]) ? FALSE : TRUE;
+        return $this->userModel->findOneBy(['username' => $userNameCandidate->value]) ? false : true;
     }
 
     /**
@@ -125,10 +123,10 @@ class RegistrationForm extends \Fitchart\Application\Control
             $time = time();
             $diff = $time - $timetrap / $this->parameters['salt_number'];
             if ($diff >= $this->minimumTime) {
-                return TRUE;
+                return true;
             }
         }
-        return FALSE;
+        return false;
     }
 
     /**
@@ -143,10 +141,10 @@ class RegistrationForm extends \Fitchart\Application\Control
             $time = time();
             $diff = $time - $timetrap / $this->parameters['salt_number'];
             if ($diff <= $this->maximumTime) {
-                return TRUE;
+                return true;
             }
         }
-        return FALSE;
+        return false;
     }
 
     /**
@@ -156,14 +154,14 @@ class RegistrationForm extends \Fitchart\Application\Control
     public function isNormalUsername($userNameCandidate)
     {
         if (count(explode(" ", $userNameCandidate->value)) > 4) {
-            return FALSE;
+            return false;
         }
 
         if (strpos($userNameCandidate->value, "$")) {
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -172,7 +170,6 @@ class RegistrationForm extends \Fitchart\Application\Control
      */
     public function isEmailAvailable($emailCandidate)
     {
-        return $this->userModel->findOneBy(['email' => $emailCandidate->value]) ? FALSE : TRUE;
+        return $this->userModel->findOneBy(['email' => $emailCandidate->value]) ? false : true;
     }
-
 }
