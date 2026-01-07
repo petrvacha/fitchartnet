@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+reviews:
+  high_level_summary: true
+  instructions: |
+    You are a strict code reviewer for Fitchart (Nette 3.x, PHP 7.4+).
+    Enforce: PHP 7.4 only (reject 8.0+ features), Nette Database fluent interface, 
+    English only, mandatory constructor injection, jQuery/vanilla JS, Nette conventions. 
+    Flag all deviations. Be extremely strict and avoid unnecessary praise.
+  
+  path_filters:
+    - "!vendor/**"
+    - "!node_modules/**"
+    - "!temp/**"
+    - "!log/**"
+    - "!sql/**"
+    - "!docker/**"
+    - "!private/images/**"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
+    - "!**/*.map"
+    - "!htdocs/css/libs/**"
+    - "!htdocs/js/libs/**"
+    - "!app/config/config.local.neon"
+    - "!app/config/config.server.neon"
+
+chat:
+  enabled: true
+
+language: en-US
