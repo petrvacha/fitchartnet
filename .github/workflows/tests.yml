@@ -1,0 +1,57 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  tester:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mariadb:10.11
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: fitchart_test
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: pdo_mysql
+          coverage: none
+
+      - name: Install mysql-client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-interaction
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            mysqladmin ping -h127.0.0.1 -P3306 -uroot -proot --silent && break
+            sleep 2
+          done
+
+      - name: Run tests
+        env:
+          TEST_DB_DSN: "mysql:host=127.0.0.1;port=3306;dbname=fitchart_test"
+          TEST_DB_ROOT_USER: "root"
+          TEST_DB_ROOT_PASSWORD: "root"
+        run: vendor/bin/tester -C tests
+

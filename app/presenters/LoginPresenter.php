@@ -194,6 +194,13 @@ class LoginPresenter extends BasePresenter
         $this->redirect('in');
     }
 
+    public function actionLogout()
+    {
+        $this->getUser()->logout();
+        $this->flashMessage('You have been signed out.', 'info');
+        $this->redirect('in');
+    }
+
     public function actionNewPassword($token)
     {
         $result = $this->userModel->checkToken($token);
