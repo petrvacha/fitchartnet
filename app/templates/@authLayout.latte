@@ -10,6 +10,10 @@
 
     <title>Fitchart{ifset $title} - {$title}{/ifset}</title>
     <link href="{$basePath}/css/style-new.min.css?v={$t}" rel="stylesheet" type="text/css">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous">
@@ -19,5 +23,12 @@
 <body class="bg-dark">
     {include content}
     <script src="{$basePath}/js/script-new.min.js?v={$t}"></script>
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js');
+        });
+    }
+    </script>
 </body>
 </html>

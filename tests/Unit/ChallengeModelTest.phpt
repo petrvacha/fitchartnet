@@ -41,3 +41,4 @@ final class ChallengeModelTest extends BaseTestCase
 
 (new ChallengeModelTest())->run();
 
+

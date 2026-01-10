@@ -87,4 +87,11 @@ class StaticPresenter extends BasePresenter
             readfile($path);
         }
     }
+
+    public function renderOffline()
+    {
+        $this->httpResponse->setHeader('X-Robots-Tag', 'noindex');
+        $this->setLayout('launch');
+        $this->template->title = 'Offline';
+    }
 }
