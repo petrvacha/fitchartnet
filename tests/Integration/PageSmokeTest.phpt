@@ -38,3 +38,4 @@ final class PageSmokeTest extends BaseTestCase
 
 (new PageSmokeTest())->run();
 
+

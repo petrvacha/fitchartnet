@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    // Flash messages auto-hide after 5 seconds
+    setTimeout(function() {
+        $('.alert-dismissable').fadeOut();
+    }, 5000);
+
     /*if ($(window).width() < 768) {
         $("body").toggleClass("sidebar-toggled");
         $(".sidebar").toggleClass("toggled");

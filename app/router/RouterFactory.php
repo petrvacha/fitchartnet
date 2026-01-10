@@ -22,6 +22,7 @@ class RouterFactory
         } else {
             $router = new RouteList();
             $router[] = new Route('', 'Homepage:launch');
+            $router[] = new Route('/offline', 'Static:offline');
             $router[] = new Route('/about', 'Homepage:about');
             $router[] = new Route('/login', 'Login:default');
             $router[] = new Route('/registration', 'Registration:default');

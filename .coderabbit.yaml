@@ -2,6 +2,7 @@
 
 reviews:
   high_level_summary: true
+  profile: "assertive"
   instructions: |
     You are a strict code reviewer for Fitchart (Nette 3.x, PHP 7.4+).
     Enforce: PHP 7.4 only (reject 8.0+ features), Nette Database fluent interface, 
@@ -28,3 +29,5 @@ chat:
   enabled: true
 
 language: en-US
+
+poem: false
