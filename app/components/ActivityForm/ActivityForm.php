@@ -25,6 +25,9 @@ class ActivityForm extends \Fitchart\Application\Control
     /** @var \App\Model\ActivityLog */
     protected $activityLogModel;
 
+    /** @var \App\Model\TelegramNotifier */
+    protected $telegramNotifier;
+
     /** @var int */
     protected $challengeId;
 
@@ -34,7 +37,9 @@ class ActivityForm extends \Fitchart\Application\Control
      * @param int $challengeId
      * @param \App\Model\User $userModel
      * @param \App\Model\Activity $activityModel
+     * @param \App\Model\Challenge $challengeModel
      * @param \App\Model\ActivityLog $activityLogModel
+     * @param \App\Model\TelegramNotifier $telegramNotifier
      */
     public function __construct(
         $userId,
@@ -42,14 +47,16 @@ class ActivityForm extends \Fitchart\Application\Control
         \App\Model\User $userModel,
         \App\Model\Activity $activityModel,
         \App\Model\Challenge $challengeModel,
-        \App\Model\ActivityLog $activityLogModel
+        \App\Model\ActivityLog $activityLogModel,
+        \App\Model\TelegramNotifier $telegramNotifier
     ) {
         $this->userId = $userId;
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;
         $this->challengeModel = $challengeModel;
         $this->activityLogModel = $activityLogModel;
-        $this->challengeId = $challengeId; //$session->getSection('challenge')->showActivitySelect;
+        $this->telegramNotifier = $telegramNotifier;
+        $this->challengeId = $challengeId;
     }
 
     /**
@@ -119,6 +126,24 @@ class ActivityForm extends \Fitchart\Application\Control
             }
             $values['updated_at'] = $values['created_at'];
             $this->activityLogModel->insert($values);
+            try {
+                $this->telegramNotifier->notifyActivityLog(
+                    (int) $values['user_id'],
+                    (int) $values['activity_id'],
+                    (int) $values['value']
+                );
+            } catch (\Throwable $e) {
+                \Tracy\Debugger::log(
+                    sprintf(
+                        'Telegram notifyActivityLog failed: user_id=%d, activity_id=%d – %s',
+                        (int) $values['user_id'],
+                        (int) $values['activity_id'],
+                        $e->getMessage()
+                    ),
+                    \Tracy\ILogger::WARNING
+                );
+                \Tracy\Debugger::log($e, \Tracy\ILogger::EXCEPTION);
+            }
         } else {
             $this->activityLogModel->update($values);
         }

@@ -278,14 +278,15 @@ class Challenge extends BaseModel
     public function getCurrentUserPerformances($challengeId)
     {
         return $this->context->query("
-            SELECT U.id, U.username, U.profile_photo, CU.color, SUM(AL.value) current_performance
+            SELECT U.id, U.username, U.profile_photo, CU.color, SUM(AL.value) current_performance,
+                MAX(AL.created_at) last_activity_at
             FROM activity_log AL
             JOIN user U ON U.id = AL.user_id
-            JOIN challenge C ON C.activity_id = AL.activity_id AND C.end_at > AL.created_at AND C.start_at< AL.created_at
+            JOIN challenge C ON C.activity_id = AL.activity_id AND C.end_at > AL.created_at AND C.start_at < AL.created_at
             JOIN challenge_user CU ON CU.user_id = U.id AND CU.challenge_id = C.id
             WHERE C.id = ?
             GROUP BY U.id
-            ORDER BY current_performance DESC", $challengeId)->fetchAll();
+            ORDER BY current_performance DESC, last_activity_at DESC", $challengeId)->fetchAll();
     }
 
     /**

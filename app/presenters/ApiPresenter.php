@@ -28,20 +28,26 @@ class ApiPresenter extends \Nette\Application\UI\Presenter
     /** @var \App\Model\ActivityLog */
     protected $activityLogModel;
 
+    /** @var \App\Model\TelegramNotifier */
+    protected $telegramNotifier;
+
 
     /**
      * @param \App\Model\User $userModel
      * @param \App\Model\Activity $activityModel
      * @param \App\Model\ActivityLog $activityLogModel
+     * @param \App\Model\TelegramNotifier $telegramNotifier
      */
     public function __construct(
         \App\Model\User $userModel,
         \App\Model\Activity $activityModel,
-        \App\Model\ActivityLog $activityLogModel
+        \App\Model\ActivityLog $activityLogModel,
+        \App\Model\TelegramNotifier $telegramNotifier
     ) {
         $this->userModel = $userModel;
         $this->activityModel = $activityModel;
         $this->activityLogModel = $activityLogModel;
+        $this->telegramNotifier = $telegramNotifier;
     }
 
     public function renderDocumentation()
@@ -98,9 +104,12 @@ class ApiPresenter extends \Nette\Application\UI\Presenter
 
         if ($user && $activity) {
             try {
-                $values = ['user_id' => $user->id, 'activity_id' => (int) $activityId, 'value' => $value];
+                $values = ['user_id' => $user->id, 'activity_id' => (int) $activityId, 'value' => (int) $value];
                 $values['created_at'] = $values['updated_at'] = $datetime ?: new \DateTime();
                 $this->activityLogModel->{$actionType}($values);
+                if ($actionType === 'insert') {
+                    $this->telegramNotifier->notifyActivityLog($user->id, (int) $activityId, (int) $value);
+                }
             } catch (\Exception $e) {
                 $this->sendJson(['status' => self::STATUS_ERROR]);
             }

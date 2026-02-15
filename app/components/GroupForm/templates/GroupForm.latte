@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-xl-4 col-sm-6 mb-3">
+        {form groupForm}
+            <div class="row">
+                <div n:if="$form->hasErrors()" class="error alert-danger px-2 py-1 mb-2">
+                    <span n:foreach="$form->errors as $error">{$error}</span>
+                </div>
+
+                <div class="form-group col-12">
+                    {label name /}{input name}
+                </div>
+                {if $isAdmin}
+                <div class="form-group col-12">
+                    {label telegram_group_id /}{input telegram_group_id}
+                </div>
+                <div class="form-group col-12">
+                    {label bot_token /}{input bot_token}
+                </div>
+                {/if}
+                <div class="token-input-list-facebook form-group col-6">
+                    {label users /}{input users}
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    {input submit}
+                </div>
+            </div>
+        {/form}
+    </div>
+</div>
+
+<script type="text/javascript">
+(function() {
+    function initGroupUsersTokenInput() {
+        if (typeof window.jQuery === 'undefined' || typeof window.jQuery().tokenInput !== 'function') {
+            return false;
+        }
+        var $ = window.jQuery;
+        var el = document.querySelector('.js-group-users') || document.querySelector('[data-role="group-users"]');
+        if (!el) {
+            return false;
+        }
+        $(el).tokenInput({$availableUsers}, { theme: "facebook", prePopulate: {$currentUsers} });
+        return true;
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGroupUsersTokenInput);
+    } else {
+        initGroupUsersTokenInput();
+    }
+    window.initGroupUsersTokenInput = initGroupUsersTokenInput;
+})();
+</script>

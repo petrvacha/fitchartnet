@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs logs-php logs-db shell composer composer-install npm db-shell db-import db-export clean ps
+.PHONY: help build up down restart logs logs-php logs-db shell composer composer-install npm db-shell db-import db-export deploy clean ps
 
 COMPOSE_FILE = docker/development/docker-compose.yml
 COMPOSE_PROJECT = fitchartnet
@@ -60,6 +60,9 @@ db-import: ## Import SQL dump (usage: make db-import FILE=sql/development.sql)
 
 db-export: ## Export database
 	cd docker/development && docker compose -p $(COMPOSE_PROJECT) exec -T database mariadb-dump -utest -ptest test > ../../sql/export_$(shell date +%Y%m%d_%H%M%S).sql
+
+deploy: ## Deploy to production via FTP
+	docker exec -it -w /var/www/html $(COMPOSE_PROJECT) php vendor/dg/ftp-deployment/deployment deploy.ini
 
 clean: ## Stop and remove containers, volumes and images
 	@echo "Cleaning up..."

@@ -1,0 +1,11 @@
+{block content}
+{include '../partial/navigation.latte'}
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">Dashboard</li>
+        <li class="breadcrumb-item"><a n:href="Group:default">Groups</a></li>
+        <li class="breadcrumb-item active">Create Group</li>
+    </ol>
+    {include '../partial/flashMessages.latte'}
+
+    {control groupForm}
+{/block}

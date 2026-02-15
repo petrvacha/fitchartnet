@@ -1,0 +1,53 @@
+{block content}
+{include '../partial/navigation.latte'}
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">Dashboard</li>
+        <li class="breadcrumb-item active">Groups</li>
+    </ol>
+    {include '../partial/flashMessages.latte'}
+
+    <a class="btn btn-success mb-3" n:href="Group:create">Create Group</a>
+
+    {if !empty($groups)}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $groups as $group}
+                <tr>
+                    <td>
+                        {if $group->membership_active}
+                            <a n:href="Group:detail $group->id">{$group->name}</a>
+                        {else}
+                            {$group->name}
+                        {/if}
+                    </td>
+                    <td>
+                        {if $group->membership_active}
+                            <span class="badge badge-success">Member</span>
+                        {else}
+                            <span class="badge badge-warning">Pending</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if !$group->membership_active}
+                            <a class="btn btn-sm btn-primary" n:href="Group:join $group->id">Accept</a>
+                        {else}
+                            <a class="btn btn-sm btn-info" n:href="Group:leave $group->id" onclick="return confirm('Are you sure you want to leave this group?');">Leave</a>
+                        {/if}
+                    </td>
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+    {else}
+        <p>You are not a member of any group yet.</p>
+    {/if}
+{/block}
