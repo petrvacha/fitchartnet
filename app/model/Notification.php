@@ -13,6 +13,9 @@ class Notification extends BaseModel
     /** @const MESSAGE_NEW_FRIEND_REQUEST string */
     public const MESSAGE_NEW_FRIEND_REQUEST = 'New friendship request';
 
+    /** @const MESSAGE_NEW_GROUP_INVITATION string */
+    public const MESSAGE_NEW_GROUP_INVITATION = 'New group invitation';
+
 
     /** @var \App\Model\Role $user */
     protected $user;
@@ -39,18 +42,26 @@ class Notification extends BaseModel
     /**
      * @param string $message
      * @param int $userId
+     * @param string|null $customLink
      */
-    public function insertNotification($message, $userId)
+    public function insertNotification($message, $userId, $customLink = null)
     {
-        switch ($message) {
-            case self::MESSAGE_NEW_CHALLENGE:
-                $link = $this->linkGenerator->link('Challenge:default');
-                break;
-            case self::MESSAGE_NEW_FRIEND_REQUEST:
-                $link = $this->linkGenerator->link('Friends:default');
-                break;
-            default:
-                $link = null;
+        if ($customLink) {
+            $link = $customLink;
+        } else {
+            switch ($message) {
+                case self::MESSAGE_NEW_CHALLENGE:
+                    $link = $this->linkGenerator->link('Challenge:default');
+                    break;
+                case self::MESSAGE_NEW_FRIEND_REQUEST:
+                    $link = $this->linkGenerator->link('Friends:default');
+                    break;
+                case self::MESSAGE_NEW_GROUP_INVITATION:
+                    $link = $this->linkGenerator->link('Group:default');
+                    break;
+                default:
+                    $link = null;
+            }
         }
 
         if ($link) {
