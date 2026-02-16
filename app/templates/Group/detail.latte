@@ -1,0 +1,49 @@
+{block content}
+{include '../partial/navigation.latte'}
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">Dashboard</li>
+        <li class="breadcrumb-item"><a n:href="Group:default">Groups</a></li>
+        <li class="breadcrumb-item active">{$group->name}</li>
+    </ol>
+    {include '../partial/flashMessages.latte'}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-users"></i>
+            {$group->name}
+            {if $isAdmin}
+                <a class="btn btn-sm btn-primary float-right" n:href="Group:edit $group->id">Edit</a>
+            {/if}
+        </div>
+        <div class="card-body">
+            <h5>Members</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $members as $member}
+                        <tr>
+                            <td>{$member->user->username}</td>
+                            <td>
+                                {if $member->active}
+                                    <span class="badge badge-success">Active</span>
+                                {else}
+                                    <span class="badge badge-warning">Pending</span>
+                                {/if}
+                                {if $member->user_id === $group->admin_user_id}
+                                    <span class="badge badge-info">Admin</span>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{/block}

@@ -21,6 +21,9 @@ services:
     - App\Model\Challenge
     - App\Model\ChallengeUser
     - App\Model\Notification
+    - App\Model\Group
+    - App\Model\GroupUser
+    - App\Model\TelegramNotifier
 
     - App\Components\MailerManagerFactory(@App\Components\MailerFactory, @App\Components\MessageFactory , @Nette\Http\Request , @Nette\Application\UI\ITemplateFactory , %config%)
     - App\Components\MailerFactory(@App\Model\LoggerModel)
@@ -35,3 +38,4 @@ services:
     - App\Components\NewPasswordForm\INewPasswordFormFactory
     - App\Components\UserWeightForm\IUserWeightFormFactory
     - App\Components\ChallengeForm\IChallengeFormFactory
+    - App\Components\GroupForm\IGroupFormFactory
