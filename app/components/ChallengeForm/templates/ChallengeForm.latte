@@ -12,16 +12,23 @@
                 <div class="form-group col-12">
                     {label activity_id /}{input activity_id}
                 </div>
-                <div class="form-group col-12">
-                    {label final_value /}{input final_value}
-                </div>
                 <div class="form-group col-6">
                     {label start_at /}{input start_at}
                 </div>
                 <div class="form-group col-6">
                     {label end_at /}{input end_at}
                 </div>
-                <div class="token-input-list-facebook form-group col-6">
+                <div class="form-group col-12 py-1 my-0">
+                    <small class="text-muted js-daily-preview"></small>
+                </div>
+                <div class="form-group col-6">
+                    <label for="daily_value">Daily value</label>
+                    <input type="text" id="daily_value" class="form-control js-daily-value" placeholder="0" autocomplete="off">
+                </div>
+                <div class="form-group col-6">
+                    {label final_value /}{input final_value}
+                </div>
+                <div class="token-input-list-facebook form-group col-12 col-md-6">
                     {label users /}{input users}
                 </div>
             </div>
@@ -53,5 +60,157 @@
         });
 
         $("#frm-challengeForm-challengeForm-users").tokenInput({$availableUsers}, { theme: "facebook", prePopulate: {$currentUsers} });
+
+        var $form = $('#frm-challengeForm-challengeForm');
+        var $startAt = $form.find('#frm-challengeForm-challengeForm-start_at');
+        var $endAt = $form.find('#frm-challengeForm-challengeForm-end_at');
+        var $finalValue = $form.find('#frm-challengeForm-challengeForm-final_value');
+        var $dailyValue = $form.find('.js-daily-value');
+        var programmaticUpdate = false;
+
+        function parseDateYmd(str) {
+            if (!str || !str.trim()) return null;
+            var parts = str.trim().split(/[\/\-]/);
+            if (parts.length !== 3) return null;
+            var y = parseInt(parts[0], 10);
+            var m = parseInt(parts[1], 10) - 1;
+            var d = parseInt(parts[2], 10);
+            if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
+            var date = new Date(y, m, d);
+            if (date.getFullYear() !== y || date.getMonth() !== m || date.getDate() !== d) return null;
+            return date;
+        }
+
+        function getEffectiveStart() {
+            var val = $startAt.val();
+            if (val) {
+                var d = parseDateYmd(val);
+                if (d) return d;
+            }
+            var now = new Date();
+            if (now.getHours() < 21) {
+                return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            }
+            var tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
+        }
+
+        function getEffectiveEnd() {
+            var val = $endAt.val();
+            if (val) {
+                var d = parseDateYmd(val);
+                if (d) return d;
+            }
+            var start = getEffectiveStart();
+            return new Date(start.getFullYear(), start.getMonth() + 1, 0);
+        }
+
+        function getDays(startDate, endDate) {
+            var sy = startDate.getFullYear(), sm = startDate.getMonth(), sd = startDate.getDate();
+            var ey = endDate.getFullYear(), em = endDate.getMonth(), ed = endDate.getDate();
+            var startUtc = Date.UTC(sy, sm, sd);
+            var endUtc = Date.UTC(ey, em, ed);
+            if (endUtc < startUtc) return 0;
+            var msPerDay = 24 * 60 * 60 * 1000;
+            return Math.floor((endUtc - startUtc) / msPerDay) + 1;
+        }
+
+        function formatDailyDisplay(num) {
+            return num < 1 ? num.toFixed(1) : String(Math.round(num));
+        }
+
+        function showPreviewError($preview, message) {
+            $preview.removeClass('text-muted').addClass('text-danger').text(message);
+        }
+
+        function showPreviewNormal($preview, text) {
+            $preview.removeClass('text-danger').addClass('text-muted').text(text);
+        }
+
+        function updatePreview() {
+            var days = getDays(getEffectiveStart(), getEffectiveEnd());
+            var dv = $dailyValue.val();
+            var dvNum = parseFloat(dv, 10);
+            var fv = parseInt($finalValue.val(), 10);
+            var fvNum = isNaN(fv) ? null : fv;
+            var $preview = $form.find('.js-daily-preview');
+            if (days <= 0) {
+                $preview.text('').removeClass('text-danger').addClass('text-muted');
+                return;
+            }
+            if (dv !== '' && !isNaN(dvNum) && dvNum < 0) {
+                showPreviewError($preview, 'Negative values are not allowed.');
+                return;
+            }
+            if (fvNum !== null && fvNum < 0) {
+                showPreviewError($preview, 'Negative values are not allowed.');
+                return;
+            }
+            if (dv !== '' && !isNaN(dvNum)) {
+                var result = dvNum * days;
+                var resultStr = result < 1 ? result.toFixed(1) : String(Math.round(result));
+                showPreviewNormal($preview, days + ' \u00d7 ' + formatDailyDisplay(dvNum) + ' = ' + resultStr);
+            } else {
+                showPreviewNormal($preview, days + ' days');
+            }
+        }
+
+        function updateDailyFromFinal() {
+            if (programmaticUpdate) return;
+            var days = getDays(getEffectiveStart(), getEffectiveEnd());
+            if (days <= 0) {
+                updatePreview();
+                return;
+            }
+            var fv = parseInt($finalValue.val(), 10);
+            if (isNaN(fv)) {
+                updatePreview();
+                return;
+            }
+            if (fv < 0) {
+                programmaticUpdate = true;
+                $dailyValue.val('');
+                programmaticUpdate = false;
+                updatePreview();
+                return;
+            }
+            var computed = fv / days;
+            programmaticUpdate = true;
+            $dailyValue.val(Math.ceil(computed));
+            programmaticUpdate = false;
+            updatePreview();
+        }
+
+        function updateFinalFromDaily() {
+            if (programmaticUpdate) return;
+            var days = getDays(getEffectiveStart(), getEffectiveEnd());
+            if (days <= 0) {
+                updatePreview();
+                return;
+            }
+            var dv = parseFloat($dailyValue.val(), 10);
+            if (isNaN(dv)) {
+                updatePreview();
+                return;
+            }
+            if (dv < 0) {
+                programmaticUpdate = true;
+                $finalValue.val('');
+                programmaticUpdate = false;
+                updatePreview();
+                return;
+            }
+            programmaticUpdate = true;
+            $finalValue.val(Math.round(dv * days));
+            programmaticUpdate = false;
+            updatePreview();
+        }
+
+        $startAt.on('change input', updateDailyFromFinal);
+        $endAt.on('change input', updateDailyFromFinal);
+        $finalValue.on('change input', updateDailyFromFinal);
+        $dailyValue.on('change input', updateFinalFromDaily);
+        updatePreview();
     });
 </script>
