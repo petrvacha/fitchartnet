@@ -100,8 +100,8 @@ class TelegramNotifier extends BaseModel
             $mark = $challenge->activity->log_type->mark ?: '';
             $orderLabel = $this->getOrderLabel($challenge->id, $userId);
             $changeLabel = $this->getChangeLabel($challenge->id, $userId, $value);
-            $text = '🏋️ ' . $challenge->name . ': ' . $user->username . ' +' . $value . ' ' . $mark . ' ' . $changeLabel . ' ' . $orderLabel
-                . "\n🔗️ " . self::$baseUrl . '/challenge/detail/' . $challenge->id;
+            $text = '🏋️ [' . $challenge->name . '](' . self::$baseUrl . '/challenge/detail/' . $challenge->id . '): ';
+            $text .= $user->username . ' +' . $value . ' ' . $mark . ' ' . $changeLabel . ' ' . $orderLabel;
 
             foreach ($groups as $group) {
                 $this->sendMessage($group->bot_token, $group->telegram_group_id, $text);
@@ -192,6 +192,7 @@ class TelegramNotifier extends BaseModel
         $payload = [
             'chat_id' => $chatId,
             'text' => $text,
+            'parse_mode' => 'Markdown',
             'disable_web_page_preview' => true,
         ];
 

@@ -86,7 +86,6 @@ class GroupForm extends \Fitchart\Application\Control
         $this->template->isAdmin = $isAdmin;
 
         if (!$this['groupForm']->offsetExists('submit')) {
-            /** @var \Nette\Forms\Controls\SubmitButton $submitButton */
             $submitButton = $this['groupForm']->addSubmit('submit', 'Create');
             $submitButton->getControlPrototype()->addClass('btn btn-success');
         }
