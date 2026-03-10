@@ -135,8 +135,10 @@ final class Bootstrap
 
         $options = [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-            \PDO::MYSQL_ATTR_MULTI_STATEMENTS => true,
         ];
+        if (defined('PDO::MYSQL_ATTR_MULTI_STATEMENTS')) {
+            $options[\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = true;
+        }
 
         // Connect to server as root to manage databases
         $pdo = new \PDO($serverDsn, $db['user'], $db['password'], $options);

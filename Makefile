@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs logs-php logs-db shell composer composer-install npm db-shell db-import db-export deploy clean ps
+.PHONY: help build up down restart logs logs-php logs-db shell composer composer-install npm db-shell db-import db-export deploy clean ps test
 
 COMPOSE_FILE = docker/development/docker-compose.yml
 COMPOSE_PROJECT = fitchartnet
@@ -70,3 +70,7 @@ clean: ## Stop and remove containers, volumes and images
 
 ps: ## Show container status
 	cd docker/development && docker compose -p $(COMPOSE_PROJECT) ps
+
+test: ## Run tests in Docker only (requires running containers: make up)
+	@cd docker/development && docker compose -p $(COMPOSE_PROJECT) ps --status running -q php | grep -q . || (echo "Error: PHP container is not running. Start containers with: make up"; exit 1)
+	cd docker/development && docker compose -p $(COMPOSE_PROJECT) exec -T php sh -c 'cd /var/www/html && php vendor/bin/tester tests/ -p php -C'

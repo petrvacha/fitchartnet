@@ -146,11 +146,6 @@ parameters:
 			path: app/model/Challenge.php
 
 		-
-			message: "#^Parameter \\#2 \\$userId of method App\\\\Model\\\\ChallengeUser\\:\\:addNewUser\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: app/model/Challenge.php
-
-		-
 			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
 			count: 2
 			path: app/model/ChallengeUser.php
@@ -237,7 +232,7 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
-			count: 2
+			count: 3
 			path: app/presenters/ChallengePresenter.php
 
 		-
@@ -249,6 +244,11 @@ parameters:
 			message: "#^Parameter \\#1 \\$input of function array_reduce expects array, bool\\|Nette\\\\Database\\\\IRow given\\.$#"
 			count: 1
 			path: app/presenters/ChallengePresenter.php
+
+		-
+			message: "#^Cannot access property \\$id on Nette\\\\Security\\\\IIdentity\\|null\\.$#"
+			count: 1
+			path: app/presenters/GroupPresenter.php
 
 		-
 			message: "#^Method App\\\\Presenters\\\\HomepagePresenter\\:\\:createComponentNewPasswordForm\\(\\) should return Nette\\\\Application\\\\UI\\\\Form but returns App\\\\Components\\\\NewPasswordForm\\.$#"

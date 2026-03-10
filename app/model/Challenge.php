@@ -108,11 +108,16 @@ class Challenge extends BaseModel
         }
 
         $users = $data['users'];
+        $creatorId = $data['created_by'];
         unset($data['users']);
         unset($data['id']);
         $row = $this->insert($data);
 
-        $this->addUsersToChallenge($row->id, $users);
+        $this->challengeUserModel->addNewUser($row->id, $creatorId, true);
+
+        $userIds = is_array($users) ? $users : array_filter(explode(',', (string) $users));
+        $userIds = array_diff($userIds, [$creatorId]);
+        $this->addUsersToChallengeInternal($row->id, $userIds);
     }
 
     /**
@@ -126,15 +131,21 @@ class Challenge extends BaseModel
         $challenge = $this->findBy(['id' => $id]);
         $challengeData = $challenge->select('created_by')->fetch();
 
-        if ($challengeData['created_by'] === $this->user->id || $this->user->getIdentity()->role <= Role::MODERATOR) {
+        if ($challengeData['created_by'] === $this->user->getIdentity()->id || $this->user->getIdentity()->role <= Role::MODERATOR) {
             $data['updated_at'] = $this->getDateTime();
 
             if (empty($data['start_at'])) {
-                $data['start_at'] = $this->getDateTime();
+                $data['start_at'] = $this->getDateTime('Y-m-d 00:00:00');
+            } else {
+                $d = DateTime::createFromFormat('Y/m/d', $data['start_at']);
+                $data['start_at'] = $d ? $d->format('Y-m-d 00:00:00') : $data['start_at'];
             }
 
             if (empty($data['end_at'])) {
-                $data['end_at'] = date('Y/m/t 23:59');
+                $data['end_at'] = date('Y-m-t 23:59:59');
+            } else {
+                $d = DateTime::createFromFormat('Y/m/d', $data['end_at']);
+                $data['end_at'] = $d ? $d->format('Y-m-d 23:59:59') : $data['end_at'];
             }
 
             $this->updateUsersInChallenge($id, $data['users']);
@@ -145,27 +156,36 @@ class Challenge extends BaseModel
 
     /**
      * @param int $challengeId
-     * @param string $users
+     * @param array|string $users User IDs as array or comma-separated string
      */
-    public function addUsersToChallenge($challengeId, $users)
+    private function addUsersToChallengeInternal($challengeId, $users)
     {
-        foreach (array_unique(explode(',', $users)) as $userId) {
+        $userIds = is_array($users) ? $users : array_filter(explode(',', (string) $users));
+        foreach ($userIds as $userId) {
             if ($this->userModel->hasPermissionForUser($userId)) {
-                $this->addUserToChallenge($challengeId, $userId);
+                $this->addUserToChallenge($challengeId, $userId, null);
             }
         }
-        $this->challengeUserModel->addNewUser($challengeId, $this->user->getIdentity()->id, true);
     }
 
     /**
-     * @param $challengeId
-     * @param $userId
-     * @param null $invitedByUserId
+     * @param int $challengeId
+     * @param int|string $userId
+     * @param int|null $invitedByUserId
      */
     public function addUserToChallenge($challengeId, $userId, $invitedByUserId = null)
     {
-        if (is_numeric($userId)) {
-            $this->challengeUserModel->addNewUser($challengeId, $userId, false, $invitedByUserId);
+        if (!is_numeric($userId)) {
+            return;
+        }
+        $userId = (int) $userId;
+        $alreadyInChallenge = (bool) $this->challengeUserModel
+            ->findBy(['challenge_id' => $challengeId, 'user_id' => $userId])
+            ->fetch();
+        $this->challengeUserModel->addNewUser($challengeId, $userId, false, $invitedByUserId);
+        if ($alreadyInChallenge) {
+            $this->notificationModel->dismissOneByType($userId, Notification::MESSAGE_NEW_CHALLENGE);
+        } else {
             $this->notificationModel->insertNotification(Notification::MESSAGE_NEW_CHALLENGE, $userId);
         }
     }
@@ -188,7 +208,7 @@ class Challenge extends BaseModel
 
         foreach ($newUserIds as $userId) {
             if (is_numeric($userId) && $this->userModel->hasPermissionForUser($userId) && !in_array($userId, $oldUserIds)) {
-                $this->challengeUserModel->addNewUser($challengeId, $userId);
+                $this->addUserToChallenge($challengeId, $userId, null);
             }
         }
 
@@ -212,8 +232,8 @@ class Challenge extends BaseModel
             JOIN challenge_user CU ON
                 CU.challenge_id = C.id
             WHERE
-                CU.user_id = ? AND  
-                CU.active = true AND             
+                CU.user_id = ? AND
+                CU.active = true AND
                 C.end_at >= ?
             ORDER BY
                 C.end_at DESC",
@@ -336,7 +356,7 @@ class Challenge extends BaseModel
 
         $startDateTime = new \DateTime($challenge[0]['start_at']);
         $startDateTime->setTime(0, 0, 0);
-        $endDateTime = $challenge[0]['end_at'];
+        $endDateTime = clone $challenge[0]['end_at'];
         $endDateTime->setTime(23, 59, 59);
         $today = new \DateTime();
         $dayFormat = "y/m/d";

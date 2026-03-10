@@ -165,6 +165,7 @@ class ChallengePresenter extends LoginBasePresenter
     public function actionJoin($challengeId)
     {
         $this->challengeUserModel->attend($challengeId);
+        $this->notificationModel->dismissOneByType($this->user->getIdentity()->id, Notification::MESSAGE_NEW_CHALLENGE);
         $this->redirect('Challenge:detail', ['id' => $challengeId]);
     }
 

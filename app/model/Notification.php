@@ -96,4 +96,19 @@ class Notification extends BaseModel
     {
         $this->findBy(['id' => $id])->update(['seen' => true]);
     }
+
+    /**
+     * Marks one unread notification of the given type as seen.
+     * Used when the user accepts a challenge or friendship before confirming the notification.
+     *
+     * @param int $userId
+     * @param string $message Notification::MESSAGE_NEW_CHALLENGE, MESSAGE_NEW_FRIEND_REQUEST or MESSAGE_NEW_GROUP_INVITATION
+     */
+    public function dismissOneByType($userId, $message)
+    {
+        $row = $this->findBy(['user_id' => $userId, 'message' => $message, 'seen' => false])->fetch();
+        if ($row) {
+            $row->update(['seen' => true]);
+        }
+    }
 }
