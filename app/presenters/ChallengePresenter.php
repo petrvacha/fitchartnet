@@ -71,6 +71,7 @@ class ChallengePresenter extends LoginBasePresenter
         $this->template->title = 'Challenges';
         $this->template->challenges = $this->challengeModel->getUserChallenges();
         $this->template->editPermission = ($this->user->getIdentity()->role <= Role::MODERATOR);
+        $this->template->now = new \DateTime();
         $this['challengeForm']['challengeForm']
             ->addSubmit('submit', 'Create')
             ->getControlPrototype()

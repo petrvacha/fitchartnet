@@ -18,6 +18,7 @@
                     <th>Name</th>
                     <th>Activity</th>
                     <th>Your performance</th>
+                    <th>Info</th>
                     <th colspan="2">Action</th>
                 </tr>
                 </thead>
@@ -35,6 +36,17 @@
                         <td>
                             {$challenge->current_value}/{$challenge->final_value} {$challenge->log_type_mark}
                             {if $challenge->current_value >= $challenge->final_value}✅{/if}
+                        </td>
+                        <td>
+                            {if $challenge->start_at > $now}
+                                {php $totalDays = $challenge->start_at->diff($challenge->end_at)->days + 1}
+                                🗓 {$challenge->start_at|date:'j.n.Y'} – {$challenge->end_at|date:'j.n.Y'} ({$totalDays} {if $totalDays === 1}day{else}days{/if})
+                            {elseif $challenge->end_at > $now}
+                                {php $daysLeft = $challenge->end_at->diff($now)->days + 1}
+                                {$daysLeft} {if $daysLeft === 1}day{else}days{/if} left
+                            {else}
+                                <span class="text-muted">{$challenge->start_at|date:'j.n.Y'} – {$challenge->end_at|date:'j.n.Y'}</span>
+                            {/if}
                         </td>
                         <td style="width: 65px;">
                             {if $challenge->end_at > $now}
@@ -76,6 +88,15 @@
                             <small class="text-muted">
                                 {$challenge->activity_name} · {$challenge->current_value}/{$challenge->final_value} {$challenge->log_type_mark}
                                 {if $challenge->current_value >= $challenge->final_value}✅{/if}
+                                {if $challenge->start_at > $now}
+                                    {php $totalDays = $challenge->start_at->diff($challenge->end_at)->days + 1}
+                                    <br><span class="text-nowrap">🗓 {$challenge->start_at|date:'j.n.Y'} – {$challenge->end_at|date:'j.n.Y'} ({$totalDays} {if $totalDays === 1}day{else}days{/if})</span>
+                                {elseif $challenge->end_at > $now}
+                                    {php $daysLeft = $challenge->end_at->diff($now)->days + 1}
+                                    · {$daysLeft} {if $daysLeft === 1}day{else}days{/if} left
+                                {else}
+                                    · <span class="text-muted">{$challenge->start_at|date:'j.n.Y'} – {$challenge->end_at|date:'j.n.Y'}</span>
+                                {/if}
                             </small>
                         </div>
                         <div class="ml-2 text-nowrap flex-shrink-0">

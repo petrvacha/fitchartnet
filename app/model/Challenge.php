@@ -266,6 +266,7 @@ class Challenge extends BaseModel
                 C.final_value,
                 A.name activity_name,
                 CU.active,
+                C.start_at,
                 C.end_at,
                 LT.mark log_type_mark
             FROM
