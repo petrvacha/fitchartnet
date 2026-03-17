@@ -101,6 +101,7 @@ class GroupPresenter extends LoginBasePresenter
             $this->redirect('Group:default');
         }
         $this->groupUserModel->attend($groupId, true);
+        $this->notificationModel->dismissOneByType($this->user->getIdentity()->id, Notification::MESSAGE_NEW_GROUP_INVITATION);
         $this->flashMessage('You have joined the group.', parent::MESSAGE_TYPE_SUCCESS);
         $this->redirect('Group:detail', ['id' => $groupId]);
     }

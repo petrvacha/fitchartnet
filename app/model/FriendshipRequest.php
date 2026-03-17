@@ -74,10 +74,19 @@ class FriendshipRequest extends BaseModel
     public function acceptFriendshipRequest($userId, $approve = true)
     {
         $toUserId = $this->user->getIdentity()->id;
-        $updateData = ['approved' => $approve, 'updated_at' => $this->getDateTime()];
-        $updated = $this->findBy(['from_user_id' => $userId, 'to_user_id' => $toUserId])->update($updateData);
+        $request = $this->findBy(['from_user_id' => $userId, 'to_user_id' => $toUserId])->fetch();
+        if (!$request) {
+            return false;
+        }
+        $wasPending = $request->approved === null || $request->approved == false;
+        if (!$wasPending) {
+            return false;
+        }
 
-        if ($updated && empty($updated['approved']) && $approve) {
+        $request->update(['approved' => $approve, 'updated_at' => $this->getDateTime()]);
+        $this->notificationModel->dismissOneByType($toUserId, Notification::MESSAGE_NEW_FRIEND_REQUEST);
+
+        if ($approve) {
             return $this->friendModel->addFriend($userId);
         }
         return false;
